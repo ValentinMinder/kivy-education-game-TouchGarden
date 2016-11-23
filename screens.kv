@@ -1,0 +1,152 @@
+<Screen>:
+    canvas.before:
+        BorderImage:
+            size: root.size
+            pos: root.pos
+            #source: "images/fd2_frame2.png"
+            border: 25, 25, 25, 25
+
+<LoadingScreen>:
+    BoxLayout:
+        size_hint: 0.5, 0.2
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        orientation: 'vertical'
+        Label:
+            text: 'Loading...'
+        Image:
+            source: 'images/ajax-loader-light.gif'
+
+<MainMenuScreen>:
+    layout: layout
+    BoxLayout:
+        id: layout
+        orientation: 'vertical'
+        padding: 0
+        spacing: 20
+        size_hint: 0.5, 1
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: 'WELCOME Interactive Garden'
+        Button:
+            text: 'Test texts size'
+            on_press: root.test()
+        Button:
+            text: 'Test graphics'
+            on_press: root.game()
+
+<TestScreen>:
+    bback: bback
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 0
+        spacing: 0
+
+        LabelB:
+            font_size: '20dp'
+            text: '20 dpx (15 pt) - [b]bold [color=#005500] green [/b]title[/color]'
+        LabelB:
+            font_size: '8dp'
+            background_color: 1,0,0,1
+            text: '8 dpx (6pt) - ' + root.text
+        LabelB:
+            font_size: '9dp'
+            text: '9 dpx - ' + root.text
+        LabelB:
+            font_size: '7pt'
+            text: '7 pt - ' + root.text
+        LabelB:
+            font_size: '10dp'
+            text: '10 dpx - ' + root.text
+        LabelB:
+            font_size: '8pt'
+            text: '8 pt - ' + root.text
+        LabelB:
+            font_size: '11dp'
+            text: '11 dpx - ' + root.text
+        LabelB:
+            font_size: '12dp'
+            background_color: 0,0.5,0,1
+            text: '12 dpx (9pt) - ' + root.text
+        LabelC:
+            font_size: '13dp'
+            text: '13 dpx - ' + root.text
+        LabelB:
+            font_size: '10pt'
+            text: '10 pt - ' + root.text
+        LabelB:
+            font_size: '14dp'
+            text: '14 dpx - ' + root.text
+        LabelB:
+            font_size: '11pt'
+            text: '11 pt - ' + root.text
+        LabelB:
+            font_size: '15dp'
+            text: '15 dpx - ' + root.text
+        LabelB:
+            font_size: '16dp'
+            text: '16 dpx (12 pt) - ' + root.text
+
+        Button:
+            id: bback
+            pos_hint: {'center_x': 0.5}
+            font_size: 10
+            text: 'Back'
+            on_press: root.back()
+
+<GameScreen>:
+    layout: layout
+
+    BoxLayout:
+        id: layout
+        orientation: 'horizontal'
+        BoxLayout:
+            id: layout
+            orientation: 'vertical'
+            padding: 10
+            spacing: 20
+            width: 171
+            size_hint: 0.125, 1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            Label:
+                text: 'house'
+            Button:
+                text: 'El 1'
+            Image:
+                id: garden
+                allow_stretch: False
+                size_hint: 0.75, 1
+                pos_hint: {'x': 0, 'top': 1}
+                top: root.top
+                width: 171
+                source: 'images/piscine.jpg'
+            Button:
+                text: 'El 3'
+                background_normal: "images/piscine.jpg"
+
+        Image:
+            id: garden
+            allow_stretch: False
+            size_hint: 0.75, 1
+            pos_hint: {'x': 0, 'top': 1}
+            top: root.top
+            height: 768
+            width: 1024
+            source: 'images/garden.jpg'
+        BoxLayout:
+            id: layout
+            orientation: 'vertical'
+            padding: 10
+            spacing: 20
+            width: 171
+            size_hint: 0.125, 1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            Label:
+                text: 'Score'
+            Image:
+                source: 'images/THERMOMETRE-transparent.gif'
+                height: self.width * 5
+            Button:
+                text: 'STOP'
+                on_press: root.back()
+                size_hint_y: 0.5
+

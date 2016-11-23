@@ -1,0 +1,33 @@
+# Background colored labels are in LabelB and LabelC, a subclass on-the-fly
+<LabelC>:
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1 # your color here
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<Label>:
+    font_size: 12
+    color: 0, 0, 0, 1
+    halign: 'left'
+    valign: 'middle'
+    markup: True
+    text_size: self.size
+
+<Button>:
+    valign: 'middle'
+    halign: 'center'
+    font_size: 30
+    color: 1, 1, 1, 1
+    border: 25, 25, 25, 25
+
+<ImageWidget>:
+    size_hint: None, None
+    allow_stretch: True
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: root.pos
+            size: root.size
