@@ -1,8 +1,8 @@
 # must be imported first to prevent issues
 from kivy.config import Config
 Config.set('graphics', 'fullscreen', 0) #set to 'auto' for production
-Config.set('graphics', 'width', 1366) #1366
-Config.set('graphics', 'height', 768) #768
+Config.set('graphics', 'width', 396) #1366
+Config.set('graphics', 'height', 398) #768
 
 
 Config.set('graphics', 'position', 'custom') # 'auto'
@@ -23,6 +23,8 @@ from kivy.factory import Factory
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.label import Label
 from kivy.properties import ListProperty
+from kivy.core.text import LabelBase
+import settings
 
 # loading widget instructions
 Builder.load_file('screens.kv')
@@ -57,6 +59,10 @@ Factory.register('KivyB', module='LabelB')
 # https://andnovar.wordpress.com/2011/08/03/kivy-label-with-background/
 class LabelC(Label):
     pass
+
+# for registering custom fonts
+for font in settings.KIVY_FONTS:
+    LabelBase.register(**font)
 
 # specialized version of screen that handles keyboard presses and has a cursor system,
 # used for all the screens outside the loading screen
@@ -114,7 +120,7 @@ class TestScreen(BackKeyScreen):
         self.cursor_wrap = True
 
         # main text for the screen
-        self.text = "[i]italic [b]and[/i] bold[/b] black [b][color=ffffff]white[/color] [color=ff3333]red[/color][/b]"
+        self.text = "[i]italic [b]and[/i] bold[/b][b][color=ffffff]white[/color] [color=ff3333]red[/color] [/b][font=CorporativeSansRd]CorpSsRd[/font]"
 
 
 # screen for picking training mode difficulty
