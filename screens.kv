@@ -116,8 +116,7 @@
             orientation: 'vertical'
             padding: 10
             spacing: 20
-            width: 171
-            size_hint: 0.125, 1
+            size_hint: 0.2, 1
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             Label:
                 text: 'house'
@@ -131,6 +130,9 @@
                 top: root.top
                 width: 171
                 source: 'images/piscine.jpg'
+            DragLabel:
+                text: 'I am a draggable text'
+                background_color: 0,0.5,0,1
             Button:
                 text: 'El 3'
                 background_normal: "images/piscine.jpg"
@@ -143,14 +145,14 @@
             top: root.top
             height: 768
             width: 1024
-            source: 'images/garden.jpg'
+            source: 'images/garden.png'
         BoxLayout:
             id: layout
             orientation: 'vertical'
             padding: 10
             spacing: 20
             width: 171
-            size_hint: 0.125, 1
+            size_hint: 0.1, 1
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             Label:
                 text: 'Score'

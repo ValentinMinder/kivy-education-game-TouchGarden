@@ -33,3 +33,9 @@
         Rectangle:
             pos: root.pos
             size: root.size
+
+<DragLabel>:
+    # Define the properties for the DragLabel
+    drag_rectangle: self.x, self.y, self.width, self.height
+    drag_timeout: 10000000
+    drag_distance: 0

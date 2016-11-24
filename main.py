@@ -1,8 +1,8 @@
 # must be imported first to prevent issues
 from kivy.config import Config
-Config.set('graphics', 'fullscreen', 0) #set to 'auto' for production
-Config.set('graphics', 'width', 396) #1366
-Config.set('graphics', 'height', 398) #768
+Config.set('graphics', 'fullscreen', 'auto') #set to 'auto' for production
+Config.set('graphics', 'width', 1366) #1366
+Config.set('graphics', 'height', 768) #768
 
 
 Config.set('graphics', 'position', 'custom') # 'auto'
@@ -10,8 +10,8 @@ Config.set('graphics', 'top', 0)
 Config.set('graphics', 'left', 0)
 
 Config.set('graphics', 'show_cursor', 0)
-Config.set('graphics', 'borderless', 0)
-Config.set('graphics', 'resizable', 1)
+Config.set('graphics', 'borderless', 1)
+Config.set('graphics', 'resizable', 0)
 
 from kivy.app import App
 from kivy.uix.button import Button
@@ -24,6 +24,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.label import Label
 from kivy.properties import ListProperty
 from kivy.core.text import LabelBase
+from kivy.uix.behaviors import DragBehavior
 import settings
 
 # loading widget instructions
@@ -63,6 +64,11 @@ class LabelC(Label):
 # for registering custom fonts
 for font in settings.KIVY_FONTS:
     LabelBase.register(**font)
+
+#for drag & drop texts (no image yet)
+class DragLabel(DragBehavior, LabelB):
+    pass
+
 
 # specialized version of screen that handles keyboard presses and has a cursor system,
 # used for all the screens outside the loading screen
