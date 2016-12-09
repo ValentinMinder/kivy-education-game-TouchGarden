@@ -33,6 +33,9 @@
         Button:
             text: 'Test graphics'
             on_press: root.game()
+        Button:
+            text: 'Test statistics'
+            on_press: root.stats()
 
 <TestScreen>:
     bback: bback
@@ -164,3 +167,42 @@
                 on_press: root.back()
                 size_hint_y: 0.5
 
+<StatsScreen>:
+    layoutd: layoutd
+    BoxLayout:
+
+        orientation: 'vertical'
+        padding: 10
+        spacing: 20
+        size_hint: 1, 1
+
+        LabelB:
+            text: 'Merci d\'évaluer l\'exposition'
+            font_size: '60dp'
+            size_hint: 1, 0.25
+
+        BoxLayout:
+            orientation: 'horizontal'
+            id: stars
+            size_hint: 1, 1
+            Button:
+                text: 'A améliorer'
+            Button:
+                text: 'Suffisant'
+            Button:
+                text: 'Bien'
+            Button:
+                text: 'Très bien'
+            Button:
+                text: 'Excellent'
+
+        BoxLayout:
+            orientation: 'horizontal'
+            id: layoutd
+            size_hint: 1, 1
+            Button:
+                text: 'Famille'
+            Button:
+                text: 'Ecole'
+            Button:
+                text: 'Adultes'

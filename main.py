@@ -111,6 +111,9 @@ class MainMenuScreen(KeyScreen):
     def game(self):
         self.manager.switch_to(GameScreen(name="Game", previous=self), direction='left')
 
+    def stats(self):
+        self.manager.switch_to(StatsScreen(name="Stats", previous=self), direction='left')
+
 # "test" screen
 class TestScreen(BackKeyScreen):
     # reference to back button for cursor use
@@ -139,6 +142,19 @@ class GameScreen(BackKeyScreen):
 
         # cursor options
         self.cursor_array = self.layout.children[:-1]
+        self.cursor_reverse = True
+        self.cursor_wrap = True
+
+# screen for picking training mode difficulty
+class StatsScreen(BackKeyScreen):
+    # layout containing the screen's buttons, used for cursor function
+    layout = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(StatsScreen, self).__init__(**kwargs)
+
+        # cursor options
+        self.cursor_array = self.layoutd.children[:-1]
         self.cursor_reverse = True
         self.cursor_wrap = True
 
