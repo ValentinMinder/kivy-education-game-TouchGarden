@@ -1,7 +1,7 @@
 # registering fonts, as suggested by
 # http://cheparev.com/kivy-connecting-font/
 # https://github.com/eviltnan/kivy-font-example
-KIVY_DEFAULT_FONT = "Roboto"
+KIVY_DEFAULT_FONT = "CorporativeSans"
 
 KIVY_FONTS = [
     {
@@ -24,6 +24,13 @@ KIVY_FONTS = [
         "fn_bold": "fonts/CorporativeSansRd/CorporativeSansRdAlt-Bold.otf",
         "fn_italic": "fonts/CorporativeSansRd/CorporativeSansRd-LightIt.otf",
         "fn_bolditalic": "fonts/CorporativeSansRd/CorporativeSansRdAlt-BoldIt.otf",
+    },
+    {
+        "name": "CorporativeSans",
+        "fn_regular": "fonts/CorporativeSans/CorporativeSans-Regular.otf",
+        "fn_bold": "fonts/CorporativeSans/CorporativeSans-Bold.otf",
+        "fn_italic": "fonts/CorporativeSans/CorporativeSans-Italic.otf",
+        "fn_bolditalic": "fonts/CorporativeSans/CorporativeSans-BoldItalic.otf",
     },
 ]
 
