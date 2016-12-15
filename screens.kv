@@ -132,13 +132,13 @@
                 pos_hint: {'x': 0, 'top': 1}
                 top: root.top
                 width: 171
-                source: 'images/piscine.jpg'
+                source: 'images/test1_haie.png'
             DragLabel:
                 text: 'I am a draggable text'
                 background_color: 0,0.5,0,1
             Button:
                 text: 'El 3'
-                background_normal: "images/piscine.jpg"
+                background_normal: "images/test1_haie_bad.png"
 
         Image:
             id: garden
@@ -148,7 +148,7 @@
             top: root.top
             height: 768
             width: 1024
-            source: 'images/garden.png'
+            source: 'images/00_fond_jardin_v2.jpg'
         BoxLayout:
             id: layout
             orientation: 'vertical'
@@ -185,24 +185,27 @@
             orientation: 'horizontal'
             id: stars
             size_hint: 1, 1
-            Button:
+            ButtonStar:
                 text: 'A améliorer'
-            Button:
+            ButtonStar:
                 text: 'Suffisant'
-            Button:
+            ButtonStar:
                 text: 'Bien'
-            Button:
+            ButtonStar:
                 text: 'Très bien'
-            Button:
+            ButtonStar:
                 text: 'Excellent'
 
         BoxLayout:
             orientation: 'horizontal'
             id: layoutd
             size_hint: 1, 1
-            Button:
+            ButtonCategory:
                 text: 'Famille'
-            Button:
-                text: 'Ecole'
-            Button:
-                text: 'Adultes'
+                background_normal: "images/picto_family.png"
+            ButtonCategory:
+                text: 'Ecole/groupe'
+                background_normal: "images/picto_school.png"
+            ButtonCategory:
+                text: 'Adultes seuls'
+                background_normal: "images/picto_couple.png"

@@ -69,6 +69,14 @@ for font in settings.KIVY_FONTS:
 class DragLabel(DragBehavior, LabelB):
     pass
 
+#for star-like buttons
+class ButtonStar(Button):
+    pass
+
+
+#for category-like buttons
+class ButtonCategory(Button):
+    pass
 
 # specialized version of screen that handles keyboard presses and has a cursor system,
 # used for all the screens outside the loading screen
