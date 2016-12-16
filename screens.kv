@@ -135,9 +135,10 @@
                 source: 'images/test1_haie.png'
             DragLabel:
                 text: 'I am a draggable text'
-                background_color: 0,0.5,0,1
+                background_color: 0,0.5,0,0.5
             Button:
                 text: 'El 3'
+                allow_stretch: False
                 background_normal: "images/test1_haie_bad.png"
 
         Image:
@@ -148,7 +149,7 @@
             top: root.top
             height: 768
             width: 1024
-            source: 'images/00_fond_jardin_v2.jpg'
+            source: 'images/00_fond_jardin_v3.png'
         BoxLayout:
             id: layout
             orientation: 'vertical'
@@ -161,6 +162,9 @@
                 text: 'Score'
             Image:
                 source: 'images/THERMOMETRE-transparent.gif'
+                height: self.width * 5
+            Image:
+                source: 'images/JDJcatleaps_v0.gif'
                 height: self.width * 5
             Button:
                 text: 'STOP'
@@ -209,3 +213,4 @@
             ButtonCategory:
                 text: 'Adultes seuls'
                 background_normal: "images/picto_couple.png"
+                on_press: root.back()
