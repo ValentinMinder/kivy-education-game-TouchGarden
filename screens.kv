@@ -114,12 +114,12 @@
     BoxLayout:
         id: layout
         orientation: 'horizontal'
+        padding: 0
+        spacing: 0
         BoxLayout:
             id: layout
             orientation: 'vertical'
-            padding: 10
-            spacing: 20
-            size_hint: 0.2, 1
+            size_hint: 0.15, 1
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             Label:
                 text: 'house'
@@ -153,9 +153,6 @@
         BoxLayout:
             id: layout
             orientation: 'vertical'
-            padding: 10
-            spacing: 20
-            width: 171
             size_hint: 0.1, 1
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             Label:
@@ -166,6 +163,9 @@
             Image:
                 source: 'images/JDJcatleaps_v0.gif'
                 height: self.width * 5
+            DragLabel:
+                text: 'I am another draggable text'
+                background_color: 0,0,0.5,0.5
             Button:
                 text: 'STOP'
                 on_press: root.back()
@@ -210,7 +210,15 @@
             ButtonCategory:
                 text: 'Ecole/groupe'
                 background_normal: "images/picto_school.png"
+                on_press: root.confirm()
             ButtonCategory:
                 text: 'Adultes seuls'
                 background_normal: "images/picto_couple.png"
                 on_press: root.back()
+
+<ConfirmStatsScreen>:
+    Button:
+        text: 'Réponse prise en compte, merci'
+        font_size: '160dp'
+        size_hint: 1, 1
+        on_press: root.back()

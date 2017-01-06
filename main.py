@@ -166,6 +166,23 @@ class StatsScreen(BackKeyScreen):
         self.cursor_reverse = True
         self.cursor_wrap = True
 
+    # switches to the how to screen
+    def confirm(self):
+        self.manager.switch_to(ConfirmStatsScreen(name="Test", previous=self.previous), direction='left')
+
+# screen for picking training mode difficulty
+class ConfirmStatsScreen(BackKeyScreen):
+    # layout containing the screen's buttons, used for cursor function
+    layout = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(ConfirmStatsScreen, self).__init__(**kwargs)
+
+        # cursor options
+        self.cursor_reverse = True
+        self.cursor_wrap = True
+
+
 # main application class
 class TouchGardenApp(App):
     # changes window title
