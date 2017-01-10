@@ -139,6 +139,7 @@ class MainMenuScreen(KeyScreen):
     def allgraphics(self):
         self.manager.switch_to(TestAllGraphicsScreen(name="TestGraphics", previous=self), direction='left')
 
+
     def stats(self):
         self.manager.switch_to(StatsScreen(name="Stats", previous=self), direction='left')
 
@@ -199,7 +200,22 @@ class TestAllGraphicsScreen(BackKeyScreen):
         # cursor options
         self.cursor_reverse = True
         self.cursor_wrap = True
+    # switches to the training mode menu
+    def moregraphics(self):
+        self.manager.switch_to(TestMoreGraphicsScreen(name="TestGraphics", previous=self.previous), direction='left')
 
+
+# screen for testing graphics
+class TestMoreGraphicsScreen(BackKeyScreen):
+    # layout containing the screen's buttons, used for cursor function
+    layout = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(TestMoreGraphicsScreen, self).__init__(**kwargs)
+
+        # cursor options
+        self.cursor_reverse = True
+        self.cursor_wrap = True
 
 # screen for testing graphics
 class TestGraphicsScreen(BackKeyScreen):

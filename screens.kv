@@ -227,10 +227,10 @@
                 source: 'images/non_animes/lierre_pour_barriere_beton.png'
             Image:
                 allow_stretch: False
-                source: 'images/non_animes/haie_diverses_especes.png'
+                source: 'images/non_animes/cone_arbre_antipredateur.png'
             Image:
                 allow_stretch: False
-                source: 'images/non_animes/haie_de_thuya.png'
+                source: 'images/non_animes/haie_diverses_especes.png'
         BoxLayout:
             orientation: 'vertical'
             size_hint: 0.2, 1
@@ -246,25 +246,54 @@
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/tas_de_bois.png'
-            Button:
-                text: 'STOP'
-                on_press: root.back()
-                size_hint: 1, 0.2
+
         BoxLayout:
             orientation: 'vertical'
             size_hint: 0.5, 1
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/piscine.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/etang.png'
+            Button:
+                text: 'Next'
+                on_press: root.moregraphics()
+                size_hint: 1, 0.2
+
+<TestMoreGraphicsScreen>
+    BoxLayout:
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 1
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/barriere_beton.png'
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/barrieres_espacee.png'
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 1
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/barrieres_ras_de_sol.png'
-            Image:
-                allow_stretch: False
-                source: 'images/non_animes/piscine.png'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 1
+                Image:
+                    allow_stretch: False
+                    source: 'images/non_animes/arbre.png'
+                Image:
+                    allow_stretch: False
+                    source: 'images/non_animes/haie_de_thuya.png'
+
+            Button:
+                text: 'STOP'
+                size_hint: 1, 0.2
+                on_press: root.back()
 
 
 <TestGraphicsScreen>
