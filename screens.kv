@@ -25,14 +25,21 @@
         spacing: 20
         size_hint: 0.5, 1
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        Label:
-            text: 'WELCOME Interactive Garden'
         Button:
             text: 'Test texts size'
             on_press: root.test()
         Button:
-            text: 'Test graphics'
+            text: 'Test game'
             on_press: root.game()
+        Button:
+            text: 'Test animations'
+            on_press: root.animations()
+        Button:
+            text: 'Test graphics'
+            on_press: root.graphics()
+        Button:
+            text: 'Test ALL graphics'
+            on_press: root.allgraphics()
         Button:
             text: 'Test statistics'
             on_press: root.stats()
@@ -121,18 +128,23 @@
             orientation: 'vertical'
             size_hint: 0.15, 1
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            Label:
-                text: 'house'
-            Button:
-                text: 'El 1'
             Image:
                 id: garden
                 allow_stretch: False
-                size_hint: 0.75, 1
+                size_hint: 1, 1
                 pos_hint: {'x': 0, 'top': 1}
                 top: root.top
                 width: 171
                 source: 'images/test1_haie.png'
+            Image:
+                allow_stretch: False
+                pos_hint: {'x': 0, 'top': 1}
+                source: 'images/non_animes/bac_herbes_aromatiques.png'
+            Image:
+                allow_stretch: True
+                pos_hint: {'x': 0, 'top': 1}
+                source: 'images/non_animes/bac_herbes_aromatiques.png'
+
             DragLabel:
                 text: 'I am a draggable text'
                 background_color: 0,0.5,0,0.5
@@ -149,7 +161,7 @@
             top: root.top
             height: 768
             width: 1024
-            source: 'images/00_fond_jardin_v3.png'
+            source: 'images/fond/fond_jardin_v4.png'
         BoxLayout:
             id: layout
             orientation: 'vertical'
@@ -158,11 +170,12 @@
             Label:
                 text: 'Score'
             Image:
-                source: 'images/THERMOMETRE-transparent.gif'
-                height: self.width * 5
+                allow_stretch: False
+                source: 'images/animations/bonhomme/homme_positif_content_2.gif'
             Image:
-                source: 'images/JDJcatleaps_v0.gif'
-                height: self.width * 5
+                allow_stretch: False
+                source: 'images/non_animes/cone_arbre_antipredateur.png'
+
             DragLabel:
                 text: 'I am another draggable text'
                 background_color: 0,0,0.5,0.5
@@ -170,6 +183,124 @@
                 text: 'STOP'
                 on_press: root.back()
                 size_hint_y: 0.5
+
+<TestAnimationsScreen>
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: 1, 1
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.5
+
+
+            Image:
+                allow_stretch: False
+                source: 'images/animations/bonhomme/homme_positif_content.gif'
+                pos_hint: {'x': 0, 'top': 1}
+
+            Image:
+                allow_stretch: False
+                source: 'images/animations/bonhomme/homme_positif_content_2.gif'
+                pos_hint: {'x': 0, 'top': 1}
+        Image:
+            allow_stretch: False
+            size_hint: 1, 0.4
+            source: 'images/JDJcatleaps_v0.gif'
+            pos_hint: {'x': 0, 'top': 1}
+
+        Button:
+            text: 'STOP'
+            on_press: root.back()
+            size_hint_y: 0.1
+
+<TestAllGraphicsScreen>
+    BoxLayout:
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.25, 1
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/prairie_fleurie.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/lierre_pour_barriere_beton.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/haie_diverses_especes.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/haie_de_thuya.png'
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.2, 1
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/bac_geraniums.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/bac_herbes_aromatiques.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/table_chaise_de_jardin.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/tas_de_bois.png'
+            Button:
+                text: 'STOP'
+                on_press: root.back()
+                size_hint: 1, 0.2
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.5, 1
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/barriere_beton.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/barrieres_espacee.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/barrieres_ras_de_sol.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/piscine.png'
+
+
+<TestGraphicsScreen>
+    BoxLayout:
+        id: layout
+        orientation: 'horizontal'
+        BoxLayout:
+            id: layout
+            orientation: 'vertical'
+            size_hint: 0.25, 1
+            Image:
+                size_hint: 1, 0.5
+                allow_stretch: False
+                pos_hint: {'x': 0, 'top': 1}
+                top: root.top
+                source: 'images/non_animes/arbre.png'
+            Image:
+                size_hint: 1, 0.25
+                allow_stretch: False
+                pos_hint: {'x': 0, 'top': 1}
+                top: root.top
+                source: 'images/non_animes/etang.png'
+            Button:
+                text: 'STOP'
+                on_press: root.back()
+                size_hint_y: 0.10
+        Image:
+            size_hint: 0.75, 1
+            allow_stretch: False
+            pos_hint: {'x': 0, 'top': 1}
+            top: root.top
+            source: 'images/fond/fond_jardin_v3.png'
+        BoxLayout:
+            id: layout
+            orientation: 'vertical'
+            size_hint: 0.0, 1
 
 <StatsScreen>:
     layoutd: layoutd

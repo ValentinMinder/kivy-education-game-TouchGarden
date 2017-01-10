@@ -1,11 +1,11 @@
 # must be imported first to prevent issues
 from kivy.config import Config
-Config.set('graphics', 'fullscreen', 'auto') #set to 'auto' for production
-Config.set('graphics', 'width', 1366) #1366
-Config.set('graphics', 'height', 768) #768
 
+Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
+Config.set('graphics', 'width', 1366)  # 1366
+Config.set('graphics', 'height', 768)  # 768
 
-Config.set('graphics', 'position', 'custom') # 'auto'
+Config.set('graphics', 'position', 'custom')  # 'auto'
 Config.set('graphics', 'top', 0)
 Config.set('graphics', 'left', 0)
 
@@ -38,7 +38,7 @@ MANAGER = None
 music = SoundLoader.load("audio/garden_base.wav")
 
 # Creating a backgroundable label (by default a blank background)
-#http://robertour.com/2015/07/15/kivy-label-or-widget-with-background-color-property/
+# http://robertour.com/2015/07/15/kivy-label-or-widget-with-background-color-property/
 Builder.load_string("""
 <LabelB>:
   background_color: 1,1,1,1
@@ -52,36 +52,43 @@ Builder.load_string("""
 
 
 class LabelB(Label):
-    background_color = ListProperty([1,1,1,1])
+    background_color = ListProperty([1, 1, 1, 1])
+
 
 Factory.register('KivyB', module='LabelB')
 
-#thanks  @Mathieu Virbel
+
+# thanks  @Mathieu Virbel
 # https://andnovar.wordpress.com/2011/08/03/kivy-label-with-background/
 class LabelC(Label):
     pass
+
 
 # for registering custom fonts
 for font in settings.KIVY_FONTS:
     LabelBase.register(**font)
 
-#for drag & drop texts (no image yet)
+
+# for drag & drop texts (no image yet)
 class DragLabel(DragBehavior, LabelB):
     pass
 
-#for star-like buttons
+
+# for star-like buttons
 class ButtonStar(Button):
     pass
 
 
-#for category-like buttons
+# for category-like buttons
 class ButtonCategory(Button):
     pass
+
 
 # specialized version of screen that handles keyboard presses and has a cursor system,
 # used for all the screens outside the loading screen
 class KeyScreen(Screen):
     pass
+
 
 class BackKeyScreen(KeyScreen):
     def __init__(self, previous, **kwargs):
@@ -93,6 +100,7 @@ class BackKeyScreen(KeyScreen):
     # returns to previous screen
     def back(self):
         self.manager.switch_to(self.previous, direction='right')
+
 
 class LoadingScreen(Screen):
     pass
@@ -119,8 +127,21 @@ class MainMenuScreen(KeyScreen):
     def game(self):
         self.manager.switch_to(GameScreen(name="Game", previous=self), direction='left')
 
+    # switches to the training mode menu
+    def animations(self):
+        self.manager.switch_to(TestAnimationsScreen(name="TestAnimations", previous=self), direction='left')
+
+    # switches to the training mode menu
+    def graphics(self):
+        self.manager.switch_to(TestGraphicsScreen(name="TestGraphics", previous=self), direction='left')
+
+    # switches to the training mode menu
+    def allgraphics(self):
+        self.manager.switch_to(TestAllGraphicsScreen(name="TestGraphics", previous=self), direction='left')
+
     def stats(self):
         self.manager.switch_to(StatsScreen(name="Stats", previous=self), direction='left')
+
 
 # "test" screen
 class TestScreen(BackKeyScreen):
@@ -153,6 +174,46 @@ class GameScreen(BackKeyScreen):
         self.cursor_reverse = True
         self.cursor_wrap = True
 
+
+# screen for testing graphics
+class TestAnimationsScreen(BackKeyScreen):
+    # layout containing the screen's buttons, used for cursor function
+    layout = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(TestAnimationsScreen, self).__init__(**kwargs)
+
+        # cursor options
+        self.cursor_reverse = True
+        self.cursor_wrap = True
+
+
+# screen for testing graphics
+class TestAllGraphicsScreen(BackKeyScreen):
+    # layout containing the screen's buttons, used for cursor function
+    layout = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(TestAllGraphicsScreen, self).__init__(**kwargs)
+
+        # cursor options
+        self.cursor_reverse = True
+        self.cursor_wrap = True
+
+
+# screen for testing graphics
+class TestGraphicsScreen(BackKeyScreen):
+    # layout containing the screen's buttons, used for cursor function
+    layout = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(TestGraphicsScreen, self).__init__(**kwargs)
+
+        # cursor options
+        self.cursor_reverse = True
+        self.cursor_wrap = True
+
+
 # screen for picking training mode difficulty
 class StatsScreen(BackKeyScreen):
     # layout containing the screen's buttons, used for cursor function
@@ -169,6 +230,7 @@ class StatsScreen(BackKeyScreen):
     # switches to the how to screen
     def confirm(self):
         self.manager.switch_to(ConfirmStatsScreen(name="Test", previous=self.previous), direction='left')
+
 
 # screen for picking training mode difficulty
 class ConfirmStatsScreen(BackKeyScreen):
@@ -205,6 +267,7 @@ class TouchGardenApp(App):
         # set starting screen
         self.manager.switch_to(MainMenuScreen(name="MainMenu"))
         return self.manager
+
 
 # launch the app
 if __name__ == '__main__':
