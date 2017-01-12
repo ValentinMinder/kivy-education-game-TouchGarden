@@ -1,5 +1,7 @@
 <Screen>:
     canvas.before:
+        Color:
+            rgb: 1, 1, 1 # your color here
         BorderImage:
             size: root.size
             pos: root.pos
@@ -29,8 +31,11 @@
             text: 'Test texts size'
             on_press: root.test()
         Button:
-            text: 'Test game'
+            text: 'Test static game'
             on_press: root.game()
+        Button:
+            text: 'Test new game'
+            on_press: root.floatgame()
         Button:
             text: 'Test animations'
             on_press: root.animations()
@@ -128,6 +133,11 @@
             orientation: 'vertical'
             size_hint: 0.15, 1
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            Label:
+                text: 'Categorie\n haies'
+                font_size: '36dp'
+
             Image:
                 id: garden
                 allow_stretch: False
@@ -136,22 +146,29 @@
                 top: root.top
                 width: 171
                 source: 'images/test1_haie.png'
+            Label:
+                size_hint: 1, 0.2
+                text: 'buisson'
+
             Image:
                 allow_stretch: False
-                pos_hint: {'x': 0, 'top': 1}
-                source: 'images/non_animes/bac_herbes_aromatiques.png'
-            Image:
-                allow_stretch: True
                 pos_hint: {'x': 0, 'top': 1}
                 source: 'images/non_animes/bac_herbes_aromatiques.png'
 
-            DragLabel:
-                text: 'I am a draggable text'
-                background_color: 0,0.5,0,0.5
+            Label:
+                size_hint: 1, 0.2
+                text: 'herbes aromatiques'
+            Label:
+                text: ''
+
+            Label:
+                text: '1 / 7'
+                font_size: '48dp'
+                size_hint_y: 0.5
             Button:
-                text: 'El 3'
+                text: 'Next'
                 allow_stretch: False
-                background_normal: "images/test1_haie_bad.png"
+                size_hint_y: 0.3
 
         Image:
             id: garden
@@ -169,20 +186,19 @@
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             Label:
                 text: 'Score'
+                size_hint: 1, 0.05
+            Label:
+                text: '3 pt'
+                font_size: '48dp'
+                size_hint: 1, 0.15
             Image:
                 allow_stretch: False
-                source: 'images/animations/bonhomme/homme_positif_content_2.gif'
-            Image:
-                allow_stretch: False
-                source: 'images/non_animes/cone_arbre_antipredateur.png'
+                source: 'images/thermometre-scaled.png'
 
-            DragLabel:
-                text: 'I am another draggable text'
-                background_color: 0,0,0.5,0.5
             Button:
                 text: 'STOP'
                 on_press: root.back()
-                size_hint_y: 0.5
+                size_hint: 1, 0.1
 
 <TestAnimationsScreen>
     BoxLayout:
@@ -192,7 +208,6 @@
             orientation: 'horizontal'
             size_hint: 1, 0.5
 
-
             Image:
                 allow_stretch: False
                 source: 'images/animations/bonhomme/homme_positif_content.gif'
@@ -201,10 +216,13 @@
             Image:
                 allow_stretch: False
                 source: 'images/animations/bonhomme/homme_positif_content_2.gif'
+                anim_delay: 0.1
                 pos_hint: {'x': 0, 'top': 1}
         Image:
             allow_stretch: False
             size_hint: 1, 0.4
+            anim_delay: 0.1
+            anim_loop: 5
             source: 'images/JDJcatleaps_v0.gif'
             pos_hint: {'x': 0, 'top': 1}
 

@@ -1,5 +1,8 @@
 # must be imported first to prevent issues
 from kivy.config import Config
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.scatter import Scatter
 
 Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 Config.set('graphics', 'width', 1366)  # 1366
@@ -126,6 +129,10 @@ class MainMenuScreen(KeyScreen):
     # switches to the training mode menu
     def game(self):
         self.manager.switch_to(GameScreen(name="Game", previous=self), direction='left')
+
+    # switches to the training mode menu
+    def floatgame(self):
+        self.manager.switch_to(FloatGameScreen(name="Game", previous=self), direction='left')
 
     # switches to the training mode menu
     def animations(self):
@@ -284,6 +291,37 @@ class TouchGardenApp(App):
         self.manager.switch_to(MainMenuScreen(name="MainMenu"))
         return self.manager
 
+# draggable element scatter
+class ElementScatter(Scatter):
+    def __init__(self, **kwargs):
+        super(ElementScatter, self).__init__()
+
+#float layout for draggable elements management
+class FloatGameScreen(Screen):
+    currentObj = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super(FloatGameScreen, self).__init__()
+        layout = GridLayout(size_hint=(1, 1), cols=3, rows=1)
+        left_frame = GridLayout(size_hint=(.25, 1), cols=1)
+        client_frame = FloatLayout(size_hint=(1, 1))
+
+        element = ElementScatter()
+        self.element = element
+        client_frame.add_widget(element, 1)
+
+        # position scatter
+        element.pos = (1056, 458)
+
+        # add widgets to the main layout
+        layout.add_widget(left_frame)
+        layout.add_widget(client_frame)
+
+        # add main layout to root
+        self.add_widget(layout)
+
+    def on_currentObj(self, *l):
+        self.element.pos = (200, 200)
 
 # launch the app
 if __name__ == '__main__':

@@ -10,9 +10,9 @@
 #:import KIVY_DEFAULT_FONT settings.KIVY_DEFAULT_FONT
 <Label>:
     font_name: KIVY_DEFAULT_FONT
-    font_size: 18
+    font_size: 20
     color: 0, 0, 0, 1
-    halign: 'left'
+    halign: 'center'
     valign: 'middle'
     markup: True
     text_size: self.size
@@ -49,3 +49,10 @@
     drag_rectangle: self.x, self.y, self.width, self.height
     drag_timeout: 10000000
     drag_distance: 0
+
+<ElementScatter>
+    Image:
+        id: imag
+        size: 96,96
+        source: 'images/768px-Gold_Star.svg.png'
+        on_touch_down: root.parent.parent.parent.currentObj = self
