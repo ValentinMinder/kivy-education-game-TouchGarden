@@ -1,8 +1,10 @@
 # must be imported first to prevent issues
+from kivy.animation import Animation
 from kivy.config import Config
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scatter import Scatter
+from kivy.uix.image import Image
 
 Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 Config.set('graphics', 'width', 1366)  # 1366
@@ -146,7 +148,6 @@ class MainMenuScreen(KeyScreen):
     def allgraphics(self):
         self.manager.switch_to(TestAllGraphicsScreen(name="TestGraphics", previous=self), direction='left')
 
-
     def stats(self):
         self.manager.switch_to(StatsScreen(name="Stats", previous=self), direction='left')
 
@@ -207,6 +208,7 @@ class TestAllGraphicsScreen(BackKeyScreen):
         # cursor options
         self.cursor_reverse = True
         self.cursor_wrap = True
+
     # switches to the training mode menu
     def moregraphics(self):
         self.manager.switch_to(TestMoreGraphicsScreen(name="TestGraphics", previous=self.previous), direction='left')
@@ -223,6 +225,7 @@ class TestMoreGraphicsScreen(BackKeyScreen):
         # cursor options
         self.cursor_reverse = True
         self.cursor_wrap = True
+
 
 # screen for testing graphics
 class TestGraphicsScreen(BackKeyScreen):
@@ -291,37 +294,167 @@ class TouchGardenApp(App):
         self.manager.switch_to(MainMenuScreen(name="MainMenu"))
         return self.manager
 
+
 # draggable element scatter
 class ElementScatter(Scatter):
     def __init__(self, **kwargs):
         super(ElementScatter, self).__init__()
 
-#float layout for draggable elements management
+    # detect the touch
+    def on_bring_to_front(self, touch):
+        print 'brought to front: '
+        print self.positive
+
+
+# non-draggable image widget
+class StaticImage(Label):
+    def __init__(self, **kwargs):
+        super(StaticImage, self).__init__()
+
+
+margin_right = 242
+height = 768
+
+
+# float layout for draggable elements management
 class FloatGameScreen(Screen):
     currentObj = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__()
-        layout = GridLayout(size_hint=(1, 1), cols=3, rows=1)
-        left_frame = GridLayout(size_hint=(.25, 1), cols=1)
         client_frame = FloatLayout(size_hint=(1, 1))
 
-        element = ElementScatter()
-        self.element = element
-        client_frame.add_widget(element, 1)
+        # garden background
+        background = StaticImage()
+        background.image.source = 'images/fond/fond_jardin_v4.png'
+        background.image.pos = (margin_right, 0)
+        background.image.size = (1024, 768)
+        client_frame.add_widget(background)
 
-        # position scatter
-        element.pos = (1056, 458)
+        # todo: make target area + positive/negative elements selection dependant on category
+        # target area to carry elements
+        area = StaticImage()
+        area.image.source = 'images/zones_de_depot/blocdepot_haie_gauche.png'
+        area.image.pos = (margin_right, 0)
+        area.image.size = (175, 175)
+        client_frame.add_widget(area)
 
-        # add widgets to the main layout
-        layout.add_widget(left_frame)
-        layout.add_widget(client_frame)
+        # positive and negative elements to drag & drop
+        # todo: check if disabling other touch than dragging
+        # todo: automatize placement & original position
+        positif = ElementScatter()
+        positif.image.source = 'images/non_animes/haie_diverses_especes.png'
+        positif.pos = (20, height - 1 * margin_right)
+        positif.x_orig = 20
+        positif.y_orig = height - 1 * margin_right
+        positif.touch = True
+        client_frame.add_widget(positif)
+
+        negatif = ElementScatter()
+        negatif.image.source = 'images/non_animes/haie_de_thuya.png'
+        negatif.pos = (20, height - 2.5 * margin_right)
+        negatif.x_orig = 20
+        negatif.y_orig = height - 2.5 * margin_right
+        negatif.positive = False
+        negatif.touch = True
+        client_frame.add_widget(negatif)
+
+        # welcoming guy
+        animated = StaticImage()
+        animated.image.anim_delay = 0.1
+        animated.image.anim_loop = 5
+        animated.image.size = (75, 152)
+        animated.image.pos = (790 + margin_right, 386)
+        animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+        client_frame.add_widget(animated)
 
         # add main layout to root
-        self.add_widget(layout)
+        self.add_widget(client_frame)
 
-    def on_currentObj(self, *l):
-        self.element.pos = (200, 200)
+    def on_touch_up(self, touch):
+        element = self.currentObj
+        print type(element)
+        # react only to element scatter moves ended to right target area
+        if (isinstance(element, ElementScatter) and element.touch):
+            # todo automatize placement for detection, static image & animation
+            if ((element.x >= margin_right - 175) & (element.x <= margin_right + 175)  # x placement with tolerance
+                    & (element.y >= -175) & (element.y <= 175)):  # y placement with tolerance
+                # put the real object in place
+                static = StaticImage()
+                static.image.source = element.image.source
+                static.image.pos = (margin_right, 0)
+                static.image.size = (175, 175)
+                element.parent.add_widget(static)
+
+                # animated guy: happy or not
+                animated = StaticImage()
+                animated.image.anim_delay = 0.1
+                animated.image.anim_loop = 5
+                animated.image.size = (75, 152)
+                animated.image.pos = (790 + margin_right, 386)
+                if (element.positive):
+                    animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+                else:
+                    # TODO: put the negative animation, remove the placement, remove the non-moving guy
+                    animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+                    animated.image.pos = (890 + margin_right, 186)
+
+                element.parent.add_widget(animated)
+
+                # points
+
+                points = ElementScatter()
+                if (element.positive):
+                    points.image.source = 'images/plus_green.png'
+                else:
+                    points.image.source = 'images/minus_red.png'
+                points.pos = (175 / 2 + margin_right, 175 / 2)
+                element.parent.add_widget(points)
+                anim_points = Animation(x=1500, y=500, duration=2)
+                if (element.positive):
+                    points.image.size = (100, 100)
+                    anim_points &= Animation(size=(700, 700))
+                else:
+                    points.image.size = (600, 600)
+                    anim_points &= Animation(size=(100, 100))
+                anim_points.start(points.image)
+
+                # animation of animals
+                # TODO: real animals!
+                animal = ElementScatter()
+                animal.image.anim_delay = 0.1
+                animal.image.size = (75, 152)
+                animal.pos = (0 + margin_right, 768)
+                animal.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+                element.parent.add_widget(animal)
+                anim = Animation(x=175 / 2 + margin_right, y=175 / 2, duration=1)
+                if (element.positive):
+                    anim += Animation(x=1024 + 200 + margin_right, y=212, duration=2)
+                else:
+                    anim += Animation(x=0 + margin_right, y=768, duration=1)
+                anim.start(animal)
+                # todo: remove the animal or make sure it disappear
+                # element.parent.remove_widget(animal)
+
+                anim_wid = Animation(x=element.x_orig, y=element.y_orig - 200)
+                anim_wid.start(element)
+
+                # todo: always remove the widget
+                # todo: why does selection doesn't work well ??
+                if (not element.positive):
+                    element.parent.remove_widget(element)
+                self.currentObj = ObjectProperty(None)
+
+                # todo : disable all other widget!
+                # todo: move to text info + other category, after a while
+
+                print 'placed scatter'
+            else:
+                anim = Animation(x=element.x_orig, y=element.y_orig)
+                anim.start(element)
+                print 'not placed'
+                self.currentObj = ObjectProperty(None)
+
 
 # launch the app
 if __name__ == '__main__':
