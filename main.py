@@ -1,8 +1,10 @@
 # coding=utf-8
 # must be imported first to prevent issues
 from Canvas import Line
+from PIL import Image
 from kivy.animation import Animation
 from kivy.config import Config
+from kivy.core.image import Image
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scatter import Scatter
@@ -11,7 +13,9 @@ from kivy.uix.image import Image
 # Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 from kivy.uix.widget import Widget
 
+from utils import sizes
 from utils.category import ElementScatter, AnimatedScatter, Category
+from utils.gui import StaticImage
 
 Config.set('graphics', 'width', 1366)  # 1366
 Config.set('graphics', 'height', 768)  # 768
@@ -307,56 +311,33 @@ class TouchGardenApp(App):
         return self.manager
 
 
-# non-draggable image widget
-class StaticImage(Label):
-    def __init__(self, **kwargs):
-        super(StaticImage, self).__init__()
-
-
-margin_right = 242
-height = 768
-
-
 # float layout for draggable elements management
 class FloatGameScreen(Screen):
-    currentObj = ObjectProperty(None)
-    speach = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__()
         client_frame = FloatLayout(size_hint=(1, 1))
-
         # garden background
-        background = StaticImage()
-        background.image.source = 'images/fond/fond_jardin_v4.png'
-        background.image.pos = (margin_right, 0)
-        background.image.size = (1024, 768)
+        background = StaticImage(pos=(sizes.width_left_margin, 0),
+                                 size=(sizes.width_game, sizes.height),
+                                 src='images/fond/fond_jardin_v4.png')
         client_frame.add_widget(background)
 
-        # todo: make target area + positive/negative elements selection dependant on category
-        # target area to carry elements
-        area = StaticImage()
-        area.image.source = 'images/zones_de_depot/blocdepot_haie_gauche.png'
-        area.image.pos = (margin_right, 0)
-        area.image.size = (175, 175)
-        client_frame.add_widget(area)
-
-        # positive and negative elements to drag & drop
         positif = ElementScatter(name=Text("fr", "de", "en"), positive=True, first=True,
                                  img='images/non_animes/haie_diverses_especes.png')
         negatif = ElementScatter(name=Text("fr", "de", "en"), positive=False, first=False,
                                  img='images/non_animes/haie_de_thuya.png')
-        category = Category(name=Text("fr", "de", "en"), el1=positif, el2=negatif)
-        client_frame.add_widget(category.element1)
-        client_frame.add_widget(category.element2)
+
+        target = StaticImage(pos=(sizes.width_left_margin, 0),
+                        size=(175,175),
+                        src='images/zones_de_depot/blocdepot_haie_gauche.png')
+        category = Category(name=Text("fr", "de", "en"), el1=positif, el2=negatif, target=target)
 
         # welcoming guy
-        animated = StaticImage()
+        animated = StaticImage(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
+                               src='images/animations/bonhomme/homme_positif_content_2.gif')
         animated.image.anim_delay = 0.1
         animated.image.anim_loop = 5
-        animated.image.size = (75, 152)
-        animated.image.pos = (790 + margin_right, 386)
-        animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
         client_frame.add_widget(animated)
 
         self.speach = speach = SpeachLabel()
@@ -368,19 +349,33 @@ class FloatGameScreen(Screen):
         # add main layout to root
         self.add_widget(client_frame)
 
+        self.frame = client_frame
+        self.gameturn_setup(category)
+
+    #setup for category game turn
+    #todo: tear down
+    def gameturn_setup(self, category):
+        self.current_category = category
+
+        # target area to carry elements
+        self.frame.add_widget(category.target)
+
+        # positive and negative elements to drag & drop
+        self.frame.add_widget(category.element1)
+        self.frame.add_widget(category.element2)
+
+
     def on_touch_up(self, touch):
         element = self.currentObj
         print type(element)
+        target = self.current_category.target
         # react only to element scatter moves ended to right target area
         if (isinstance(element, ElementScatter) and element.touch):
             # todo automatize placement for detection, static image & animation
-            if ((element.x >= margin_right - 175) & (element.x <= margin_right + 175)  # x placement with tolerance
-                    & (element.y >= -175) & (element.y <= 175)):  # y placement with tolerance
+            # check collision
+            if (target.image.collide_widget(element)):
                 # put the real object in place
-                static = StaticImage()
-                static.image.source = element.image.source
-                static.image.pos = (margin_right, 0)
-                static.image.size = (175, 175)
+                static = StaticImage(pos=(sizes.width_left_margin, 0), size=(175, 175), src=element.image.source)
                 element.parent.add_widget(static)
 
                 # text speach update
@@ -390,17 +385,16 @@ class FloatGameScreen(Screen):
                     self.speach.label.text = txt_game_move_positive()
 
                 # animated guy: happy or not
-                animated = StaticImage()
+                animated = StaticImage(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
+                                       src='images/animations/bonhomme/homme_positif_content_2.gif')
                 animated.image.anim_delay = 0.1
                 animated.image.anim_loop = 5
-                animated.image.size = (75, 152)
-                animated.image.pos = (790 + margin_right, 386)
                 if (element.positive):
                     animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
                 else:
                     # TODO: put the negative animation, remove the placement, remove the non-moving guy
                     animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
-                    animated.image.pos = (890 + margin_right, 186)
+                    animated.image.pos = (890 + sizes.width_left_margin, 186)
 
                 element.parent.add_widget(animated)
 
@@ -411,7 +405,7 @@ class FloatGameScreen(Screen):
                     points.image.source = 'images/plus_green.png'
                 else:
                     points.image.source = 'images/minus_red.png'
-                points.pos = (175 / 2 + margin_right, 175 / 2)
+                points.pos = (175 / 2 + sizes.width_left_margin, 175 / 2)
                 element.parent.add_widget(points)
                 anim_points = Animation(x=1500, y=500, duration=2)
                 if (element.positive):
@@ -427,14 +421,14 @@ class FloatGameScreen(Screen):
                 animal = AnimatedScatter()
                 animal.image.anim_delay = 0.1
                 animal.image.size = (75, 152)
-                animal.pos = (0 + margin_right, 768)
+                animal.pos = (0 + sizes.width_left_margin, 768)
                 animal.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
                 element.parent.add_widget(animal)
-                anim = Animation(x=175 / 2 + margin_right, y=175 / 2, duration=1)
+                anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=1)
                 if (element.positive):
-                    anim += Animation(x=1024 + 200 + margin_right, y=212, duration=2)
+                    anim += Animation(x=1024 + 200 + sizes.width_left_margin, y=212, duration=2)
                 else:
-                    anim += Animation(x=0 + margin_right, y=768, duration=1)
+                    anim += Animation(x=0 + sizes.width_left_margin, y=768, duration=1)
                 anim.start(animal)
                 # todo: remove the animal or make sure it disappear
                 # element.parent.remove_widget(animal)

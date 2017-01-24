@@ -6,10 +6,12 @@ import sizes
 
 
 class Category(object):
-    def __init__(self, name, el1, el2):
+    def __init__(self, name, el1, el2, target):
         self.name = name
         self.element1 = el1
         self.element2 = el2
+        self.target = target
+
 
 # animated scatter element
 #  todo: check disabling all touch
