@@ -65,15 +65,13 @@
 
 <ElementScatter>
     image: imag
-    # to replace object at their correct original placement
-    x_orig: 0
-    y_orig: 0
-    #to know wether positive or negative scenario should be activated
-    positive: True
-    # to know if should react to touch
-    touch: False
     Image:
         id: imag
         size: 200, 200
-        source: 'images/768px-Gold_Star.svg.png'
         on_touch_down: root.parent.parent.currentObj = self.parent
+
+<AnimatedScatter>
+    image: imag
+    Image:
+        id: imag
+        size: 200, 200

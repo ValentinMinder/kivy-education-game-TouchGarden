@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 # must be imported first to prevent issues
 from Canvas import Line
 from kivy.animation import Animation
@@ -8,8 +8,10 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scatter import Scatter
 from kivy.uix.image import Image
 
-#Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
+# Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 from kivy.uix.widget import Widget
+
+from utils.category import ElementScatter, AnimatedScatter, Category
 
 Config.set('graphics', 'width', 1366)  # 1366
 Config.set('graphics', 'height', 768)  # 768
@@ -82,6 +84,7 @@ for font in settings.KIVY_FONTS:
 # for drag & drop texts (no image yet)
 class DragLabel(DragBehavior, LabelB):
     pass
+
 
 # for speach
 class SpeachLabel(Widget):
@@ -304,17 +307,6 @@ class TouchGardenApp(App):
         return self.manager
 
 
-# draggable element scatter
-class ElementScatter(Scatter):
-    def __init__(self, **kwargs):
-        super(ElementScatter, self).__init__()
-
-    # detect the touch
-    def on_bring_to_front(self, touch):
-        print 'brought to front: '
-        print self.positive
-
-
 # non-draggable image widget
 class StaticImage(Label):
     def __init__(self, **kwargs):
@@ -350,24 +342,13 @@ class FloatGameScreen(Screen):
         client_frame.add_widget(area)
 
         # positive and negative elements to drag & drop
-        # todo: check if disabling other touch than dragging
-        # todo: automatize placement & original position
-        positif = ElementScatter()
-        positif.image.source = 'images/non_animes/haie_diverses_especes.png'
-        positif.pos = (20, height - 1 * margin_right)
-        positif.x_orig = 20
-        positif.y_orig = height - 1 * margin_right
-        positif.touch = True
-
-        negatif = ElementScatter()
-        negatif.image.source = 'images/non_animes/haie_de_thuya.png'
-        negatif.pos = (20, height - 2.5 * margin_right)
-        negatif.x_orig = 20
-        negatif.y_orig = height - 2.5 * margin_right
-        negatif.positive = False
-        negatif.touch = True
-        client_frame.add_widget(negatif)
-        client_frame.add_widget(positif)
+        positif = ElementScatter(name=Text("fr", "de", "en"), positive=True, first=True,
+                                 img='images/non_animes/haie_diverses_especes.png')
+        negatif = ElementScatter(name=Text("fr", "de", "en"), positive=False, first=False,
+                                 img='images/non_animes/haie_de_thuya.png')
+        category = Category(name=Text("fr", "de", "en"), el1=positif, el2=negatif)
+        client_frame.add_widget(category.element1)
+        client_frame.add_widget(category.element2)
 
         # welcoming guy
         animated = StaticImage()
@@ -379,9 +360,8 @@ class FloatGameScreen(Screen):
         client_frame.add_widget(animated)
 
         self.speach = speach = SpeachLabel()
-        #textlabel.background_color = 1,1,1,0
         speach.label.text = txt_tutorial_welcome()
-        speach.label.pos = (1366-320, 768-170)
+        speach.label.pos = (1366 - 320, 768 - 170)
         speach.label.size = (200, 150)
         client_frame.add_widget(speach)
 
@@ -403,7 +383,7 @@ class FloatGameScreen(Screen):
                 static.image.size = (175, 175)
                 element.parent.add_widget(static)
 
-                #text speach update
+                # text speach update
                 if (not element.positive):
                     self.speach.label.text = txt_game_move_negative()
                 else:
@@ -426,7 +406,7 @@ class FloatGameScreen(Screen):
 
                 # points
 
-                points = ElementScatter()
+                points = AnimatedScatter()
                 if (element.positive):
                     points.image.source = 'images/plus_green.png'
                 else:
@@ -444,7 +424,7 @@ class FloatGameScreen(Screen):
 
                 # animation of animals
                 # TODO: real animals!
-                animal = ElementScatter()
+                animal = AnimatedScatter()
                 animal.image.anim_delay = 0.1
                 animal.image.size = (75, 152)
                 animal.pos = (0 + margin_right, 768)

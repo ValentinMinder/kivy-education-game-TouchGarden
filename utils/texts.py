@@ -23,6 +23,21 @@ class color:
     default = black
 
 
+class Text:
+
+    def __init__(self, fr, de, en):
+        self.french = fr
+        self.german = de
+        self.english = en
+
+    def get(self):
+        switch = {
+            lang.fr: self.french,
+            lang.de: self.german,
+            lang.en: self.english
+        }
+        return color.default + switch.get(lang.current) + color.end
+
 # default text switch, always define ALL languages
 def txt_notxt():
     switch = {
