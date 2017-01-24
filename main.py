@@ -1,4 +1,6 @@
+#coding=utf-8
 # must be imported first to prevent issues
+from Canvas import Line
 from kivy.animation import Animation
 from kivy.config import Config
 from kivy.uix.floatlayout import FloatLayout
@@ -6,7 +8,9 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scatter import Scatter
 from kivy.uix.image import Image
 
-Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
+#Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
+from kivy.uix.widget import Widget
+
 Config.set('graphics', 'width', 1366)  # 1366
 Config.set('graphics', 'height', 768)  # 768
 
@@ -31,6 +35,7 @@ from kivy.properties import ListProperty
 from kivy.core.text import LabelBase
 from kivy.uix.behaviors import DragBehavior
 import settings
+from utils.texts import *
 
 # loading widget instructions
 Builder.load_file('screens.kv')
@@ -76,6 +81,10 @@ for font in settings.KIVY_FONTS:
 
 # for drag & drop texts (no image yet)
 class DragLabel(DragBehavior, LabelB):
+    pass
+
+# for speach
+class SpeachLabel(Widget):
     pass
 
 
@@ -319,6 +328,7 @@ height = 768
 # float layout for draggable elements management
 class FloatGameScreen(Screen):
     currentObj = ObjectProperty(None)
+    speach = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__()
@@ -348,7 +358,6 @@ class FloatGameScreen(Screen):
         positif.x_orig = 20
         positif.y_orig = height - 1 * margin_right
         positif.touch = True
-        client_frame.add_widget(positif)
 
         negatif = ElementScatter()
         negatif.image.source = 'images/non_animes/haie_de_thuya.png'
@@ -358,6 +367,7 @@ class FloatGameScreen(Screen):
         negatif.positive = False
         negatif.touch = True
         client_frame.add_widget(negatif)
+        client_frame.add_widget(positif)
 
         # welcoming guy
         animated = StaticImage()
@@ -367,6 +377,13 @@ class FloatGameScreen(Screen):
         animated.image.pos = (790 + margin_right, 386)
         animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
         client_frame.add_widget(animated)
+
+        self.speach = speach = SpeachLabel()
+        #textlabel.background_color = 1,1,1,0
+        speach.label.text = txt_tutorial_welcome()
+        speach.label.pos = (1366-320, 768-170)
+        speach.label.size = (200, 150)
+        client_frame.add_widget(speach)
 
         # add main layout to root
         self.add_widget(client_frame)
@@ -385,6 +402,12 @@ class FloatGameScreen(Screen):
                 static.image.pos = (margin_right, 0)
                 static.image.size = (175, 175)
                 element.parent.add_widget(static)
+
+                #text speach update
+                if (not element.positive):
+                    self.speach.label.text = txt_game_move_negative()
+                else:
+                    self.speach.label.text = txt_game_move_positive()
 
                 # animated guy: happy or not
                 animated = StaticImage()
@@ -452,6 +475,7 @@ class FloatGameScreen(Screen):
             else:
                 anim = Animation(x=element.x_orig, y=element.y_orig)
                 anim.start(element)
+                self.speach.label.text = txt_game_move_unreached()
                 print 'not placed'
                 self.currentObj = ObjectProperty(None)
 
