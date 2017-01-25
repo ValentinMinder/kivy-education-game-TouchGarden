@@ -1,6 +1,5 @@
 # coding=utf-8
 # must be imported first to prevent issues
-from Canvas import Line
 from PIL import Image
 from kivy.animation import Animation
 from kivy.config import Config
@@ -10,15 +9,15 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scatter import Scatter
 from kivy.uix.image import Image
 
-# Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 from kivy.uix.widget import Widget
 
 from utils import sizes
 from utils.category import ElementScatter, AnimatedScatter, Category
-from utils.gui import StaticImage
+from utils.gui import StaticImage, ButtonWrap
 
-Config.set('graphics', 'width', 1366)  # 1366
-Config.set('graphics', 'height', 768)  # 768
+# Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
+Config.set('graphics', 'width', sizes.width)  # 1366
+Config.set('graphics', 'height', sizes.height)  # 768
 
 Config.set('graphics', 'position', 'custom')  # 'auto'
 Config.set('graphics', 'top', 0)
@@ -313,15 +312,38 @@ class TouchGardenApp(App):
 
 # float layout for draggable elements management
 class FloatGameScreen(Screen):
-
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__()
         client_frame = FloatLayout(size_hint=(1, 1))
         # garden background
-        background = StaticImage(pos=(sizes.width_left_margin, 0),
+        left_bg = StaticImage(pos=(sizes.width_ref, sizes.height_ref),
+                              size=(sizes.width_left_margin, sizes.height),
+                              src='images/scenery/nav_fond_gauche_200x768px.png')
+        client_frame.add_widget(left_bg)
+
+        background = StaticImage(pos=(sizes.width_left_margin, sizes.height_ref),
                                  size=(sizes.width_game, sizes.height),
                                  src='images/fond/fond_jardin_v4.png')
         client_frame.add_widget(background)
+        right_bg = StaticImage(pos=(sizes.width_right_game, sizes.height_ref),
+                               size=(sizes.width_right_margin, sizes.height),
+                               src='images/scenery/nav_fond_droite_142x768px.png')
+        client_frame.add_widget(right_bg)
+
+        button_next = ButtonWrap(fct=self.next_category,
+                                 pos=(sizes.width_ref, sizes.height_ref),
+                                 size=(sizes.width_left_margin, sizes.height_button_small),
+                                 size_img=(75, 44),
+                                 src="images/scenery/fleche_suite_75x44px.png")
+        client_frame.add_widget(button_next)
+
+
+        button_stop = ButtonWrap(fct=self.stop_game,
+                                 pos=(sizes.width_right_game, sizes.height_ref),
+                                 size=(sizes.width_right_margin, sizes.height_button_small),
+                                 size_img=(57, 57),
+                                 src="images/scenery/bouton_eteindre_57x57px.png")
+        client_frame.add_widget(button_stop)
 
         positif = ElementScatter(name=Text("fr", "de", "en"), positive=True, first=True,
                                  img='images/non_animes/haie_diverses_especes.png')
@@ -329,8 +351,8 @@ class FloatGameScreen(Screen):
                                  img='images/non_animes/haie_de_thuya.png')
 
         target = StaticImage(pos=(sizes.width_left_margin, 0),
-                        size=(175,175),
-                        src='images/zones_de_depot/blocdepot_haie_gauche.png')
+                             size=(175, 175),
+                             src='images/zones_de_depot/blocdepot_haie_gauche.png')
         category = Category(name=Text("fr", "de", "en"), el1=positif, el2=negatif, target=target)
 
         # welcoming guy
@@ -342,7 +364,7 @@ class FloatGameScreen(Screen):
 
         self.speach = speach = SpeachLabel()
         speach.label.text = txt_tutorial_welcome()
-        speach.label.pos = (1366 - 320, 768 - 170)
+        speach.label.pos = (1366 - 350, 768 - 170)
         speach.label.size = (200, 150)
         client_frame.add_widget(speach)
 
@@ -352,8 +374,14 @@ class FloatGameScreen(Screen):
         self.frame = client_frame
         self.gameturn_setup(category)
 
-    #setup for category game turn
-    #todo: tear down
+    def next_category(self, touch):
+        print 'TODO: move to next category'
+
+    def stop_game(selfself, touch):
+        print 'TODO: ask to reset/stop game'
+
+    # setup for category game turn
+    # todo: tear down
     def gameturn_setup(self, category):
         self.current_category = category
 
@@ -363,7 +391,6 @@ class FloatGameScreen(Screen):
         # positive and negative elements to drag & drop
         self.frame.add_widget(category.element1)
         self.frame.add_widget(category.element2)
-
 
     def on_touch_up(self, touch):
         element = self.currentObj
