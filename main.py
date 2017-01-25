@@ -313,6 +313,7 @@ class TouchGardenApp(App):
 # float layout for draggable elements management
 class FloatGameScreen(BackKeyScreen):
     currentObj = ObjectProperty(None)
+
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__(**kwargs)
         client_frame = FloatLayout(size_hint=(1, 1))
@@ -331,18 +332,51 @@ class FloatGameScreen(BackKeyScreen):
                                src='images/scenery/nav_fond_droite_142x768px.png')
         client_frame.add_widget(right_bg)
 
+        # smiles and gscale (gauge)
+        smile_pos = StaticImage(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_top),
+                                size=(29, 29),
+                                src='images/scenery/smile_positif_29x29px.png')
+        client_frame.add_widget(smile_pos)
+
+        smile_neg = StaticImage(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_bottom),
+                                size=(29, 29),
+                                src='images/scenery/smile_negatif_29x29px.png')
+        client_frame.add_widget(smile_neg)
+
+        scale = StaticImage(pos=(sizes.gauge_left_margin, sizes.gauge_bottom_margin),
+                            size=(77, 459),
+                            src='images/scenery/score_77x459px.png')
+        client_frame.add_widget(scale)
+
+        # scoring green and red
+        # todo: single score scale and change color
+        score = StaticImage(pos=(sizes.gauge_left_start, sizes.gauge_bottom_start),
+                            size=(sizes.gauge_width, sizes.gauge_height(sizes.gauge_number)),
+                            src='images/scenery/score_rouge.png')
+        score.image.allow_stretch = True
+        score.image.keep_ratio = False
+        self.score = score
+        scoregr = StaticImage(
+            pos=(sizes.gauge_left_start, sizes.gauge_bottom_start + sizes.gauge_height(sizes.gauge_number)),
+            size=(sizes.gauge_width, sizes.gauge_height(sizes.gauge_number)),
+            src='images/scenery/score_vert.png')
+        scoregr.image.allow_stretch = True
+        scoregr.image.keep_ratio = False
+        client_frame.add_widget(scoregr)
+        client_frame.add_widget(score)
+
         button_next = ButtonImage(on_press=self.next_category,
-                                 pos=(sizes.width_ref, sizes.height_ref),
-                                 size=(sizes.width_left_margin, sizes.height_button_small),
-                                 size_img=(75, 44),
-                                 src="images/scenery/fleche_suite_75x44px.png")
+                                  pos=(sizes.width_ref, sizes.height_ref),
+                                  size=(sizes.width_left_margin, sizes.height_button_small),
+                                  size_img=(75, 44),
+                                  src="images/scenery/fleche_suite_75x44px.png")
         client_frame.add_widget(button_next)
 
         button_stop = ButtonImage(on_press=self.stop_game,
-                                 pos=(sizes.width_right_game, sizes.height_ref),
-                                 size=(sizes.width_right_margin, sizes.height_button_small),
-                                 size_img=(57, 57),
-                                 src="images/scenery/bouton_eteindre_57x57px.png")
+                                  pos=(sizes.width_right_game, sizes.height_ref),
+                                  size=(sizes.width_right_margin, sizes.height_button_small),
+                                  size_img=(57, 57),
+                                  src="images/scenery/bouton_eteindre_57x57px.png")
         client_frame.add_widget(button_stop)
 
         positif = ElementScatter(name=Text("fr", "de", "en"), positive=True, first=True,
@@ -410,7 +444,7 @@ class FloatGameScreen(BackKeyScreen):
                 static = StaticImage(pos=(sizes.width_left_margin, 0), size=(175, 175), src=element.image.source)
                 element.parent.add_widget(static)
 
-                #remove the target
+                # remove the target
                 self.frame.remove_widget(self.current_category.target)
 
                 # text speach update
