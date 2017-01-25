@@ -1,7 +1,5 @@
 # coding=utf-8
-from kivy.uix.image import Image
-from kivy.uix.label import Label
-
+from kivy.uix.button import Button
 
 from kivy.uix.widget import Widget
 
@@ -15,13 +13,11 @@ class StaticImage(Widget):
 
 
 # transparent button with centered unstreched image wrapper
-class ButtonWrap(Widget):
-    def __init__(self, fct, pos, size, size_img, src):
-        super(ButtonWrap, self).__init__()
-        self.button.on_touch_down = fct
-        self.button.pos = pos
-        self.button.size = size
-        self.button.background_normal = 'images/scenery/transparency.png'
-        self.button.add_widget(
+class ButtonImage(Button):
+    def __init__(self, on_press, pos, size, size_img, src):
+        super(ButtonImage, self).__init__(on_press=on_press, pos=pos, size=size, size_hint=(None, None),
+                                          background_normal='images/scenery/transparency.png')
+        self.add_widget(
             StaticImage(pos=(pos[0] + (size[0] - size_img[0]) / 2.0, pos[1] + (size[1] - size_img[1]) / 2.0),
-                        size=size_img, src=src))
+                        size=size_img,
+                        src=src))

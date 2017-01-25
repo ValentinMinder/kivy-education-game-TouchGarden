@@ -13,7 +13,7 @@ from kivy.uix.widget import Widget
 
 from utils import sizes
 from utils.category import ElementScatter, AnimatedScatter, Category
-from utils.gui import StaticImage, ButtonWrap
+from utils.gui import StaticImage, ButtonImage
 
 # Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 Config.set('graphics', 'width', sizes.width)  # 1366
@@ -311,9 +311,10 @@ class TouchGardenApp(App):
 
 
 # float layout for draggable elements management
-class FloatGameScreen(Screen):
+class FloatGameScreen(BackKeyScreen):
+    currentObj = ObjectProperty(None)
     def __init__(self, **kwargs):
-        super(FloatGameScreen, self).__init__()
+        super(FloatGameScreen, self).__init__(**kwargs)
         client_frame = FloatLayout(size_hint=(1, 1))
         # garden background
         left_bg = StaticImage(pos=(sizes.width_ref, sizes.height_ref),
@@ -330,15 +331,14 @@ class FloatGameScreen(Screen):
                                src='images/scenery/nav_fond_droite_142x768px.png')
         client_frame.add_widget(right_bg)
 
-        button_next = ButtonWrap(fct=self.next_category,
+        button_next = ButtonImage(on_press=self.next_category,
                                  pos=(sizes.width_ref, sizes.height_ref),
                                  size=(sizes.width_left_margin, sizes.height_button_small),
                                  size_img=(75, 44),
                                  src="images/scenery/fleche_suite_75x44px.png")
         client_frame.add_widget(button_next)
 
-
-        button_stop = ButtonWrap(fct=self.stop_game,
+        button_stop = ButtonImage(on_press=self.stop_game,
                                  pos=(sizes.width_right_game, sizes.height_ref),
                                  size=(sizes.width_right_margin, sizes.height_button_small),
                                  size_img=(57, 57),
@@ -375,10 +375,15 @@ class FloatGameScreen(Screen):
         self.gameturn_setup(category)
 
     def next_category(self, touch):
-        print 'TODO: move to next category'
+        category = self.current_category
+        self.frame.remove_widget(category.target)
+        self.frame.remove_widget(category.element1)
+        self.frame.remove_widget(category.element2)
+        print 'TODO: add new category'
 
-    def stop_game(selfself, touch):
-        print 'TODO: ask to reset/stop game'
+    def stop_game(self, touch):
+        print 'TODO: ask confirmation to reset/stop game'
+        self.back()
 
     # setup for category game turn
     # todo: tear down
@@ -404,6 +409,9 @@ class FloatGameScreen(Screen):
                 # put the real object in place
                 static = StaticImage(pos=(sizes.width_left_margin, 0), size=(175, 175), src=element.image.source)
                 element.parent.add_widget(static)
+
+                #remove the target
+                self.frame.remove_widget(self.current_category.target)
 
                 # text speach update
                 if (not element.positive):
