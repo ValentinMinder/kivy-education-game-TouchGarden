@@ -36,3 +36,8 @@ gauge_smiley_left = gauge_left_start + (gauge_width - smiley_size) / 2.0
 gauge_smiley_margin = 11
 gauge_smiley_bottom = gauge_bottom_margin - gauge_smiley_margin - smiley_size
 gauge_smiley_top = gauge_bottom_start + gauge_height(2 * gauge_number) + 27
+
+cursor_height = 20
+cursor_left = gauge_left_start + 15
+def cursor_pos_y(step):
+    return gauge_bottom_start + gauge_height(step) - cursor_height/2.0

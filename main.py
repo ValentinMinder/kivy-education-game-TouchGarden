@@ -313,6 +313,7 @@ class TouchGardenApp(App):
 # float layout for draggable elements management
 class FloatGameScreen(BackKeyScreen):
     currentObj = ObjectProperty(None)
+    points = 0
 
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__(**kwargs)
@@ -348,22 +349,25 @@ class FloatGameScreen(BackKeyScreen):
                             src='images/scenery/score_77x459px.png')
         client_frame.add_widget(scale)
 
-        # scoring green and red
-        # todo: single score scale and change color
-        score = StaticImage(pos=(sizes.gauge_left_start, sizes.gauge_bottom_start),
+        # colored score gauge
+        self.gauge = StaticImage(pos=(sizes.gauge_left_start, sizes.gauge_bottom_start),
                             size=(sizes.gauge_width, sizes.gauge_height(sizes.gauge_number)),
-                            src='images/scenery/score_rouge.png')
-        score.image.allow_stretch = True
-        score.image.keep_ratio = False
-        self.score = score
-        scoregr = StaticImage(
-            pos=(sizes.gauge_left_start, sizes.gauge_bottom_start + sizes.gauge_height(sizes.gauge_number)),
-            size=(sizes.gauge_width, sizes.gauge_height(sizes.gauge_number)),
-            src='images/scenery/score_vert.png')
-        scoregr.image.allow_stretch = True
-        scoregr.image.keep_ratio = False
-        client_frame.add_widget(scoregr)
-        client_frame.add_widget(score)
+                            src='images/scenery/score_vert.png')
+        self.gauge.image.allow_stretch = True
+        self.gauge.image.keep_ratio = False
+        client_frame.add_widget(self.gauge)
+
+        #cursor
+        self.cursor = StaticImage(pos=(sizes.cursor_left, sizes.cursor_pos_y(sizes.gauge_number)),
+                            size=(38, 20),
+                            src='images/scenery/curseur_38x20px.png')
+        client_frame.add_widget(self.cursor)
+
+        #todo: add this to demo /tuto
+        anim = Animation(y = sizes.cursor_pos_y(0), duration=1)
+        anim += Animation(y=sizes.cursor_pos_y(2 * sizes.gauge_number), duration=2)
+        anim += Animation(y=sizes.cursor_pos_y(sizes.gauge_number), duration=1)
+        anim.start(self.cursor.image)
 
         button_next = ButtonImage(on_press=self.next_category,
                                   pos=(sizes.width_ref, sizes.height_ref),
@@ -418,6 +422,16 @@ class FloatGameScreen(BackKeyScreen):
     def stop_game(self, touch):
         print 'TODO: ask confirmation to reset/stop game'
         self.back()
+
+    #update the cursor placement and gauge filling/color depending on points
+    def update_cursor(self):
+        anim = Animation(y=sizes.cursor_pos_y(self.points + sizes.gauge_number), duration=1)
+        anim.start(self.cursor.image)
+        self.gauge.image.size = (sizes.gauge_width, sizes.gauge_height(self.points + sizes.gauge_number))
+        if (self.points >= 0):
+            self.gauge.image.source= 'images/scenery/score_vert.png'
+        else:
+            self.gauge.image.source = 'images/scenery/score_rouge.png'
 
     # setup for category game turn
     # todo: tear down
@@ -510,6 +524,12 @@ class FloatGameScreen(BackKeyScreen):
                 if (not element.positive):
                     element.parent.remove_widget(element)
                 self.currentObj = ObjectProperty(None)
+
+                if (element.positive):
+                    self.points += 1
+                else:
+                    self.points -= 1
+                self.update_cursor()
 
                 # todo : disable all other widget!
                 # todo: move to text info + other category, after a while
