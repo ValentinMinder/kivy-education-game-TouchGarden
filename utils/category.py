@@ -28,14 +28,17 @@ class ElementScatter(Scatter):
         self.name = name
         # to know wether positive or negative scenario should be activated
         self.positive = positive
+        self.size_hint = (None, None)
+        self.size = (sizes.width_left_elements, sizes.width_left_elements)
         self.image.source = img
+        self.image.size = (sizes.width_left_images, sizes.width_left_images)
+        self.image.pos = (sizes.border_small, sizes.border_small)
         # _orig to replace object at their correct original placement
-        self.x_orig = sizes.border_margin
+        self.x_orig = sizes.width_border_left
         if (first):
-            self.y_orig = sizes.height - sizes.height_left_margin
+            self.y_orig = sizes.height_left_first
         else:
-            print sizes.height - sizes.height_left_margin - sizes.height_left_elements
-            self.y_orig = sizes.height - sizes.height_left_margin - sizes.height_left_elements
+            self.y_orig = sizes.height_left_second
         self.pos = (self.x_orig, self.y_orig)
         self.touch = True
 

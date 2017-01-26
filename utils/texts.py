@@ -18,10 +18,10 @@ class color:
     green = "[color=#599875]"  # rgb(89, 152, 117)
     magenta = "[color=#e4235f]"  # rgb(228, 35, 95)
     grey = "[color=#969696]"  # rgb(150, 150, 150)
+    grey_light = "[color=#d0d0d0]" #rgb(208, 208, 208)
     white = "[color=#ffffff]"  # rgb(255, 255, 255)
     end = "[/color]"
-    default = black
-
+    default = grey_light
 
 class Text:
 
@@ -36,7 +36,7 @@ class Text:
             lang.de: self.german,
             lang.en: self.english
         }
-        return color.default + switch.get(lang.current) + color.end
+        return color.default + switch.get(lang.current) #+ color.end
 
 # default text switch, always define ALL languages
 def txt_notxt():
@@ -71,7 +71,7 @@ def txt_game_move_unreached():
 # game move target reached, correct positive element
 def txt_game_move_positive():
     switch = {
-        lang.fr: "Bravo, bien joué!",
+        lang.fr: "[b]Bravo, bien joué![/b]",
         lang.de: "TODO: keine deutsche Übersetzung, Entschuldigung...",
         lang.en: "TODO: no english translation, sorry..."
     }

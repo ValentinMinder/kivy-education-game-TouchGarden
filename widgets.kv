@@ -10,7 +10,7 @@
 #:import KIVY_DEFAULT_FONT settings.KIVY_DEFAULT_FONT
 <Label>:
     font_name: KIVY_DEFAULT_FONT
-    font_size: 20
+    font_size: 24
     color: 0, 0, 0, 1
     halign: 'center'
     valign: 'middle'
@@ -50,6 +50,11 @@
     drag_timeout: 10000000
     drag_distance: 0
 
+<LabelWrap>:
+    label: label
+    Label:
+        id: label
+
 <SpeachLabel>:
     label: label
     LabelB:
@@ -66,7 +71,6 @@
     image: imag
     Image:
         id: imag
-        size: 200, 200
         on_touch_down: root.parent.parent.currentObj = self.parent
 
 <AnimatedScatter>

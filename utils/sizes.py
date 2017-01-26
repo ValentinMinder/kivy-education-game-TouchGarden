@@ -9,13 +9,23 @@ width_game = 1024
 width_left_margin = 200
 width_right_game = width_left_margin + width_game
 width_right_margin = width - width_game - width_left_margin
+width_left_elements = 144
 
-border_margin = 20
-height_left_margin = 300
-height_left_elements = 250
-height_button_small = 78
+border_small = 6
+border_text_min = 10
+width_text_max = width_left_margin - 2 * border_text_min
+height_button_small = 78 - border_small
 
-border = 26
+width_left_images = width_left_elements - 2 * border_small
+
+width_border_left = (width_left_margin - width_left_elements) / 2
+height_left_margin = width_border_left
+height_left_category = 682
+height_left_category_desc = height_left_category - height_button_small
+height_left_first = height_left_category_desc - width_left_elements - height_left_margin
+height_left_first_desc = height_left_first - height_button_small
+height_left_second = height_left_first_desc - width_left_elements - height_left_margin
+height_left_second_desc = height_left_second - height_button_small
 
 
 def gauge_height(step):
@@ -41,3 +51,10 @@ cursor_height = 20
 cursor_left = gauge_left_start + 15
 def cursor_pos_y(step):
     return gauge_bottom_start + gauge_height(step) - cursor_height/2.0
+
+category_height = 23
+category_width = 186
+category_number = 6.0
+
+def category_width_progress (step):
+    return step * category_width / category_number

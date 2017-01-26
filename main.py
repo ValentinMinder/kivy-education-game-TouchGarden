@@ -94,6 +94,28 @@ class SpeachLabel(Widget):
     pass
 
 
+# for speach
+class LabelWrap(Widget):
+    def __init__(self, pos, size, text, font_size = 18, bold=False):
+        super(LabelWrap, self).__init__()
+        self.label.pos = pos
+        self.label.size = size
+        self.label.text = text.get()
+        self.text = text
+        self.bold = bold
+        self.bolden()
+        self.label.font_size = font_size
+
+    def bolden(self):
+        if (self.bold):
+            self.label.text = "[b]" + self.label.text + "[/b]"
+
+    def update_cat(self, current_cat):
+        self.label.text = self.text.get() + " " + str(current_cat) + "/" + str(sizes.gauge_number)
+        self.bolden()
+
+
+
 # for star-like buttons
 class ButtonStar(Button):
     pass
@@ -369,15 +391,32 @@ class FloatGameScreen(BackKeyScreen):
         anim += Animation(y=sizes.cursor_pos_y(sizes.gauge_number), duration=1)
         anim.start(self.cursor.image)
 
+        cat_scale = StaticImage(pos=(sizes.border_small, sizes.height_button_small),
+                            size=(sizes.category_width, sizes.category_height),
+                            src='images/scenery/niveau_avancement_186x23px.png')
+        client_frame.add_widget(cat_scale)
+
+        #todo: handle correctly category numbers
+        self.categorynb = 1
+        # colored score gauge
+        self.category_scale = StaticImage(pos=(sizes.border_small, sizes.height_button_small),
+                                 size=(sizes.category_width_progress(self.categorynb), sizes.category_height),
+                                 src='images/scenery/niveau_avancement_curseur.png')
+        self.category_scale.image.allow_stretch = True
+        self.category_scale.image.keep_ratio = False
+        client_frame.add_widget(self.category_scale)
+
+
+
         button_next = ButtonImage(on_press=self.next_category,
-                                  pos=(sizes.width_ref, sizes.height_ref),
+                                  pos=(sizes.width_ref, sizes.border_small),
                                   size=(sizes.width_left_margin, sizes.height_button_small),
                                   size_img=(75, 44),
                                   src="images/scenery/fleche_suite_75x44px.png")
         client_frame.add_widget(button_next)
 
         button_stop = ButtonImage(on_press=self.stop_game,
-                                  pos=(sizes.width_right_game, sizes.height_ref),
+                                  pos=(sizes.width_right_game, sizes.border_small),
                                   size=(sizes.width_right_margin, sizes.height_button_small),
                                   size_img=(57, 57),
                                   src="images/scenery/bouton_eteindre_57x57px.png")
@@ -402,9 +441,65 @@ class FloatGameScreen(BackKeyScreen):
 
         self.speach = speach = SpeachLabel()
         speach.label.text = txt_tutorial_welcome()
-        speach.label.pos = (1366 - 350, 768 - 170)
+        speach.label.pos = (1366 - 364, 768 - 170)
         speach.label.size = (200, 150)
         client_frame.add_widget(speach)
+
+        score_text = LabelWrap(size=(sizes.width_right_margin, sizes.height_button_small),
+                               pos = (sizes.width_right_game, sizes.height_left_category),
+                               text=Text(fr='Score', de = 'TODE', en='Score'),
+                               font_size=28, bold=True)
+        client_frame.add_widget(score_text)
+
+        self.category_text = LabelWrap(size=(sizes.width_left_margin, sizes.height_button_small),
+                                          pos=(sizes.width_ref, sizes.height_left_category),
+                                          text=Text(fr='Catégorie', de='TODE', en='Category'),
+                                          font_size=28, bold=True)
+        client_frame.add_widget(self.category_text)
+        self.category_text.update_cat(1)
+
+        self.category_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_button_small),
+                                       pos=(sizes.border_text_min, sizes.height_left_category_desc),
+                                       text=Text(fr="Haies et bordures (mock)", de='TODE', en='TOEN'),
+                                       font_size=23)
+        client_frame.add_widget(self.category_desc)
+
+        #nice ui elements
+        f1 = StaticImage(pos=(sizes.width_border_left, sizes.height_left_category),
+                             size=(sizes.width_left_elements, sizes.border_small),
+                             src='images/scenery/filet_souligne_144x6px.png')
+        f2 = StaticImage(pos=(sizes.width_right_game + sizes.width_border_left, sizes.height_left_category),
+                         size=(sizes.width_right_margin - 2 * sizes.width_border_left, sizes.border_small),
+                         src='images/scenery/filet_souligne_144x6px.png')
+        f2.image.allow_stretch = True
+        f2.image.keep_ratio = False
+        f3 = StaticImage(pos=(sizes.width_border_left, sizes.height_left_category_desc),
+                         size=(sizes.width_left_elements, sizes.border_small),
+                         src='images/scenery/filet_souligne_144x6px.png')
+        client_frame.add_widget(f1)
+        client_frame.add_widget(f2)
+        client_frame.add_widget(f3)
+
+        # textual description elements
+        self.elem_first_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_button_small),
+                               pos=(sizes.border_text_min, sizes.height_left_first_desc),
+                               text=Text(fr="haies d'espèces natives hétérogènes (sample mock text)", de='TODE', en='TOEN'))
+        client_frame.add_widget(self.elem_first_desc)
+
+        self.elem_second_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_button_small),
+                                    pos=(sizes.border_text_min, sizes.height_left_second_desc),
+                                    text=Text(fr="haie homogène de thuyas exotiques (sample mock text)", de='TODE', en='TOEN'))
+        client_frame.add_widget(self.elem_second_desc)
+
+        elem_first_frame = StaticImage(size=(sizes.width_left_elements, sizes.width_left_elements),
+                                    pos=(sizes.width_border_left, sizes.height_left_first),
+                                    src='images/scenery/fond_menu_gauche_144x144px.png')
+        client_frame.add_widget(elem_first_frame)
+
+        elem_second_frame = StaticImage(size=(sizes.width_left_elements, sizes.width_left_elements),
+                                    pos=(sizes.width_border_left, sizes.height_left_second),
+                                    src='images/scenery/fond_menu_gauche_144x144px.png')
+        client_frame.add_widget(elem_second_frame)
 
         # add main layout to root
         self.add_widget(client_frame)
@@ -417,7 +512,19 @@ class FloatGameScreen(BackKeyScreen):
         self.frame.remove_widget(category.target)
         self.frame.remove_widget(category.element1)
         self.frame.remove_widget(category.element2)
-        print 'TODO: add new category'
+
+        self.categorynb +=1
+        if (self.categorynb <= sizes.category_number):
+            self.category_scale.image.size = (sizes.category_width_progress(self.categorynb), sizes.category_height)
+            self.category_text.update_cat(self.categorynb)
+            self.category_desc.label.text = "blo"
+            self.elem_first_desc.label.text = "bli"
+            self.elem_second_desc.label.text = "bla"
+            print 'TODO: add new category'
+        else:
+            print 'TODO: end of game, see results before leaving'
+            self.back()
+
 
     def stop_game(self, touch):
         print 'TODO: ask confirmation to reset/stop game'
@@ -516,7 +623,7 @@ class FloatGameScreen(BackKeyScreen):
                 # todo: remove the animal or make sure it disappear
                 # element.parent.remove_widget(animal)
 
-                anim_wid = Animation(x=element.x_orig, y=element.y_orig - 200)
+                anim_wid = Animation(x=element.x_orig, y=element.y_orig)
                 anim_wid.start(element)
 
                 # todo: always remove the widget
