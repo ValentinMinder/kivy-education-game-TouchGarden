@@ -12,20 +12,21 @@ width_right_margin = width - width_game - width_left_margin
 width_left_elements = 144
 
 border_small = 6
-border_text_min = 10
+border_text_min = border_small * 2
 width_text_max = width_left_margin - 2 * border_text_min
 height_button_small = 78 - border_small
+
+height_title = 80
+height_left_category_element = height_title - border_small
 
 width_left_images = width_left_elements - 2 * border_small
 
 width_border_left = (width_left_margin - width_left_elements) / 2
 height_left_margin = width_border_left
-height_left_category = 682
-height_left_category_desc = height_left_category - height_button_small
+height_left_category_title = height_used - height_title
+height_left_category_desc = height_left_category_title - height_title
 height_left_first = height_left_category_desc - width_left_elements - height_left_margin
-height_left_first_desc = height_left_first - height_button_small
-height_left_second = height_left_first_desc - width_left_elements - height_left_margin
-height_left_second_desc = height_left_second - height_button_small
+height_left_first_desc = height_left_first - height_title
 
 
 def gauge_height(step):
@@ -56,5 +57,15 @@ category_height = 23
 category_width = 186
 category_number = 6.0
 
+#remaining size is spread over the 2 elements
+left_margin_elements = (height_left_first - 2 * height_title - width_left_elements - height_button_small - border_small - category_height) / 2
+height_left_second = height_left_first_desc - width_left_elements - left_margin_elements
+height_left_second_desc = height_left_second - height_title
+
 def category_width_progress (step):
     return step * category_width / category_number
+
+font_size_default= 18
+font_size_large = 22
+font_size_subtitle = 24
+font_size_title = 34

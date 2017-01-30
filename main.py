@@ -96,7 +96,7 @@ class SpeachLabel(Widget):
 
 # for speach
 class LabelWrap(Widget):
-    def __init__(self, pos, size, text, font_size = 18, bold=False):
+    def __init__(self, pos, size, text, font_size = sizes.font_size_default, bold=False, vAlignTop=False):
         super(LabelWrap, self).__init__()
         self.label.pos = pos
         self.label.size = size
@@ -105,6 +105,8 @@ class LabelWrap(Widget):
         self.bold = bold
         self.bolden()
         self.label.font_size = font_size
+        if (vAlignTop):
+            self.label.valign = 'top'
 
     def bolden(self):
         if (self.bold):
@@ -391,7 +393,7 @@ class FloatGameScreen(BackKeyScreen):
         anim += Animation(y=sizes.cursor_pos_y(sizes.gauge_number), duration=1)
         anim.start(self.cursor.image)
 
-        cat_scale = StaticImage(pos=(sizes.border_small, sizes.height_button_small),
+        cat_scale = StaticImage(pos=(sizes.border_small, sizes.height_button_small + sizes.border_small),
                             size=(sizes.category_width, sizes.category_height),
                             src='images/scenery/niveau_avancement_186x23px.png')
         client_frame.add_widget(cat_scale)
@@ -399,7 +401,7 @@ class FloatGameScreen(BackKeyScreen):
         #todo: handle correctly category numbers
         self.categorynb = 1
         # colored score gauge
-        self.category_scale = StaticImage(pos=(sizes.border_small, sizes.height_button_small),
+        self.category_scale = StaticImage(pos=(sizes.border_small, sizes.height_button_small + sizes.border_small),
                                  size=(sizes.category_width_progress(self.categorynb), sizes.category_height),
                                  src='images/scenery/niveau_avancement_curseur.png')
         self.category_scale.image.allow_stretch = True
@@ -446,34 +448,34 @@ class FloatGameScreen(BackKeyScreen):
         client_frame.add_widget(speach)
 
         score_text = LabelWrap(size=(sizes.width_right_margin, sizes.height_button_small),
-                               pos = (sizes.width_right_game, sizes.height_left_category),
+                               pos = (sizes.width_right_game, sizes.height_left_category_title),
                                text=Text(fr='Score', de = 'TODE', en='Score'),
                                font_size=28, bold=True)
         client_frame.add_widget(score_text)
 
-        self.category_text = LabelWrap(size=(sizes.width_left_margin, sizes.height_button_small),
-                                          pos=(sizes.width_ref, sizes.height_left_category),
+        self.category_text = LabelWrap(size=(sizes.width_left_margin, sizes.height_left_category_element),
+                                          pos=(sizes.width_ref, sizes.height_left_category_title),
                                           text=Text(fr='Catégorie', de='TODE', en='Category'),
-                                          font_size=28, bold=True)
+                                          font_size=sizes.font_size_subtitle, bold=True)
         client_frame.add_widget(self.category_text)
         self.category_text.update_cat(1)
 
-        self.category_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_button_small),
+        self.category_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_left_category_element),
                                        pos=(sizes.border_text_min, sizes.height_left_category_desc),
-                                       text=Text(fr="Haies et bordures (mock)", de='TODE', en='TOEN'),
-                                       font_size=23)
+                                       text=Text(fr="IiiiiiiiIiiiiiiiiIiiiiiiiiiiiiiiiiiiiIiiIIi (mock)", de='TODE', en='TOEN'),
+                                       font_size=sizes.font_size_large)
         client_frame.add_widget(self.category_desc)
 
         #nice ui elements
-        f1 = StaticImage(pos=(sizes.width_border_left, sizes.height_left_category),
+        f1 = StaticImage(pos=(sizes.width_border_left, sizes.height_left_category_title - sizes.border_small),
                              size=(sizes.width_left_elements, sizes.border_small),
                              src='images/scenery/filet_souligne_144x6px.png')
-        f2 = StaticImage(pos=(sizes.width_right_game + sizes.width_border_left, sizes.height_left_category),
+        f2 = StaticImage(pos=(sizes.width_right_game + sizes.width_border_left, sizes.height_left_category_title - sizes.border_small),
                          size=(sizes.width_right_margin - 2 * sizes.width_border_left, sizes.border_small),
                          src='images/scenery/filet_souligne_144x6px.png')
         f2.image.allow_stretch = True
         f2.image.keep_ratio = False
-        f3 = StaticImage(pos=(sizes.width_border_left, sizes.height_left_category_desc),
+        f3 = StaticImage(pos=(sizes.width_border_left, sizes.height_left_category_desc - sizes.border_small),
                          size=(sizes.width_left_elements, sizes.border_small),
                          src='images/scenery/filet_souligne_144x6px.png')
         client_frame.add_widget(f1)
@@ -481,14 +483,16 @@ class FloatGameScreen(BackKeyScreen):
         client_frame.add_widget(f3)
 
         # textual description elements
-        self.elem_first_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_button_small),
+        self.elem_first_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
                                pos=(sizes.border_text_min, sizes.height_left_first_desc),
-                               text=Text(fr="haies d'espèces natives hétérogènes (sample mock text)", de='TODE', en='TOEN'))
+                               text=Text(fr="Haies d'espèces natives IiiiiiiIiiiiiIiiiiiiiiiiiiii 3rd and last line I", de='TODE', en='TOEN'),
+                               vAlignTop=True)
         client_frame.add_widget(self.elem_first_desc)
 
-        self.elem_second_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_button_small),
+        self.elem_second_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
                                     pos=(sizes.border_text_min, sizes.height_left_second_desc),
-                                    text=Text(fr="haie homogène de thuyas exotiques (sample mock text)", de='TODE', en='TOEN'))
+                                    text=Text(fr="Haie homogène Iiiiiiiiiiii", de='TODE', en='TOEN'),
+                                    vAlignTop=True)
         client_frame.add_widget(self.elem_second_desc)
 
         elem_first_frame = StaticImage(size=(sizes.width_left_elements, sizes.width_left_elements),

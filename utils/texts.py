@@ -18,10 +18,10 @@ class color:
     green = "[color=#599875]"  # rgb(89, 152, 117)
     magenta = "[color=#e4235f]"  # rgb(228, 35, 95)
     grey = "[color=#969696]"  # rgb(150, 150, 150)
-    grey_light = "[color=#d0d0d0]" #rgb(208, 208, 208)
+    grey_light = "[color=#d0c7d1]" #rgb(208, 199,209)
     white = "[color=#ffffff]"  # rgb(255, 255, 255)
     end = "[/color]"
-    default = grey_light
+    default = black
 
 class Text:
 
@@ -36,7 +36,7 @@ class Text:
             lang.de: self.german,
             lang.en: self.english
         }
-        return color.default + switch.get(lang.current) #+ color.end
+        return color.grey_light + switch.get(lang.current) #+ color.end
 
 # default text switch, always define ALL languages
 def txt_notxt():
