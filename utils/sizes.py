@@ -69,3 +69,25 @@ font_size_default= 18
 font_size_large = 22
 font_size_subtitle = 24
 font_size_title = 34
+
+#negative_window
+win_dx = 262
+win_dy = 82
+win_width = 898
+win_height = 600
+win_header = 80
+win_width_infos = 183
+win_choice_width = 400
+win_choice_height = 194
+win_choice_header = 38
+win_choice_margin = (win_width - 2 * win_choice_width) / 3
+win_choice_left = win_choice_margin
+win_choice_right = win_choice_width + 2 * win_choice_margin
+win_choice_down = win_choice_margin
+win_choice_up = win_choice_height + 2 * win_choice_margin
+win_choice_img_size = width_left_images
+
+win_choice_inner_margin = (win_choice_height - win_choice_header - win_choice_img_size) / 2
+win_choice_inner_center = (win_choice_width - win_choice_img_size) / 2
+win_choice_inner_left = win_choice_inner_center - win_choice_img_size * 0.75
+win_choice_inner_right = win_choice_inner_center + win_choice_img_size * 0.75

@@ -12,6 +12,12 @@ class Category(object):
         self.element2 = el2
         self.target = target
 
+class Recover(object):
+    def __init__(self, positive, negative, solution=False, correction='images/scenery/transparency.png'):
+        self.positive = positive
+        self.negative = negative
+        self.solution = solution
+        self.correction = correction
 
 # animated scatter element
 #  todo: check disabling all touch

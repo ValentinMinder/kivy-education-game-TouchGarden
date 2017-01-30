@@ -12,8 +12,8 @@ from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 
 from utils import sizes
-from utils.category import ElementScatter, AnimatedScatter, Category
-from utils.gui import StaticImage, ButtonImage
+from utils.category import ElementScatter, AnimatedScatter, Category, Recover
+from utils.gui import StaticImage, ButtonImage, ButtonImageChoices, LabelWrap
 
 # Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 Config.set('graphics', 'width', sizes.width)  # 1366
@@ -94,27 +94,7 @@ class SpeachLabel(Widget):
     pass
 
 
-# for speach
-class LabelWrap(Widget):
-    def __init__(self, pos, size, text, font_size = sizes.font_size_default, bold=False, vAlignTop=False):
-        super(LabelWrap, self).__init__()
-        self.label.pos = pos
-        self.label.size = size
-        self.label.text = text.get()
-        self.text = text
-        self.bold = bold
-        self.bolden()
-        self.label.font_size = font_size
-        if (vAlignTop):
-            self.label.valign = 'top'
 
-    def bolden(self):
-        if (self.bold):
-            self.label.text = "[b]" + self.label.text + "[/b]"
-
-    def update_cat(self, current_cat):
-        self.label.text = self.text.get() + " " + str(current_cat) + "/" + str(sizes.gauge_number)
-        self.bolden()
 
 
 
@@ -633,9 +613,6 @@ class FloatGameScreen(BackKeyScreen):
 
                 element.parent.add_widget(animated)
 
-                # points
-                m = 1 if element.positive else -1
-                self.anim_points(m, 175 / 2 + sizes.width_left_margin, 175 / 2)
 
                 # animation of animals
                 # TODO: real animals!
@@ -667,10 +644,20 @@ class FloatGameScreen(BackKeyScreen):
                     self.points += 1
                 else:
                     self.points -= 1
-                self.update_cursor()
+
 
                 # todo : disable all other widget!
                 # todo: move to text info + other category, after a while
+
+                def after(screen):
+                    self.update_cursor()
+                    self.frame.remove_widget(animal)
+                    self.frame.remove_widget(animated)
+                    if (not element.positive):
+                        self.after_negative()
+                # points
+                m = 1 if element.positive else -1
+                self.anim_points(m, 175 / 2 + sizes.width_left_margin, 175 / 2, fct_next=after)
 
                 print 'placed scatter'
             else:
@@ -679,6 +666,136 @@ class FloatGameScreen(BackKeyScreen):
                 self.speach.label.text = txt_game_move_unreached()
                 print 'not placed'
                 self.currentObj = ObjectProperty(None)
+
+    def after_negative(self):
+        print 'negative'
+
+        def x(_x):
+            return _x + sizes.win_dx
+        def y (_y):
+            return _y + sizes.win_dy
+
+        window_frame = FloatLayout(size_hint=(1, 1), pos=(0,0))
+
+        window_frame.add_widget(StaticImage(
+            pos=(x(-2), y(-22)),
+            size=(923, 624),
+            src='images/scenery/fenetre_infos_923x624px.png'))
+
+        self.add_widget(
+            LabelWrap(pos=(x(0), y(sizes.win_height - sizes.win_header)),
+                      size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
+                      text=Text(fr="Ce n'est pas le bon choix...", de= "TODE", en="TOEN"),
+                      font_size=sizes.font_size_title,
+                      bold=True))
+
+        window_frame.add_widget(StaticImage(pos=(x(0), y(sizes.win_height - sizes.win_header)),
+                            size=(sizes.win_width, sizes.win_header),
+                            src='images/scenery/bandeau_gris_fenetre_choix_898x80px.png'))
+
+        # todo: separate the text for internationalizazion !
+        window_frame.add_widget(ButtonImage(
+            on_press=self.more_infos, pos=(x(sizes.win_width - sizes.win_width_infos), y(sizes.win_height - sizes.win_header)),
+                            size=(sizes.win_width_infos, sizes.win_header),
+                            size_img=(sizes.win_width_infos, sizes.win_header),
+                            src='images/scenery/bouton_plus_d_infos_183x80px.png'))
+
+        #todo: react to clicks
+        def replace(screen):
+            print 'replace'
+
+        def remove(screen):
+            print 'remove'
+
+        def keep(screen):
+            print 'keep'
+
+        def correct(screen):
+            print 'correct'
+
+        class ButtonImageChoicesKeep(ButtonImageChoices):
+            def __init__(self, recover):
+                pos = (x(sizes.win_choice_left), y(sizes.win_choice_down))
+                text = Text("Garder", "TODE", "TOEN")
+                super(ButtonImageChoicesKeep, self).__init__(keep, pos, text)
+
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src=recover.negative))
+
+
+        class ButtonImageChoicesRemove(ButtonImageChoices):
+            def __init__(self, recover):
+                pos = (x(sizes.win_choice_right), y(sizes.win_choice_up))
+                text = Text(fr="Enlever", de="TODE", en="TOEN")
+                super(ButtonImageChoicesRemove, self).__init__(remove, pos, text)
+
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src=recover.negative))
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src='images/scenery/picto_croix_112x112px.png'))
+
+
+        class ButtonImageChoicesReplace(ButtonImageChoices):
+            def __init__(self, recover):
+                pos = (x(sizes.win_choice_left), y(sizes.win_choice_up))
+                text = Text("Remplacer", "TODE", "TOEN")
+                super(ButtonImageChoicesReplace, self).__init__(replace, pos, text)
+
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src='images/scenery/fleche_seule_23x44px.png'))
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src=recover.negative))
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src='images/scenery/picto_croix_112x112px.png'))
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_right, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src=recover.positive))
+
+        class ButtonImageChoicesCorrect(ButtonImageChoices):
+            def __init__(self, recover):
+                pos = (x(sizes.win_choice_right), y(sizes.win_choice_down))
+                text = Text("Corriger", "TODE", "TOEN")
+                super(ButtonImageChoicesCorrect, self).__init__(correct, pos, text)
+
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src='images/scenery/fleche_seule_23x44px.png'))
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src=recover.negative))
+                self.add_widget(
+                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_right, pos[1] + sizes.win_choice_inner_margin),
+                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                                src=recover.correction))
+
+        recover = Recover('images/non_animes/haie_diverses_especes.png', 'images/non_animes/haie_de_thuya.png', True, 'images/non_animes/haie_de_thuya.png')
+        window_frame.add_widget(ButtonImageChoicesReplace(recover))
+        window_frame.add_widget(ButtonImageChoicesRemove(recover))
+        window_frame.add_widget(ButtonImageChoicesKeep(recover))
+        if (recover.solution):
+            window_frame.add_widget(ButtonImageChoicesCorrect(recover))
+
+        self.frame.add_widget(window_frame)
+        pass
+
+    def more_infos(self, screen):
+        print 'know more'
+
 
 
 # launch the app
