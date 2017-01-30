@@ -360,12 +360,12 @@ class FloatGameScreen(BackKeyScreen):
         # smiles and gscale (gauge)
         smile_pos = StaticImage(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_top),
                                 size=(29, 29),
-                                src='images/scenery/smile_positif_29x29px.png')
+                                src='images/scenery/smile_positif_210x200px.png')
         client_frame.add_widget(smile_pos)
 
         smile_neg = StaticImage(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_bottom),
                                 size=(29, 29),
-                                src='images/scenery/smile_negatif_29x29px.png')
+                                src='images/scenery/smile_negatif_210x200px.png')
         client_frame.add_widget(smile_neg)
 
         scale = StaticImage(pos=(sizes.gauge_left_margin, sizes.gauge_bottom_margin),
@@ -393,7 +393,7 @@ class FloatGameScreen(BackKeyScreen):
         anim += Animation(y=sizes.cursor_pos_y(sizes.gauge_number), duration=1)
         anim.start(self.cursor.image)
 
-        cat_scale = StaticImage(pos=(sizes.border_small, sizes.height_button_small + sizes.border_small),
+        cat_scale = StaticImage(pos=(sizes.border_small + 2, sizes.height_button_small + sizes.border_small),
                             size=(sizes.category_width, sizes.category_height),
                             src='images/scenery/niveau_avancement_186x23px.png')
         client_frame.add_widget(cat_scale)
@@ -421,7 +421,7 @@ class FloatGameScreen(BackKeyScreen):
                                   pos=(sizes.width_right_game, sizes.border_small),
                                   size=(sizes.width_right_margin, sizes.height_button_small),
                                   size_img=(57, 57),
-                                  src="images/scenery/bouton_eteindre_57x57px.png")
+                                  src="images/scenery/bouton_eteindre_200x200px.png")
         client_frame.add_widget(button_stop)
 
         positif = ElementScatter(name=Text("fr", "de", "en"), positive=True, first=True,
@@ -512,22 +512,63 @@ class FloatGameScreen(BackKeyScreen):
         self.gameturn_setup(category)
 
     def next_category(self, touch):
+        if (self.categorynb <= sizes.category_number):
+            self.speach.label.text = txt_game_move_pass()
+            self.anim_points(0, 0, 0, self.pick_category)
+        else:
+            print 'TODO: end of game, see results before leaving'
+            self.back()
+
+    def pick_category(self, screen):
         category = self.current_category
         self.frame.remove_widget(category.target)
         self.frame.remove_widget(category.element1)
         self.frame.remove_widget(category.element2)
 
-        self.categorynb +=1
-        if (self.categorynb <= sizes.category_number):
-            self.category_scale.image.size = (sizes.category_width_progress(self.categorynb), sizes.category_height)
-            self.category_text.update_cat(self.categorynb)
-            self.category_desc.label.text = "blo"
-            self.elem_first_desc.label.text = "bli"
-            self.elem_second_desc.label.text = "bla"
-            print 'TODO: add new category'
-        else:
-            print 'TODO: end of game, see results before leaving'
-            self.back()
+        self.categorynb += 1
+
+        self.category_scale.image.size = (sizes.category_width_progress(self.categorynb), sizes.category_height)
+        self.category_text.update_cat(self.categorynb)
+        self.category_desc.label.text = "blo"
+        self.elem_first_desc.label.text = "bli"
+        self.elem_second_desc.label.text = "bla"
+
+
+        print 'TODO: add new category'
+
+    # does nothing, used for no action after animation
+    def none(self):
+        pass
+
+    # animates a smile/a points mark towards scale from the happening area
+    # todo: choose if points or smiles
+    def anim_points(self, points, x_start, y_start, fct_next=none):
+        size = 50
+        size_final = 200
+        x_final = sizes.width - size_final
+        y_final = (sizes.height - size_final) / 2
+        y_shift = 300
+        points_image = StaticImage(size=(size, size),
+                                   pos=(x_start, y_start),
+                                   src='images/scenery/points_neutre_500x500px.png')
+        if (points > 0):
+            points_image.image.source = 'images/scenery/smile_positif_210x200px.png'
+            y_final += y_shift
+        elif (points < 0):
+            points_image.image.source = 'images/scenery/points_negatif_500x500px.png'
+            y_final -= y_shift
+
+        self.frame.add_widget(points_image)
+
+        def remove(anim, widget):
+            self.frame.remove_widget(points_image)
+            fct_next(self)
+
+        d = 3
+        anim_points = Animation(size=(size_final, size_final), duration=d)
+        anim_points &= Animation(x=x_final, y=y_final, duration=d, t='in_quad')
+        anim_points.bind(on_complete=remove)
+        anim_points.start(points_image.image)
 
 
     def stop_game(self, touch):
@@ -593,22 +634,8 @@ class FloatGameScreen(BackKeyScreen):
                 element.parent.add_widget(animated)
 
                 # points
-
-                points = AnimatedScatter()
-                if (element.positive):
-                    points.image.source = 'images/plus_green.png'
-                else:
-                    points.image.source = 'images/minus_red.png'
-                points.pos = (175 / 2 + sizes.width_left_margin, 175 / 2)
-                element.parent.add_widget(points)
-                anim_points = Animation(x=1500, y=500, duration=2)
-                if (element.positive):
-                    points.image.size = (100, 100)
-                    anim_points &= Animation(size=(700, 700))
-                else:
-                    points.image.size = (600, 600)
-                    anim_points &= Animation(size=(100, 100))
-                anim_points.start(points.image)
+                m = 1 if element.positive else -1
+                self.anim_points(m, 175 / 2 + sizes.width_left_margin, 175 / 2)
 
                 # animation of animals
                 # TODO: real animals!

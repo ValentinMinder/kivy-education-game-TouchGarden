@@ -54,7 +54,7 @@ def cursor_pos_y(step):
     return gauge_bottom_start + gauge_height(step) - cursor_height/2.0
 
 category_height = 23
-category_width = 186
+category_width = 188
 category_number = 6.0
 
 #remaining size is spread over the 2 elements

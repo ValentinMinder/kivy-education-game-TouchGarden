@@ -15,7 +15,9 @@ class lang:
 # text color handling
 class color:
     black = "[color=#323a47]"  # rgb(50, 58, 71)
-    green = "[color=#599875]"  # rgb(89, 152, 117)
+    green = "[color=#00aa50]"  # rgb(0, 170, 80)
+    green_light = "[color=#599875]"  # rgb(89, 152, 117)
+    orange = "[color=#ff8000]"  # rgb(255,128,0)
     magenta = "[color=#e4235f]"  # rgb(228, 35, 95)
     grey = "[color=#969696]"  # rgb(150, 150, 150)
     grey_light = "[color=#d0c7d1]" #rgb(208, 199,209)
@@ -86,3 +88,12 @@ def txt_game_move_negative():
         lang.en: "TODO: no english translation, sorry..."
     }
     return color.magenta + switch.get(lang.current) + color.end
+
+# game move target reached, uncorrect negative element
+def txt_game_move_pass():
+    switch = {
+        lang.fr: "Catégorie passée, aucun point attribué...",
+        lang.de: "TODO: keine deutsche Übersetzung, Entschuldigung...",
+        lang.en: "TODO: no english translation, sorry..."
+    }
+    return color.orange + switch.get(lang.current) + color.end
