@@ -361,6 +361,12 @@ class FloatGameScreen(BackKeyScreen):
                                src='images/scenery/nav_fond_droite_142x768px.png')
         client_frame.add_widget(right_bg)
 
+        # todo: remove swimming pool
+        pool = StaticImage(pos=(228, 300),
+                              size=(456, 256),
+                              src='images/animations/scenery/pool.zip')
+        client_frame.add_widget(pool)
+
         # smiles and gscale (gauge)
         smile_pos = StaticImage(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_top),
                                 size=(29, 29),
@@ -435,7 +441,7 @@ class FloatGameScreen(BackKeyScreen):
 
         target = StaticImage(pos=(sizes.width_left_margin, 0),
                              size=(175, 175),
-                             src='images/zones_de_depot/blocdepot_haie_gauche.png')
+                             src='images/zones_de_depot/depot_haies_2.zip')
         category = Category(name=Text("fr", "de", "en"), el1=positif, el2=negatif, target=target)
 
         # welcoming guy
@@ -600,6 +606,21 @@ class FloatGameScreen(BackKeyScreen):
         # target area to carry elements
         self.frame.add_widget(category.target)
 
+        #todo: remove: only for test
+        target2 = StaticImage(pos=(sizes.width_left_margin + 250, 0),
+                             size=(175, 175),
+                             src='images/zones_de_depot/depot_haies_1.zip')
+
+        target3 = StaticImage(pos=(sizes.width_left_margin + 500, 0),
+                             size=(175, 175),
+                             src='images/zones_de_depot/depot_haies_3.zip')
+        self.frame.add_widget(target2)
+        self.frame.add_widget(target3)
+        speed = 1
+        category.target.image.anim_delay = speed
+        target2.image.anim_delay = speed
+        target3.image.anim_delay = speed
+
         # positive and negative elements to drag & drop
         self.frame.add_widget(category.element1)
         self.frame.add_widget(category.element2)
@@ -641,20 +662,54 @@ class FloatGameScreen(BackKeyScreen):
 
                 element.parent.add_widget(animated)
 
+                # todo: move to text info + other category, after a while
+
+                def after(screen):
+                    self.update_cursor()
+                    self.frame.remove_widget(animal)
+                    self.frame.remove_widget(animated)
+                    if (element.positive):
+                        self.category_next(None)
+                    else:
+                        self.after_negative()
+
+                # points
+                m = 1 if element.positive else -1
+
 
                 # animation of animals
                 # TODO: real animals!
                 animal = AnimatedScatter()
                 animal.image.anim_delay = 0.1
                 animal.image.size = (75, 152)
-                animal.pos = (0 + sizes.width_left_margin, 768)
-                animal.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+                animal.pos = (sizes.width, sizes.height/2)
+                animal.image.source = 'images/animations/haies/mesange_vole.zip'
+                animal.image.anim_delay = 0.2
                 element.parent.add_widget(animal)
-                anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=1)
+                anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=2)
+                heart = StaticImage(pos=(175 / 2 + 200, 175 / 2), size=(46, 50),
+                                    src='images/animations/eaux/coeur.zip')
+                def after_anim():
+                    self.anim_points(m, 175 / 2 + sizes.width_left_margin, 175 / 2, fct_next=after)
+
+                def after_bad (t,r):
+                    anim = Animation(x=100 + sizes.width, y=sizes.height / 2, duration=2)
+                    anim.start(animal)
+                    after_anim()
+                def remove_heart(t, r):
+                    element.parent.remove_widget(heart)
+
+                def add_heart(t,r):
+                    element.parent.add_widget(heart)
+                    anim = Animation(x=250, y=200, duration=1)
+                    anim += Animation(x=-100, y=175, duration=2)
+                    anim.start(animal)
+                    anim.bind(on_complete=remove_heart)
+                    after_anim()
                 if (element.positive):
-                    anim += Animation(x=1024 + 200 + sizes.width_left_margin, y=212, duration=2)
+                    anim.bind(on_complete=add_heart)
                 else:
-                    anim += Animation(x=0 + sizes.width_left_margin, y=768, duration=1)
+                    anim.bind(on_complete=after_bad)
                 anim.start(animal)
                 # todo: remove the animal or make sure it disappear
                 # element.parent.remove_widget(animal)
@@ -675,19 +730,7 @@ class FloatGameScreen(BackKeyScreen):
 
 
                 # todo : disable all other widget!
-                # todo: move to text info + other category, after a while
 
-                def after(screen):
-                    self.update_cursor()
-                    self.frame.remove_widget(animal)
-                    self.frame.remove_widget(animated)
-                    if (element.positive):
-                        self.category_next(None)
-                    else:
-                        self.after_negative()
-                # points
-                m = 1 if element.positive else -1
-                self.anim_points(m, 175 / 2 + sizes.width_left_margin, 175 / 2, fct_next=after)
 
                 print 'placed scatter'
             else:
@@ -744,7 +787,7 @@ class FloatGameScreen(BackKeyScreen):
             animal.image.anim_delay = 0.1
             animal.image.size = (75, 152)
             animal.pos = (0 + sizes.width_left_margin, 768)
-            animal.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+            animal.image.source = 'images/animations/haies/mesange_vole.zip'
             self.frame.add_widget(animal)
             anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=1)
             anim += Animation(x=1024 + 200 + sizes.width_left_margin, y=212, duration=2)
@@ -778,7 +821,7 @@ class FloatGameScreen(BackKeyScreen):
             animal.image.anim_delay = 0.1
             animal.image.size = (75, 152)
             animal.pos = (0 + sizes.width_left_margin, 768)
-            animal.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+            animal.image.source = 'images/animations/haies/mesange_vole.zip'
             self.frame.add_widget(animal)
             anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=1)
             anim += Animation(x=1024 + 200 + sizes.width_left_margin, y=212, duration=2)

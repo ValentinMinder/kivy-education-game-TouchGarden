@@ -293,30 +293,110 @@
         size_hint: 1, 1
         BoxLayout:
             orientation: 'horizontal'
-            size_hint: 1, 0.5
-
+            size_hint: 1, 0.2
             Image:
                 allow_stretch: False
-                source: 'images/animations/bonhomme/homme_positif_content.gif'
-                pos_hint: {'x': 0, 'top': 1}
-
+                source: 'images/animations/abris/herisson_mal.zip'
+                anim_delay: 0.2
             Image:
                 allow_stretch: False
-                source: 'images/animations/bonhomme/homme_positif_content_2.gif'
+                source: 'images/animations/abris/herisson_marche.zip'
                 anim_delay: 0.1
-                pos_hint: {'x': 0, 'top': 1}
-        Image:
-            allow_stretch: False
+            Image:
+                allow_stretch: False
+                source: 'images/animations/abris/herisson_zzz.zip'
+                anim_delay: 0.5
+            Image:
+                allow_stretch: False
+                source: 'images/animations/animaux/chat_couche_intro.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/animaux/chat_couche_loop.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/animaux/chat_marche.zip'
+                anim_delay: 0.3
+            Image:
+                allow_stretch: False
+                source: 'images/animations/animaux/chevre.zip'
+                anim_delay: 0.4
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
+            Image:
+                allow_stretch: False
+                source: 'images/animations/eaux/coeur.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/eaux/grenouille.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/fleurs/papillon_rouge.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/fleurs/papillon_jaune.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/haies/mesange_vole.zip'
+                anim_delay: 0.2
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
+            Image:
+                allow_stretch: False
+                source: 'images/animations/mur/ecureuil_court.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/mur/ecureuil_grimpe.zip'
+                anim_delay: 0.2
+            Image:
+                allow_stretch: False
+                source: 'images/animations/mur/ecureuil_tombe.zip'
+                anim_delay: 0.2
+            Image:
+                allow_stretch: False
+                source: 'images/animations/terrasse/musaraigne_flambe_intro.zip'
+                anim_delay: 0.2
+            Image:
+                allow_stretch: False
+                source: 'images/animations/terrasse/musaraigne_flambe_loop.zip'
+                anim_delay: 0.2
+            Image:
+                allow_stretch: False
+                source: 'images/animations/terrasse/musaraigne_marche.zip'
+                anim_delay: 0.1
+            Button:
+                text: 'STOP'
+                on_press: root.back()
+                #size_hint_y: 0.1
+        BoxLayout:
+            orientation: 'horizontal'
             size_hint: 1, 0.4
-            anim_delay: 0.1
-            anim_loop: 5
-            source: 'images/JDJcatleaps_v0.gif'
-            pos_hint: {'x': 0, 'top': 1}
+            Image:
+                allow_stretch: False
+                source: 'images/animations/animaux/chat_meurtre.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                anim_delay: 0.1
+                source: 'images/JDJcatleaps_v0.gif'
+            Image:
+                allow_stretch: False
+                source: 'images/animations/eaux/plouf.zip'
+                anim_delay: 0.2
+            Image:
+                allow_stretch: False
+                source: 'images/animations/scenery/pool.zip'
+                anim_delay: 0.5
 
-        Button:
-            text: 'STOP'
-            on_press: root.back()
-            size_hint_y: 0.1
+
 
 <TestAllGraphicsScreen>
     BoxLayout:
