@@ -390,7 +390,7 @@ class FloatGameScreen(BackKeyScreen):
 
 
 
-        button_next = ButtonImage(on_press=self.next_category,
+        button_next = ButtonImage(on_press=self.category_forward,
                                   pos=(sizes.width_ref, sizes.border_small),
                                   size=(sizes.width_left_margin, sizes.height_button_small),
                                   size_img=(75, 44),
@@ -491,19 +491,22 @@ class FloatGameScreen(BackKeyScreen):
         self.frame = client_frame
         self.gameturn_setup(category)
 
-    def next_category(self, touch):
-        if (self.categorynb <= sizes.category_number):
+    def category_forward(self, touch):
+        if (self.categorynb < sizes.category_number):
             self.speach.label.text = txt_game_move_pass()
-            self.anim_points(0, 0, 0, self.pick_category)
+            self.anim_points(0, 0, 0, self.category_next)
         else:
+            self.category_next(touch)
+
+    def category_next(self, screen):
+        if (self.categorynb >= sizes.category_number):
             print 'TODO: end of game, see results before leaving'
             self.back()
-
-    def pick_category(self, screen):
         category = self.current_category
-        self.frame.remove_widget(category.target)
-        self.frame.remove_widget(category.element1)
-        self.frame.remove_widget(category.element2)
+        #todo: reactivate , just easier to test
+        #self.frame.remove_widget(category.target)
+        #self.frame.remove_widget(category.element1)
+        #self.frame.remove_widget(category.element2)
 
         self.categorynb += 1
 
@@ -589,6 +592,7 @@ class FloatGameScreen(BackKeyScreen):
                 # put the real object in place
                 static = StaticImage(pos=(sizes.width_left_margin, 0), size=(175, 175), src=element.image.source)
                 element.parent.add_widget(static)
+                self.static = static
 
                 # remove the target
                 self.frame.remove_widget(self.current_category.target)
@@ -636,8 +640,8 @@ class FloatGameScreen(BackKeyScreen):
 
                 # todo: always remove the widget
                 # todo: why does selection doesn't work well ??
-                if (not element.positive):
-                    element.parent.remove_widget(element)
+                #if (not element.positive):
+                 #   element.parent.remove_widget(element)
                 self.currentObj = ObjectProperty(None)
 
                 if (element.positive):
@@ -653,7 +657,9 @@ class FloatGameScreen(BackKeyScreen):
                     self.update_cursor()
                     self.frame.remove_widget(animal)
                     self.frame.remove_widget(animated)
-                    if (not element.positive):
+                    if (element.positive):
+                        self.category_next(None)
+                    else:
                         self.after_negative()
                 # points
                 m = 1 if element.positive else -1
@@ -682,16 +688,16 @@ class FloatGameScreen(BackKeyScreen):
             size=(923, 624),
             src='images/scenery/fenetre_infos_923x624px.png'))
 
-        self.add_widget(
+        window_frame.add_widget(StaticImage(pos=(x(0), y(sizes.win_height - sizes.win_header)),
+                            size=(sizes.win_width, sizes.win_header),
+                            src='images/scenery/bandeau_gris_fenetre_choix_898x80px.png'))
+
+        window_frame.add_widget(
             LabelWrap(pos=(x(0), y(sizes.win_height - sizes.win_header)),
                       size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
                       text=Text(fr="Ce n'est pas le bon choix...", de= "TODE", en="TOEN"),
                       font_size=sizes.font_size_title,
                       bold=True))
-
-        window_frame.add_widget(StaticImage(pos=(x(0), y(sizes.win_height - sizes.win_header)),
-                            size=(sizes.win_width, sizes.win_header),
-                            src='images/scenery/bandeau_gris_fenetre_choix_898x80px.png'))
 
         # todo: separate the text for internationalizazion !
         window_frame.add_widget(ButtonImage(
@@ -703,15 +709,63 @@ class FloatGameScreen(BackKeyScreen):
         #todo: react to clicks
         def replace(screen):
             print 'replace'
+            self.points += 2
+
+
+            self.static.image.source = 'images/non_animes/haie_diverses_especes.png'
+
+
+            #todo: better
+            animal = AnimatedScatter()
+            animal.image.anim_delay = 0.1
+            animal.image.size = (75, 152)
+            animal.pos = (0 + sizes.width_left_margin, 768)
+            animal.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+            self.frame.add_widget(animal)
+            anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=1)
+            anim += Animation(x=1024 + 200 + sizes.width_left_margin, y=212, duration=2)
+            anim.start(animal)
+
+            self.anim_points(1, 175 / 2 + sizes.width_left_margin, 175 / 2, fct_next=self.category_next)
+            after_all_choices()
 
         def remove(screen):
-            print 'remove'
+            print 'TODO: remove the object'
+            self.frame.remove_widget(self.static)
+            self.points += 1
+            after_all_choices()
+            self.category_forward(None)
 
         def keep(screen):
             print 'keep'
+            after_all_choices()
+            self.category_next(None)
 
         def correct(screen):
             print 'correct'
+            self.points += 2
+
+            #todo: correction, instead, in right position
+            self.static.image.source = 'images/non_animes/haie_diverses_especes.png'
+            self.static.image.pos = (400,0)
+
+            # todo: better
+            animal = AnimatedScatter()
+            animal.image.anim_delay = 0.1
+            animal.image.size = (75, 152)
+            animal.pos = (0 + sizes.width_left_margin, 768)
+            animal.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+            self.frame.add_widget(animal)
+            anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=1)
+            anim += Animation(x=1024 + 200 + sizes.width_left_margin, y=212, duration=2)
+            anim.start(animal)
+
+            self.anim_points(1, 175 / 2 + sizes.width_left_margin, 175 / 2, fct_next=self.category_next)
+            after_all_choices()
+
+        def after_all_choices():
+            self.frame.remove_widget(window_frame)
+            self.update_cursor()
 
         class ButtonImageChoicesKeep(ButtonImageChoices):
             def __init__(self, recover):
@@ -783,6 +837,7 @@ class FloatGameScreen(BackKeyScreen):
                                 size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
                                 src=recover.correction))
 
+        #initiate a correct recover
         recover = Recover('images/non_animes/haie_diverses_especes.png', 'images/non_animes/haie_de_thuya.png', True, 'images/non_animes/haie_de_thuya.png')
         window_frame.add_widget(ButtonImageChoicesReplace(recover))
         window_frame.add_widget(ButtonImageChoicesRemove(recover))
