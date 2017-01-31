@@ -527,13 +527,15 @@
 
         LabelB:
             text: 'Merci d\'évaluer l\'exposition'
-            font_size: '60dp'
+            font_size: '28dp'
             size_hint: 1, 0.25
 
         BoxLayout:
             orientation: 'horizontal'
-            id: stars
             size_hint: 1, 1
+            id: layoutd
+            Image:
+                source: 'images/flags/french.jpg'
             ButtonStar:
                 text: 'A améliorer'
             ButtonStar:
@@ -544,10 +546,75 @@
                 text: 'Très bien'
             ButtonStar:
                 text: 'Excellent'
+                on_press: root.forward()
 
+        LabelB:
+            text: 'Bitte geben Sie une eine Note (TODE)'
+            font_size: '28dp'
+            size_hint: 1, 0.25
         BoxLayout:
             orientation: 'horizontal'
-            id: layoutd
+            size_hint: 1, 1
+            Image:
+                source: 'images/flags/german.jpg'
+            ButtonStar:
+                text: 'A améliorer'
+            ButtonStar:
+                text: 'Suffisant'
+            ButtonStar:
+                text: 'Bien'
+            ButtonStar:
+                text: 'Très bien'
+            ButtonStar:
+                text: 'Excellent'
+        LabelB:
+            text: 'Please rate the exhibition (TOEN)'
+            font_size: '28dp'
+            size_hint: 1, 0.25
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 1
+            Image:
+                source: 'images/flags/english.png'
+            ButtonStar:
+                text: 'May be better'
+            ButtonStar:
+                text: 'OK.'
+            ButtonStar:
+                text: 'Good'
+            ButtonStar:
+                text: 'Very good'
+            ButtonStar:
+                text: 'Excellent'
+
+<ContestScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        id: layoutd
+        size_hint: 1, 1
+        Label:
+            text: 'Merci pour votre réponse, vous pouvez maintenant participer au concours'
+            font_size: '40dp'
+        Label:
+            text: 'Question 1'
+            font_size: '32dp'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 1
+            Button:
+                text: 'Réponse A'
+            Button:
+                text: 'Réponse B'
+            Button:
+                text: 'Réponse C'
+        Label:
+            text: 'etc. etc.'
+            font_size: '32dp'
+        Label:
+            text: 'Finalement, merci de renseigner le contexte de votre visite'
+            font_size: '32dp'
+        BoxLayout:
+            orientation: 'horizontal'
             size_hint: 1, 1
             ButtonCategory:
                 text: 'Famille'

@@ -295,11 +295,28 @@ class StatsScreen(BackKeyScreen):
         self.cursor_array = self.layoutd.children[:-1]
         self.cursor_reverse = True
         self.cursor_wrap = True
+        # switches to the how to screen
+
+    def forward(self):
+        self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous), direction='left')
+
+
+
+# screen for picking training mode difficulty
+class ContestScreen(BackKeyScreen):
+    # layout containing the screen's buttons, used for cursor function
+    layout = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(ContestScreen, self).__init__(**kwargs)
+
+        # cursor options
+        self.cursor_reverse = True
+        self.cursor_wrap = True
 
     # switches to the how to screen
     def confirm(self):
         self.manager.switch_to(ConfirmStatsScreen(name="Test", previous=self.previous), direction='left')
-
 
 # screen for picking training mode difficulty
 class ConfirmStatsScreen(BackKeyScreen):
