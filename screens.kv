@@ -37,6 +37,9 @@
             text: 'Test new game'
             on_press: root.floatgame()
         Button:
+            text: 'Test start screen'
+            on_press: root.start()
+        Button:
             text: 'Test animations'
             on_press: root.animations()
         Button:
@@ -48,6 +51,90 @@
         Button:
             text: 'Test statistics'
             on_press: root.stats()
+
+<StartScreen>
+    layout: layout
+    FloatLayout:
+        Image:
+            source: 'images/fond/game.png'
+        LabelB:
+            background_color: 1,1,1,0.3
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 10
+            size_hint: 0.7, 0.9
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            BoxLayout:
+                id:layout
+                orientation: 'horizontal'
+                padding: 0
+                spacing: 50
+                Button:
+                    text: 'FRANCAIS'
+                    background_normal: 'images/flags/french.jpg'
+                    on_press: root.french()
+                Button:
+                    text: 'DEUTSCH'
+                    background_normal: 'images/flags/german.jpg'
+                    on_press: root.german()
+                Button:
+                    text: 'ENGLISH'
+                    background_normal: 'images/flags/english.png'
+                    on_press: root.english()
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 0
+                spacing: 50
+                Button:
+                    text: 'DEMARRER'
+                    background_normal: 'images/flags/fr.png'
+                    on_press: root.french()
+                Button:
+                    text: 'STARTEN'
+                    background_normal: 'images/flags/de.png'
+                    on_press: root.german()
+                Button:
+                    text: 'START'
+                    background_normal: 'images/flags/us.png'
+                    on_press: root.english()
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 0
+                spacing: 5
+                background: 0, 0, 0, 0.4
+                canvas.before:
+                    Color:
+                        rgb: 1, 1, 1, 1
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 0
+                    spacing: 5
+                    Image:
+                        source: 'images/credits/moschatz.png'
+                    Image:
+                        source: 'images/credits/inventivek.png'
+
+                Image:
+                    source: 'images/credits/zivil_dienst_20.png'
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 0
+                    spacing: 5
+                    Image:
+                        source: 'images/credits/pronatura.jpg'
+                    Image:
+                        source: 'images/credits/iict.png'
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 0
+                    spacing: 5
+
+                    Image:
+                        source: 'images/credits/heig-vd.png'
+                    Image:
+                        source: 'images/credits/hes-so.png'
+
 
 <TestScreen>:
     bback: bback

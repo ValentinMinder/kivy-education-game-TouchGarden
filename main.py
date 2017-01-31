@@ -170,6 +170,30 @@ class MainMenuScreen(KeyScreen):
     def stats(self):
         self.manager.switch_to(StatsScreen(name="Stats", previous=self), direction='left')
 
+    def start(self):
+        self.manager.switch_to(StartScreen(name="Start", previous=self), direction='left')
+
+# start screen to choose language and see credits
+class StartScreen(BackKeyScreen):
+    def __init__(self, **kwargs):
+        super(StartScreen, self).__init__(**kwargs)
+
+        self.cursor_array = self.layout.children[:-1]
+        self.cursor_reverse = True
+        self.cursor_wrap = True
+
+    def french(self):
+        lang.current = lang.fr
+        self.forward()
+    def german(self):
+        lang.current = lang.de
+        self.forward()
+    def english(self):
+        lang.current = lang.en
+        self.forward()
+    def forward(self):
+        self.manager.switch_to(FloatGameScreen(name="Game", previous=self), direction='left')
+
 
 # "test" screen
 class TestScreen(BackKeyScreen):
