@@ -458,8 +458,9 @@ class FloatGameScreen(BackKeyScreen):
 
         target = StaticImage(pos=(sizes.width_left_margin, 0),
                              size=(175, 175),
-                             src='images/zones_de_depot/depot_haies_2.zip')
-        category = Category(name=Text("fr", "de", "en"), el1=positif, el2=negatif, target=target)
+                             src='images/zones_de_depot/haies.zip')
+        target.image.anim_delay = 1
+        category = Category(name=Text("haies et bordures", "de", "en"), el1=positif, el2=negatif, target=target)
 
         # welcoming guy
         animated = StaticImage(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
@@ -622,21 +623,6 @@ class FloatGameScreen(BackKeyScreen):
 
         # target area to carry elements
         self.frame.add_widget(category.target)
-
-        #todo: remove: only for test
-        target2 = StaticImage(pos=(sizes.width_left_margin + 250, 0),
-                             size=(175, 175),
-                             src='images/zones_de_depot/depot_haies_1.zip')
-
-        target3 = StaticImage(pos=(sizes.width_left_margin + 500, 0),
-                             size=(175, 175),
-                             src='images/zones_de_depot/depot_haies_3.zip')
-        self.frame.add_widget(target2)
-        self.frame.add_widget(target3)
-        speed = 1
-        category.target.image.anim_delay = speed
-        target2.image.anim_delay = speed
-        target3.image.anim_delay = speed
 
         # positive and negative elements to drag & drop
         self.frame.add_widget(category.element1)
