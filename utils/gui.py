@@ -4,13 +4,18 @@ from kivy.uix.widget import Widget
 
 from utils import sizes
 
-# non-draggable image widget
-class StaticImage(Widget):
-    def __init__(self, pos, size, src):
-        super(StaticImage, self).__init__()
+# wrapping widget containing a single image
+# used for exact x/y image positioning (image is NOT centered)
+# widget can be added to a FloatLayout and wrapped Image will be correctly placed
+# to change image properties, access it with widget.image
+class ImageWrap(Widget):
+    def __init__(self, source = 'images/scenery/transparency.png', pos = (100, 100), size = (200,200), allow_stretch = False, keep_ratio=True):
+        super(ImageWrap, self).__init__()
+        self.image.source = source
         self.image.pos = pos
         self.image.size = size
-        self.image.source = src
+        self.image.allow_stretch = allow_stretch
+        self.image.keep_ratio = keep_ratio
 
 
 # transparent button with centered unstreched image wrapper
@@ -19,9 +24,9 @@ class ButtonImage(Button):
         super(ButtonImage, self).__init__(on_press=on_press, pos=pos, size=size, size_hint=(None, None),
                                           background_normal='images/scenery/transparency.png')
         self.add_widget(
-            StaticImage(pos=(pos[0] + (size[0] - size_img[0]) / 2.0, pos[1] + (size[1] - size_img[1]) / 2.0),
-                        size=size_img,
-                        src=src))
+            ImageWrap(pos=(pos[0] + (size[0] - size_img[0]) / 2.0, pos[1] + (size[1] - size_img[1]) / 2.0),
+                      size=size_img,
+                      source=src))
 
 class ButtonImageChoices(ButtonImage):
     def __init__(self, on_press, pos, text):

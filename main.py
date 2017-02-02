@@ -13,7 +13,7 @@ from kivy.uix.widget import Widget
 
 from utils import sizes
 from utils.category import ElementScatter, AnimatedScatter, Category, Recover
-from utils.gui import StaticImage, ButtonImage, ButtonImageChoices, LabelWrap
+from utils.gui import ImageWrap, ButtonImage, ButtonImageChoices, LabelWrap
 
 # Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 Config.set('graphics', 'width', sizes.width)  # 1366
@@ -82,20 +82,6 @@ class LabelC(Label):
 # for registering custom fonts
 for font in settings.KIVY_FONTS:
     LabelBase.register(**font)
-
-
-# for drag & drop texts (no image yet)
-class DragLabel(DragBehavior, LabelB):
-    pass
-
-
-# for speach
-class SpeachLabel(Widget):
-    pass
-
-
-
-
 
 
 # for star-like buttons
@@ -173,6 +159,7 @@ class MainMenuScreen(KeyScreen):
     def start(self):
         self.manager.switch_to(StartScreen(name="Start", previous=self), direction='left')
 
+
 # start screen to choose language and see credits
 class StartScreen(BackKeyScreen):
     def __init__(self, **kwargs):
@@ -185,12 +172,15 @@ class StartScreen(BackKeyScreen):
     def french(self):
         lang.current = lang.fr
         self.forward()
+
     def german(self):
         lang.current = lang.de
         self.forward()
+
     def english(self):
         lang.current = lang.en
         self.forward()
+
     def forward(self):
         self.manager.switch_to(FloatGameScreen(name="Game", previous=self), direction='left')
 
@@ -301,7 +291,6 @@ class StatsScreen(BackKeyScreen):
         self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous), direction='left')
 
 
-
 # screen for picking training mode difficulty
 class ContestScreen(BackKeyScreen):
     # layout containing the screen's buttons, used for cursor function
@@ -317,6 +306,7 @@ class ContestScreen(BackKeyScreen):
     # switches to the how to screen
     def confirm(self):
         self.manager.switch_to(ConfirmStatsScreen(name="Test", previous=self.previous), direction='left')
+
 
 # screen for picking training mode difficulty
 class ConfirmStatsScreen(BackKeyScreen):
@@ -355,6 +345,10 @@ class TouchGardenApp(App):
         return self.manager
 
 
+class ImageF(Image):
+    pass
+
+
 # float layout for draggable elements management
 class FloatGameScreen(BackKeyScreen):
     currentObj = ObjectProperty(None)
@@ -362,181 +356,178 @@ class FloatGameScreen(BackKeyScreen):
 
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__(**kwargs)
-        client_frame = FloatLayout(size_hint=(1, 1))
-        # garden background
-        left_bg = StaticImage(pos=(sizes.width_ref, sizes.height_ref),
-                              size=(sizes.width_left_margin, sizes.height),
-                              src='images/scenery/nav_fond_gauche_200x768px.png')
-        client_frame.add_widget(left_bg)
 
-        background = StaticImage(pos=(sizes.width_left_margin, sizes.height_ref),
-                                 size=(sizes.width_game, sizes.height),
-                                 src='images/fond/fond_jardin_v4.png')
-        client_frame.add_widget(background)
-        right_bg = StaticImage(pos=(sizes.width_right_game, sizes.height_ref),
+        # todo: handle correctly category numbers
+        self.categorynb = 1
+
+        self.frame = FloatLayout(size_hint=(1, 1))
+        self.init_static_UI()
+        self.init_dynamic_UI()
+
+        # add main layout to root
+        self.add_widget(self.frame)
+
+        # init categories and game
+        self.init_welcome_tuto()
+        self.init_category_struct()
+
+    # create and add all static UI elements (non-movable, non-changeable, only background and scenery)
+    def init_static_UI(self):
+        f = self.frame
+
+        # garden background and large borders left/right
+        f.add_widget(ImageWrap(pos=(sizes.width_ref, sizes.height_ref),
+                               size=(sizes.width_left_margin, sizes.height),
+                               source='images/scenery/nav_fond_gauche_200x768px.png'))
+        f.add_widget(ImageWrap(pos=(sizes.width_left_margin, sizes.height_ref),
+                               size=(sizes.width_game, sizes.height),
+                               source='images/fond/fond_jardin_v4.png'))
+        f.add_widget(ImageWrap(pos=(sizes.width_right_game, sizes.height_ref),
                                size=(sizes.width_right_margin, sizes.height),
-                               src='images/scenery/nav_fond_droite_142x768px.png')
-        client_frame.add_widget(right_bg)
+                               source='images/scenery/nav_fond_droite_142x768px.png'))
 
-        # todo: remove swimming pool
-        pool = StaticImage(pos=(228, 300),
-                              size=(456, 256),
-                              src='images/animations/scenery/pool.zip')
-        client_frame.add_widget(pool)
+        # right elements
+        # smiles and points scale (gauge)
+        f.add_widget(ImageWrap(pos=(sizes.gauge_left_margin, sizes.gauge_bottom_margin),
+                               size=(77, 459),
+                               source='images/scenery/score_77x459px.png'))
+        f.add_widget(ImageWrap(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_top),
+                               size=(29, 29),
+                               source='images/scenery/smile_positif_210x200px.png'))
+        f.add_widget(ImageWrap(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_bottom),
+                               size=(29, 29),
+                               source='images/scenery/smile_negatif_210x200px.png'))
 
-        # smiles and gscale (gauge)
-        smile_pos = StaticImage(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_top),
-                                size=(29, 29),
-                                src='images/scenery/smile_positif_210x200px.png')
-        client_frame.add_widget(smile_pos)
+        # left elements
+        f.add_widget(ImageWrap(pos=(sizes.border_small + 2, sizes.height_button_small + sizes.border_small),
+                               size=(sizes.category_width, sizes.category_height),
+                               source='images/scenery/niveau_avancement_186x23px.png'))
 
-        smile_neg = StaticImage(pos=(sizes.gauge_smiley_left, sizes.gauge_smiley_bottom),
-                                size=(29, 29),
-                                src='images/scenery/smile_negatif_210x200px.png')
-        client_frame.add_widget(smile_neg)
+        # buttons
+        f.add_widget(ButtonImage(on_press=self.category_forward,
+                                 pos=(sizes.width_ref, sizes.border_small),
+                                 size=(sizes.width_left_margin, sizes.height_button_small),
+                                 size_img=(75, 44),
+                                 src="images/scenery/fleche_suite_75x44px.png"))
+        f.add_widget(ButtonImage(on_press=self.stop_game,
+                                 pos=(sizes.width_right_game, sizes.border_small),
+                                 size=(sizes.width_right_margin, sizes.height_button_small),
+                                 size_img=(57, 57),
+                                 src="images/scenery/bouton_eteindre_200x200px.png"))
 
-        scale = StaticImage(pos=(sizes.gauge_left_margin, sizes.gauge_bottom_margin),
-                            size=(77, 459),
-                            src='images/scenery/score_77x459px.png')
-        client_frame.add_widget(scale)
+        # nice ui elements
+        f.add_widget(ImageWrap(pos=(sizes.width_border_left, sizes.height_left_category_title - sizes.border_small),
+                               size=(sizes.width_left_elements, sizes.border_small),
+                               source='images/scenery/filet_souligne_144x6px.png'))
+        f.add_widget(ImageWrap(pos=(
+            sizes.width_right_game + sizes.width_border_left, sizes.height_left_category_title - sizes.border_small),
+            size=(sizes.width_right_margin - 2 * sizes.width_border_left, sizes.border_small),
+            source='images/scenery/filet_souligne_144x6px.png',
+            allow_stretch=True,
+            keep_ratio=False)
+        )
+        f.add_widget(ImageWrap(pos=(sizes.width_border_left, sizes.height_left_category_desc - sizes.border_small),
+                               size=(sizes.width_left_elements, sizes.border_small),
+                               source='images/scenery/filet_souligne_144x6px.png'))
+
+        f.add_widget(ImageWrap(size=(sizes.width_left_elements, sizes.width_left_elements),
+                               pos=(sizes.width_border_left, sizes.height_left_first),
+                               source='images/scenery/fond_menu_gauche_144x144px.png'))
+        f.add_widget(ImageWrap(size=(sizes.width_left_elements, sizes.width_left_elements),
+                               pos=(sizes.width_border_left, sizes.height_left_second),
+                               source='images/scenery/fond_menu_gauche_144x144px.png'))
+
+        f.add_widget(LabelWrap(size=(sizes.width_right_margin, sizes.height_button_small),
+                               pos=(sizes.width_right_game, sizes.height_left_category_title),
+                               text=Text(fr='Score', de='TODE', en='Score'),
+                               font_size=sizes.font_size_subtitle, bold=True))
+
+    # create and add all dynamic UI elements (some movable, some resizabée, some text or image changeable, no background, some scenery)
+    def init_dynamic_UI(self):
+        f = self.frame
 
         # colored score gauge
-        self.gauge = StaticImage(pos=(sizes.gauge_left_start, sizes.gauge_bottom_start),
-                            size=(sizes.gauge_width, sizes.gauge_height(sizes.gauge_number)),
-                            src='images/scenery/score_vert.png')
-        self.gauge.image.allow_stretch = True
-        self.gauge.image.keep_ratio = False
-        client_frame.add_widget(self.gauge)
+        self.gauge = ImageWrap(pos=(sizes.gauge_left_start, sizes.gauge_bottom_start),
+                               size=(sizes.gauge_width, sizes.gauge_height(sizes.gauge_number)),
+                               source='images/scenery/score_vert.png',
+                               allow_stretch=True,
+                               keep_ratio=False)
+        f.add_widget(self.gauge)
 
-        #cursor
-        self.cursor = StaticImage(pos=(sizes.cursor_left, sizes.cursor_pos_y(sizes.gauge_number)),
-                            size=(38, 20),
-                            src='images/scenery/curseur_38x20px.png')
-        client_frame.add_widget(self.cursor)
+        # cursor
+        self.cursor = ImageWrap(pos=(sizes.cursor_left, sizes.cursor_pos_y(sizes.gauge_number)),
+                                size=(38, 20),
+                                source='images/scenery/curseur_38x20px.png')
+        f.add_widget(self.cursor)
 
-        #todo: add this to demo /tuto
-        anim = Animation(y = sizes.cursor_pos_y(0), duration=1)
+        # colored score gauge
+        self.category_scale = ImageWrap(pos=(sizes.border_small, sizes.height_button_small + sizes.border_small),
+                                        size=(sizes.category_width_progress(self.categorynb), sizes.category_height),
+                                        source='images/scenery/niveau_avancement_curseur.png',
+                                        allow_stretch=True,
+                                        keep_ratio=False)
+        f.add_widget(self.category_scale)
+
+        # textual description elements
+        self.elem_first_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
+                                         pos=(sizes.border_text_min, sizes.height_left_first_desc),
+                                         text=Text(fr="FR", de='DE', en='EN'),
+                                         vAlignTop=True)
+        f.add_widget(self.elem_first_desc)
+
+        self.elem_second_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
+                                          pos=(sizes.border_text_min, sizes.height_left_second_desc),
+                                          text=Text(fr="FR", de='DE', en='EN'),
+                                          vAlignTop=True)
+        f.add_widget(self.elem_second_desc)
+
+        self.category_text = LabelWrap(size=(sizes.width_left_margin, sizes.height_left_category_element),
+                                       pos=(sizes.width_ref, sizes.height_left_category_title),
+                                       text=Text(fr='Catégorie', de='Kategorie', en='Category'),
+                                       font_size=sizes.font_size_subtitle, bold=True)
+        f.add_widget(self.category_text)
+        self.category_text.update_cat(self.categorynb)
+
+        self.category_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_left_category_element),
+                                       pos=(sizes.border_text_min, sizes.height_left_category_desc),
+                                       text=Text(fr="FR", de='DE', en='EN'),
+                                       font_size=sizes.font_size_large)
+        f.add_widget(self.category_desc)
+
+    # welcome tutorial: happy guy speaking
+    def init_welcome_tuto(self):
+        # todo: add this to demo /tuto
+        anim = Animation(y=sizes.cursor_pos_y(0), duration=1)
         anim += Animation(y=sizes.cursor_pos_y(2 * sizes.gauge_number), duration=2)
         anim += Animation(y=sizes.cursor_pos_y(sizes.gauge_number), duration=1)
         anim.start(self.cursor.image)
 
-        cat_scale = StaticImage(pos=(sizes.border_small + 2, sizes.height_button_small + sizes.border_small),
-                            size=(sizes.category_width, sizes.category_height),
-                            src='images/scenery/niveau_avancement_186x23px.png')
-        client_frame.add_widget(cat_scale)
+        # welcoming guy
+        animated = ImageWrap(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
+                             source='images/animations/bonhomme/homme_positif_content_2.gif')
+        animated.image.anim_delay = 0.1
+        animated.image.anim_loop = 5
+        self.frame.add_widget(animated)
 
-        #todo: handle correctly category numbers
-        self.categorynb = 1
-        # colored score gauge
-        self.category_scale = StaticImage(pos=(sizes.border_small, sizes.height_button_small + sizes.border_small),
-                                 size=(sizes.category_width_progress(self.categorynb), sizes.category_height),
-                                 src='images/scenery/niveau_avancement_curseur.png')
-        self.category_scale.image.allow_stretch = True
-        self.category_scale.image.keep_ratio = False
-        client_frame.add_widget(self.category_scale)
+        self.speach = LabelWrap(size=(sizes.speach_width, sizes.speach_height),
+                                pos=sizes.speach_pos,
+                                text=Text(fr="FR", de='DE', en='EN'),
+                                font_size=sizes.font_size_large)
+        self.speach.label.text = txt_tutorial_welcome()
+        self.speach.label.background_color = 1, 1, 1, 0.8
+        self.frame.add_widget(self.speach)
 
-
-
-        button_next = ButtonImage(on_press=self.category_forward,
-                                  pos=(sizes.width_ref, sizes.border_small),
-                                  size=(sizes.width_left_margin, sizes.height_button_small),
-                                  size_img=(75, 44),
-                                  src="images/scenery/fleche_suite_75x44px.png")
-        client_frame.add_widget(button_next)
-
-        button_stop = ButtonImage(on_press=self.stop_game,
-                                  pos=(sizes.width_right_game, sizes.border_small),
-                                  size=(sizes.width_right_margin, sizes.height_button_small),
-                                  size_img=(57, 57),
-                                  src="images/scenery/bouton_eteindre_200x200px.png")
-        client_frame.add_widget(button_stop)
-
+    def init_category_struct(self):
         positif = ElementScatter(name=Text("fr", "de", "en"), positive=True, first=True,
                                  img='images/non_animes/haie_diverses_especes.png')
         negatif = ElementScatter(name=Text("fr", "de", "en"), positive=False, first=False,
                                  img='images/non_animes/haie_de_thuya.png')
 
-        target = StaticImage(pos=(sizes.width_left_margin, 0),
-                             size=(175, 175),
-                             src='images/zones_de_depot/haies.zip')
+        target = ImageWrap(pos=(sizes.width_left_margin, 0),
+                           size=(175, 175),
+                           source='images/zones_de_depot/haies.zip')
         target.image.anim_delay = 1
         category = Category(name=Text("haies et bordures", "de", "en"), el1=positif, el2=negatif, target=target)
-
-        # welcoming guy
-        animated = StaticImage(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
-                               src='images/animations/bonhomme/homme_positif_content_2.gif')
-        animated.image.anim_delay = 0.1
-        animated.image.anim_loop = 5
-        client_frame.add_widget(animated)
-
-        self.speach = speach = SpeachLabel()
-        speach.label.text = txt_tutorial_welcome()
-        speach.label.pos = (1366 - 364, 768 - 170)
-        speach.label.size = (200, 150)
-        client_frame.add_widget(speach)
-
-        score_text = LabelWrap(size=(sizes.width_right_margin, sizes.height_button_small),
-                               pos = (sizes.width_right_game, sizes.height_left_category_title),
-                               text=Text(fr='Score', de = 'TODE', en='Score'),
-                               font_size=28, bold=True)
-        client_frame.add_widget(score_text)
-
-        self.category_text = LabelWrap(size=(sizes.width_left_margin, sizes.height_left_category_element),
-                                          pos=(sizes.width_ref, sizes.height_left_category_title),
-                                          text=Text(fr='Catégorie', de='TODE', en='Category'),
-                                          font_size=sizes.font_size_subtitle, bold=True)
-        client_frame.add_widget(self.category_text)
-        self.category_text.update_cat(1)
-
-        self.category_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_left_category_element),
-                                       pos=(sizes.border_text_min, sizes.height_left_category_desc),
-                                       text=Text(fr="IiiiiiiiIiiiiiiiiIiiiiiiiiiiiiiiiiiiiIiiIIi (mock)", de='TODE', en='TOEN'),
-                                       font_size=sizes.font_size_large)
-        client_frame.add_widget(self.category_desc)
-
-        #nice ui elements
-        f1 = StaticImage(pos=(sizes.width_border_left, sizes.height_left_category_title - sizes.border_small),
-                             size=(sizes.width_left_elements, sizes.border_small),
-                             src='images/scenery/filet_souligne_144x6px.png')
-        f2 = StaticImage(pos=(sizes.width_right_game + sizes.width_border_left, sizes.height_left_category_title - sizes.border_small),
-                         size=(sizes.width_right_margin - 2 * sizes.width_border_left, sizes.border_small),
-                         src='images/scenery/filet_souligne_144x6px.png')
-        f2.image.allow_stretch = True
-        f2.image.keep_ratio = False
-        f3 = StaticImage(pos=(sizes.width_border_left, sizes.height_left_category_desc - sizes.border_small),
-                         size=(sizes.width_left_elements, sizes.border_small),
-                         src='images/scenery/filet_souligne_144x6px.png')
-        client_frame.add_widget(f1)
-        client_frame.add_widget(f2)
-        client_frame.add_widget(f3)
-
-        # textual description elements
-        self.elem_first_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
-                               pos=(sizes.border_text_min, sizes.height_left_first_desc),
-                               text=Text(fr="Haies d'espèces natives IiiiiiiIiiiiiIiiiiiiiiiiiiii 3rd and last line I", de='TODE', en='TOEN'),
-                               vAlignTop=True)
-        client_frame.add_widget(self.elem_first_desc)
-
-        self.elem_second_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
-                                    pos=(sizes.border_text_min, sizes.height_left_second_desc),
-                                    text=Text(fr="Haie homogène Iiiiiiiiiiii", de='TODE', en='TOEN'),
-                                    vAlignTop=True)
-        client_frame.add_widget(self.elem_second_desc)
-
-        elem_first_frame = StaticImage(size=(sizes.width_left_elements, sizes.width_left_elements),
-                                    pos=(sizes.width_border_left, sizes.height_left_first),
-                                    src='images/scenery/fond_menu_gauche_144x144px.png')
-        client_frame.add_widget(elem_first_frame)
-
-        elem_second_frame = StaticImage(size=(sizes.width_left_elements, sizes.width_left_elements),
-                                    pos=(sizes.width_border_left, sizes.height_left_second),
-                                    src='images/scenery/fond_menu_gauche_144x144px.png')
-        client_frame.add_widget(elem_second_frame)
-
-        # add main layout to root
-        self.add_widget(client_frame)
-
-        self.frame = client_frame
         self.gameturn_setup(category)
 
     def category_forward(self, touch):
@@ -551,10 +542,10 @@ class FloatGameScreen(BackKeyScreen):
             print 'TODO: end of game, see results before leaving'
             self.back()
         category = self.current_category
-        #todo: reactivate , just easier to test
-        #self.frame.remove_widget(category.target)
-        #self.frame.remove_widget(category.element1)
-        #self.frame.remove_widget(category.element2)
+        # todo: reactivate , just easier to test
+        # self.frame.remove_widget(category.target)
+        # self.frame.remove_widget(category.element1)
+        # self.frame.remove_widget(category.element2)
 
         self.categorynb += 1
 
@@ -563,7 +554,6 @@ class FloatGameScreen(BackKeyScreen):
         self.category_desc.label.text = "blo"
         self.elem_first_desc.label.text = "bli"
         self.elem_second_desc.label.text = "bla"
-
 
         print 'TODO: add new category'
 
@@ -579,9 +569,9 @@ class FloatGameScreen(BackKeyScreen):
         x_final = sizes.width - size_final
         y_final = (sizes.height - size_final) / 2
         y_shift = 300
-        points_image = StaticImage(size=(size, size),
-                                   pos=(x_start, y_start),
-                                   src='images/scenery/points_neutre_500x500px.png')
+        points_image = ImageWrap(size=(size, size),
+                                 pos=(x_start, y_start),
+                                 source='images/scenery/points_neutre_500x500px.png')
         if (points > 0):
             points_image.image.source = 'images/scenery/smile_positif_210x200px.png'
             y_final += y_shift
@@ -601,18 +591,17 @@ class FloatGameScreen(BackKeyScreen):
         anim_points.bind(on_complete=remove)
         anim_points.start(points_image.image)
 
-
     def stop_game(self, touch):
         print 'TODO: ask confirmation to reset/stop game'
         self.back()
 
-    #update the cursor placement and gauge filling/color depending on points
+    # update the cursor placement and gauge filling/color depending on points
     def update_cursor(self):
         anim = Animation(y=sizes.cursor_pos_y(self.points + sizes.gauge_number), duration=1)
         anim.start(self.cursor.image)
         self.gauge.image.size = (sizes.gauge_width, sizes.gauge_height(self.points + sizes.gauge_number))
         if (self.points >= 0):
-            self.gauge.image.source= 'images/scenery/score_vert.png'
+            self.gauge.image.source = 'images/scenery/score_vert.png'
         else:
             self.gauge.image.source = 'images/scenery/score_rouge.png'
 
@@ -638,7 +627,7 @@ class FloatGameScreen(BackKeyScreen):
             # check collision
             if (target.image.collide_widget(element)):
                 # put the real object in place
-                static = StaticImage(pos=(sizes.width_left_margin, 0), size=(175, 175), src=element.image.source)
+                static = ImageWrap(pos=(sizes.width_left_margin, 0), size=(175, 175), source=element.image.source)
                 element.parent.add_widget(static)
                 self.static = static
 
@@ -652,8 +641,8 @@ class FloatGameScreen(BackKeyScreen):
                     self.speach.label.text = txt_game_move_positive()
 
                 # animated guy: happy or not
-                animated = StaticImage(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
-                                       src='images/animations/bonhomme/homme_positif_content_2.gif')
+                animated = ImageWrap(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
+                                     source='images/animations/bonhomme/homme_positif_content_2.gif')
                 animated.image.anim_delay = 0.1
                 animated.image.anim_loop = 5
                 if (element.positive):
@@ -679,36 +668,38 @@ class FloatGameScreen(BackKeyScreen):
                 # points
                 m = 1 if element.positive else -1
 
-
                 # animation of animals
                 # TODO: real animals!
                 animal = AnimatedScatter()
                 animal.image.anim_delay = 0.1
                 animal.image.size = (75, 152)
-                animal.pos = (sizes.width, sizes.height/2)
+                animal.pos = (sizes.width, sizes.height / 2)
                 animal.image.source = 'images/animations/haies/mesange_vole.zip'
                 animal.image.anim_delay = 0.2
                 element.parent.add_widget(animal)
                 anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=2)
-                heart = StaticImage(pos=(175 / 2 + 200, 175 / 2), size=(46, 50),
-                                    src='images/animations/eaux/coeur.zip')
+                heart = ImageWrap(pos=(175 / 2 + 200, 175 / 2), size=(46, 50),
+                                  source='images/animations/eaux/coeur.zip')
+
                 def after_anim():
                     self.anim_points(m, 175 / 2 + sizes.width_left_margin, 175 / 2, fct_next=after)
 
-                def after_bad (t,r):
+                def after_bad(t, r):
                     anim = Animation(x=100 + sizes.width, y=sizes.height / 2, duration=2)
                     anim.start(animal)
                     after_anim()
+
                 def remove_heart(t, r):
                     element.parent.remove_widget(heart)
 
-                def add_heart(t,r):
+                def add_heart(t, r):
                     element.parent.add_widget(heart)
                     anim = Animation(x=250, y=200, duration=1)
                     anim += Animation(x=-100, y=175, duration=2)
                     anim.start(animal)
                     anim.bind(on_complete=remove_heart)
                     after_anim()
+
                 if (element.positive):
                     anim.bind(on_complete=add_heart)
                 else:
@@ -722,15 +713,14 @@ class FloatGameScreen(BackKeyScreen):
 
                 # todo: always remove the widget
                 # todo: why does selection doesn't work well ??
-                #if (not element.positive):
-                 #   element.parent.remove_widget(element)
+                # if (not element.positive):
+                #   element.parent.remove_widget(element)
                 self.currentObj = ObjectProperty(None)
 
                 if (element.positive):
                     self.points += 1
                 else:
                     self.points -= 1
-
 
                 # todo : disable all other widget!
 
@@ -748,44 +738,44 @@ class FloatGameScreen(BackKeyScreen):
 
         def x(_x):
             return _x + sizes.win_dx
-        def y (_y):
+
+        def y(_y):
             return _y + sizes.win_dy
 
-        window_frame = FloatLayout(size_hint=(1, 1), pos=(0,0))
+        window_frame = FloatLayout(size_hint=(1, 1), pos=(0, 0))
 
-        window_frame.add_widget(StaticImage(
+        window_frame.add_widget(ImageWrap(
             pos=(x(-2), y(-22)),
             size=(923, 624),
-            src='images/scenery/fenetre_infos_923x624px.png'))
+            source='images/scenery/fenetre_infos_923x624px.png'))
 
-        window_frame.add_widget(StaticImage(pos=(x(0), y(sizes.win_height - sizes.win_header)),
-                            size=(sizes.win_width, sizes.win_header),
-                            src='images/scenery/bandeau_gris_fenetre_choix_898x80px.png'))
+        window_frame.add_widget(ImageWrap(pos=(x(0), y(sizes.win_height - sizes.win_header)),
+                                          size=(sizes.win_width, sizes.win_header),
+                                          source='images/scenery/bandeau_gris_fenetre_choix_898x80px.png'))
 
         window_frame.add_widget(
             LabelWrap(pos=(x(0), y(sizes.win_height - sizes.win_header)),
                       size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
-                      text=Text(fr="Ce n'est pas le bon choix...", de= "TODE", en="TOEN"),
+                      text=Text(fr="Ce n'est pas le bon choix...", de="TODE", en="TOEN"),
                       font_size=sizes.font_size_title,
                       bold=True))
 
         # todo: separate the text for internationalizazion !
         window_frame.add_widget(ButtonImage(
-            on_press=self.more_infos, pos=(x(sizes.win_width - sizes.win_width_infos), y(sizes.win_height - sizes.win_header)),
-                            size=(sizes.win_width_infos, sizes.win_header),
-                            size_img=(sizes.win_width_infos, sizes.win_header),
-                            src='images/scenery/bouton_plus_d_infos_183x80px.png'))
+            on_press=self.more_infos,
+            pos=(x(sizes.win_width - sizes.win_width_infos), y(sizes.win_height - sizes.win_header)),
+            size=(sizes.win_width_infos, sizes.win_header),
+            size_img=(sizes.win_width_infos, sizes.win_header),
+            src='images/scenery/bouton_plus_d_infos_183x80px.png'))
 
-        #todo: react to clicks
+        # todo: react to clicks
         def replace(screen):
             print 'replace'
             self.points += 2
 
-
             self.static.image.source = 'images/non_animes/haie_diverses_especes.png'
 
-
-            #todo: better
+            # todo: better
             animal = AnimatedScatter()
             animal.image.anim_delay = 0.1
             animal.image.size = (75, 152)
@@ -815,9 +805,9 @@ class FloatGameScreen(BackKeyScreen):
             print 'correct'
             self.points += 2
 
-            #todo: correction, instead, in right position
+            # todo: correction, instead, in right position
             self.static.image.source = 'images/non_animes/haie_diverses_especes.png'
-            self.static.image.pos = (400,0)
+            self.static.image.pos = (400, 0)
 
             # todo: better
             animal = AnimatedScatter()
@@ -844,10 +834,9 @@ class FloatGameScreen(BackKeyScreen):
                 super(ButtonImageChoicesKeep, self).__init__(keep, pos, text)
 
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src=recover.negative))
-
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source=recover.negative))
 
         class ButtonImageChoicesRemove(ButtonImageChoices):
             def __init__(self, recover):
@@ -856,14 +845,13 @@ class FloatGameScreen(BackKeyScreen):
                 super(ButtonImageChoicesRemove, self).__init__(remove, pos, text)
 
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src=recover.negative))
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source=recover.negative))
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src='images/scenery/picto_croix_112x112px.png'))
-
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source='images/scenery/picto_croix_112x112px.png'))
 
         class ButtonImageChoicesReplace(ButtonImageChoices):
             def __init__(self, recover):
@@ -872,21 +860,21 @@ class FloatGameScreen(BackKeyScreen):
                 super(ButtonImageChoicesReplace, self).__init__(replace, pos, text)
 
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src='images/scenery/fleche_seule_23x44px.png'))
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source='images/scenery/fleche_seule_23x44px.png'))
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src=recover.negative))
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source=recover.negative))
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src='images/scenery/picto_croix_112x112px.png'))
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source='images/scenery/picto_croix_112x112px.png'))
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_right, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src=recover.positive))
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_right, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source=recover.positive))
 
         class ButtonImageChoicesCorrect(ButtonImageChoices):
             def __init__(self, recover):
@@ -895,20 +883,21 @@ class FloatGameScreen(BackKeyScreen):
                 super(ButtonImageChoicesCorrect, self).__init__(correct, pos, text)
 
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src='images/scenery/fleche_seule_23x44px.png'))
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_center, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source='images/scenery/fleche_seule_23x44px.png'))
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src=recover.negative))
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_left, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source=recover.negative))
                 self.add_widget(
-                    StaticImage(pos=(pos[0] + sizes.win_choice_inner_right, pos[1] + sizes.win_choice_inner_margin),
-                                size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
-                                src=recover.correction))
+                    ImageWrap(pos=(pos[0] + sizes.win_choice_inner_right, pos[1] + sizes.win_choice_inner_margin),
+                              size=(sizes.win_choice_img_size, sizes.win_choice_img_size),
+                              source=recover.correction))
 
-        #initiate a correct recover
-        recover = Recover('images/non_animes/haie_diverses_especes.png', 'images/non_animes/haie_de_thuya.png', True, 'images/non_animes/haie_de_thuya.png')
+        # initiate a correct recover
+        recover = Recover('images/non_animes/haie_diverses_especes.png', 'images/non_animes/haie_de_thuya.png', True,
+                          'images/non_animes/haie_de_thuya.png')
         window_frame.add_widget(ButtonImageChoicesReplace(recover))
         window_frame.add_widget(ButtonImageChoicesRemove(recover))
         window_frame.add_widget(ButtonImageChoicesKeep(recover))
@@ -920,7 +909,6 @@ class FloatGameScreen(BackKeyScreen):
 
     def more_infos(self, screen):
         print 'know more'
-
 
 
 # launch the app

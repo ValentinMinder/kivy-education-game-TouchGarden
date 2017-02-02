@@ -2,7 +2,7 @@
 <LabelC>:
     canvas.before:
         Color:
-            rgb: 1, 1, 1 # your color here
+            rgb: 0, 0, 1 # your color here
         Rectangle:
             pos: self.pos
             size: self.size
@@ -34,38 +34,16 @@
     color: 0, 0, 0, 1
     valign: 'bottom'
 
-<ImageWidget>:
-    size_hint: None, None
-    allow_stretch: True
-    canvas.before:
-        Color:
-            rgba: 0, 0, 0, 1
-        Rectangle:
-            pos: root.pos
-            size: root.size
-
-<DragLabel>:
-    # Define the properties for the DragLabel
-    drag_rectangle: self.x, self.y, self.width, self.height
-    drag_timeout: 10000000
-    drag_distance: 0
-
 <LabelWrap>:
-    label: label
-    Label:
-        id: label
-
-<SpeachLabel>:
     label: label
     LabelB:
         id: label
-        background_color: 1,1,1,0.8
+        background_color: 1,1,1,0
 
-<StaticImage>
-    image: imag
+<ImageWrap>:
+    image: img
     Image:
-        id: imag
-        on_touch_down: root.parent.parent.currentObj = self.parent
+        id: img
 
 <ElementScatter>
     image: imag

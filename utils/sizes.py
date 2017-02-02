@@ -28,6 +28,10 @@ height_left_category_desc = height_left_category_title - height_title
 height_left_first = height_left_category_desc - width_left_elements - height_left_margin
 height_left_first_desc = height_left_first - height_title
 
+speach_margin = 20
+speach_height = 150
+speach_width = 200
+speach_pos = (width_right_game - speach_width - speach_margin, height - speach_height - speach_margin)
 
 def gauge_height(step):
     return gauge_bottom_first + step * gauge_bottom_next
