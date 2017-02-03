@@ -33,6 +33,16 @@ speach_height = 150
 speach_width = 200
 speach_pos = (width_right_game - speach_width - speach_margin, height - speach_height - speach_margin)
 
+# static UI
+table_pos = (width_left_margin + 400, height_ref + 585)
+
+# dynamic UI
+human_size = (75, 152)
+human_pos = (width_left_margin + 790, height_ref + 386)
+
+tree_size = (274,245)
+tree_pos = (width_left_margin + 350, height_ref + 175)
+
 def gauge_height(step):
     return gauge_bottom_first + step * gauge_bottom_next
 

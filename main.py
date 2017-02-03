@@ -386,6 +386,10 @@ class FloatGameScreen(BackKeyScreen):
                                size=(sizes.width_right_margin, sizes.height),
                                source='images/scenery/nav_fond_droite_142x768px.png'))
 
+        f.add_widget(ImageWrap(pos=sizes.table_pos,
+                               size=(130,119),
+                               source='images/non_animes/table_chaise_de_jardin.png'))
+
         # right elements
         # smiles and points scale (gauge)
         f.add_widget(ImageWrap(pos=(sizes.gauge_left_margin, sizes.gauge_bottom_margin),
@@ -468,6 +472,12 @@ class FloatGameScreen(BackKeyScreen):
                                         keep_ratio=False)
         f.add_widget(self.category_scale)
 
+        # tree with bird (at first)
+        self.tree = ImageWrap(pos=sizes.tree_pos,
+                              size=sizes.tree_size,
+                              source='images/non_animes/arbre_oiseau.png')
+        f.add_widget(self.tree)
+
         # textual description elements
         self.elem_first_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
                                          pos=(sizes.border_text_min, sizes.height_left_first_desc),
@@ -503,7 +513,8 @@ class FloatGameScreen(BackKeyScreen):
         anim.start(self.cursor.image)
 
         # welcoming guy
-        animated = ImageWrap(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
+        animated = ImageWrap(pos=sizes.human_pos,
+                             size=sizes.human_size,
                              source='images/animations/bonhomme/homme_positif_content_2.gif')
         animated.image.anim_delay = 0.1
         animated.image.anim_loop = 5
