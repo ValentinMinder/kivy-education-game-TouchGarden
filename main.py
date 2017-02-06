@@ -8,10 +8,13 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scatter import Scatter
 from kivy.uix.image import Image
+from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.boxlayout import BoxLayout
 
 from kivy.uix.widget import Widget
 
 from utils import sizes
+from utils.quiz import Quiz
 from utils.category import ElementScatter, AnimatedScatter, Category, Recover
 from utils.gui import ImageWrap, ButtonImage, ButtonImageChoices, LabelWrap
 
@@ -85,8 +88,10 @@ for font in settings.KIVY_FONTS:
 
 
 # for star-like buttons
-class ButtonStar(Button):
-    pass
+class ButtonStar(ToggleButton):
+    # on press, toogle all previous stars and untoggle following
+    def on_press(self):
+        self.parent.parent.parent.check(self)
 
 
 # for category-like buttons
@@ -277,15 +282,110 @@ class TestGraphicsScreen(BackKeyScreen):
 class StatsScreen(BackKeyScreen):
     # layout containing the screen's buttons, used for cursor function
     layout = ObjectProperty()
+    max = 5
 
     def __init__(self, **kwargs):
         super(StatsScreen, self).__init__(**kwargs)
 
-        # cursor options
-        self.cursor_array = self.layoutd.children[:-1]
-        self.cursor_reverse = True
-        self.cursor_wrap = True
-        # switches to the how to screen
+        def add_star(widget):
+            widget.add_widget(Label())
+            for i in range(1, self.max + 1):
+                bs = ButtonStar()
+                bs.text = bs.id = str(i)
+                widget.add_widget(bs)
+                widget.add_widget(Label())
+
+        add_star(self.star_fr)
+        add_star(self.star_de)
+
+    def check(self, btn):
+        print btn
+        print btn.id
+        nb = int(btn.id)
+        self.rate = nb
+
+        def check_star(widget):
+            for i in widget.children:
+                if (i.id):
+                    if int(i.id) <= nb:
+                        i.state = 'down'
+                    else:
+                        i.state = 'normal'
+                        anim = Animation(x=2000, duration=1)
+                        anim.start(i)
+
+
+                    # todo: choos if anim should forward
+                    if (int(i.id) == self.max):
+                        anim = Animation(duration=3)
+                        anim.bind(on_complete=self.forward_)
+                        anim.start(i)
+
+        check_star(self.star_fr)
+        check_star(self.star_de)
+        self.vde.disabled = False
+        self.vfr.disabled = False
+
+    def validate_fr(self):
+        lang.current = lang.fr
+        self.forward()
+
+    def validate_de(self):
+        lang.current = lang.de
+        self.forward()
+
+    def forward_(self, a, b):
+        print a
+        print b
+        self.forward()
+
+    def forward(self):
+        self.manager.switch_to(ContestIntroScreen(name="Game", previous=self), direction='left')
+
+
+class QuestionWidget(BoxLayout):
+    def __init__(self, q):
+        super(QuestionWidget, self).__init__()
+        self.question = q
+        self.q.text = q.question.get()
+        self.selected = -1
+        i = q.replies.__len__() - 1
+        while (i >= 0):
+            self.r.add_widget(
+                ToggleButton(text=q.replies[i].text.get(), on_press=self.reply, id=str(i), group="question",
+                             background_color=color.back_grey))
+            i -= 1
+
+    def done(self):
+        return (self.selected != -1)
+
+    def reply(self, btn):
+        nb = int(btn.id)
+        if (self.done()):
+            self.r.children[self.selected].background_color = color.back_grey
+        self.selected = nb
+        btn.background_color = color.back_selected
+        self.parent.parent.parent.check()
+
+    def correct(self):
+        nb = self.selected
+        if (nb != -1):
+            if (self.question.replies[nb].is_correct):
+                self.r.children[nb].background_color = color.back_green
+                return True
+            else:
+                self.r.children[nb].background_color = color.back_magenta
+        return False
+
+    def block(self):
+        for child in self.r.children:
+            child.disabled = True
+
+
+# screen for picking training mode difficulty
+class ContestIntroScreen(BackKeyScreen):
+    def __init__(self, **kwargs):
+        super(ContestIntroScreen, self).__init__(**kwargs)
 
     def forward(self):
         self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous), direction='left')
@@ -303,22 +403,54 @@ class ContestScreen(BackKeyScreen):
         self.cursor_reverse = True
         self.cursor_wrap = True
 
-    # switches to the how to screen
-    def confirm(self):
-        self.manager.switch_to(ConfirmStatsScreen(name="Test", previous=self.previous), direction='left')
+        layout = BoxLayout(orientation='vertical', size_hint=(1, 1), padding=10, spacing=20)
+        self.add_widget(layout)
 
+        layout.add_widget(
+            Label(text='Merci pour votre réponse, vous pouvez maintenant participer au concours', size_hint=(1, 0.25)))
 
-# screen for picking training mode difficulty
-class ConfirmStatsScreen(BackKeyScreen):
-    # layout containing the screen's buttons, used for cursor function
-    layout = ObjectProperty()
+        self.qlayout = qlayout = BoxLayout(orientation='vertical', size_hint=(1, 1), spacing=20)
 
-    def __init__(self, **kwargs):
-        super(ConfirmStatsScreen, self).__init__(**kwargs)
+        self.quiz = Quiz()
+        for qq in self.quiz.questions:
+            qw = QuestionWidget(qq)
+            qlayout.add_widget(qw)
 
-        # cursor options
-        self.cursor_reverse = True
-        self.cursor_wrap = True
+        layout.add_widget(qlayout)
+
+        self.btn_submit = btn = Button(text="répondre d'abord à toutes les questions", size_hint=(1, 0.25),
+                                       background_normal='', background_down='')
+        btn.disabled = True
+        btn.background_color = color.back_grey
+
+        def erase():
+            self.back()
+
+        def submit():
+            all_correct = True
+            for qq in self.qlayout.children:
+                all_correct &= qq.correct()
+                qq.block()
+            if all_correct:
+                btn.background_color = color.back_green
+                btn.text = "Bravo, vous avez répondu correctement, vous allez participer au tirage au sort."
+            else:
+                btn.background_color = color.back_magenta
+                btn.text = "Quelques erreurs, malheureusement..."
+                # todo: after timeout, move to start screen
+
+            btn.on_press = erase
+
+        btn.on_press = submit
+        layout.add_widget(btn)
+
+    def check(self):
+        done = True
+        for q in self.qlayout.children:
+            done &= q.done()
+        if done:
+            self.btn_submit.disabled = False
+            self.btn_submit.text = "Appuyer pour vérifier, lorsque tu es prêt."
 
 
 # main application class
@@ -356,6 +488,7 @@ class FloatGameScreen(BackKeyScreen):
 
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__(**kwargs)
+        self.quiz = Quiz()
 
         # todo: handle correctly category numbers
         self.categorynb = 1
@@ -387,7 +520,7 @@ class FloatGameScreen(BackKeyScreen):
                                source='images/scenery/nav_fond_droite_142x768px.png'))
 
         f.add_widget(ImageWrap(pos=sizes.table_pos,
-                               size=(130,119),
+                               size=(130, 119),
                                source='images/non_animes/table_chaise_de_jardin.png'))
 
         # right elements
@@ -545,6 +678,7 @@ class FloatGameScreen(BackKeyScreen):
         if (self.categorynb < sizes.category_number):
             self.speach.label.text = txt_game_move_pass()
             self.anim_points(0, 0, 0, self.category_next)
+            print self.quiz.next_question()
         else:
             self.category_next(touch)
 

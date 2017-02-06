@@ -25,9 +25,16 @@ class color:
     end = "[/color]"
     default = black
 
+    #for backgrounds
+    back_grey = (0.58,0.58,0.58,1)
+    back_grey_dark =  (0.2,0.2,0.2,1)
+    back_magenta = (0.89, 0.13, 0.37, 1)
+    back_green = (0, 0.66,0.195,1)
+    back_selected = (1, 0.5, 0, 1)
+
 class Text:
 
-    def __init__(self, fr, de, en):
+    def __init__(self, fr, de, en="en"):
         self.french = fr
         self.german = de
         self.english = en

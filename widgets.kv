@@ -10,7 +10,7 @@
 #:import KIVY_DEFAULT_FONT settings.KIVY_DEFAULT_FONT
 <Label>:
     font_name: KIVY_DEFAULT_FONT
-    font_size: 24
+    font_size: 32
     color: 0, 0, 0, 1
     halign: 'center'
     valign: 'middle'
@@ -20,13 +20,20 @@
 <Button>:
     valign: 'middle'
     halign: 'center'
-    font_size: 50
     color: 0, 0, 0, 1
     border: 25, 25, 25, 25
 
+<ToggleButton>
+    background_normal: ''
+    background_down: ''
+    background_disabled_normal: ''
+    background_disabled_down: ''
+
 <ButtonStar>:
     color: 0, 0, 0, 1
-    valign: 'bottom'
+    valign: 'middle'
+    size_hint: None, None
+    size: 150, 150
     background_normal: "images/768px-Grey_Star.svg.png"
     background_down: "images/768px-Gold_Star.svg.png"
 

@@ -536,117 +536,94 @@
             orientation: 'vertical'
             size_hint: 0.0, 1
 
+#:import color utils.texts.color
 <StatsScreen>:
-    layoutd: layoutd
+    star_fr: star_fr
+    star_de: star_de
+    vde: vde
+    vfr: vfr
     BoxLayout:
 
         orientation: 'vertical'
         padding: 10
-        spacing: 20
+        spacing: 50
         size_hint: 1, 1
 
         LabelB:
-            text: 'Merci d\'évaluer l\'exposition'
-            font_size: '28dp'
-            size_hint: 1, 0.25
+            text: 'Merci d\'évaluer l\'exposition pour participer au concours'
+            background_color: color.back_grey
+            size_hint: 1, 0.4
 
         BoxLayout:
             orientation: 'horizontal'
             size_hint: 1, 1
-            id: layoutd
-            Image:
-                source: 'images/flags/french.jpg'
-            ButtonStar:
-                text: 'A améliorer'
-            ButtonStar:
-                text: 'Suffisant'
-            ButtonStar:
-                text: 'Bien'
-            ButtonStar:
-                text: 'Très bien'
-            ButtonStar:
-                text: 'Excellent'
-                on_press: root.forward()
+            id: star_fr
+
+        Button:
+            id: vfr
+            size_hint: 1, 0.4
+            text: 'Enregistrer'
+            disabled: True
+            on_press: root.validate_fr()
 
         LabelB:
-            text: 'Bitte geben Sie une eine Note (TODE)'
-            font_size: '28dp'
-            size_hint: 1, 0.25
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, 1
-            Image:
-                source: 'images/flags/german.jpg'
-            ButtonStar:
-                text: 'A améliorer'
-            ButtonStar:
-                text: 'Suffisant'
-            ButtonStar:
-                text: 'Bien'
-            ButtonStar:
-                text: 'Très bien'
-            ButtonStar:
-                text: 'Excellent'
-        LabelB:
-            text: 'Please rate the exhibition (TOEN)'
-            font_size: '28dp'
-            size_hint: 1, 0.25
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, 1
-            Image:
-                source: 'images/flags/english.png'
-            ButtonStar:
-                text: 'May be better'
-            ButtonStar:
-                text: 'OK.'
-            ButtonStar:
-                text: 'Good'
-            ButtonStar:
-                text: 'Very good'
-            ButtonStar:
-                text: 'Excellent'
+            background_color: color.back_grey_dark
+            font_size: '12dp'
+            size_hint: 1, 0.05
 
-<ContestScreen>:
+        LabelB:
+            text: 'Bitte geben Sie uns eine Note'
+            background_color: color.back_grey
+            size_hint: 1, 0.4
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 1
+            id: star_de
+
+        Button:
+            id: vde
+            size_hint: 1, 0.4
+            text: 'Speichern'
+            disabled: True
+            on_press: root.validate_de()
+
+
+<QuestionWidget>
+    q: q
+    r: r
+    orientation: 'vertical'
+    size_hint: 1, 1
+    LabelB:
+        id: q
+        background_color: (0.2,0.2,0.2,1)
+    BoxLayout:
+        id: r
+        spacing: 10
+        orientation: 'horizontal'
+        size_hint: 1, 1
+
+<ContestIntroScreen>:
     BoxLayout:
         orientation: 'vertical'
-        id: layoutd
         size_hint: 1, 1
-        Label:
-            text: 'Merci pour votre réponse, vous pouvez maintenant participer au concours'
-            font_size: '40dp'
-        Label:
-            text: 'Question 1'
-            font_size: '32dp'
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, 1
-            Button:
-                text: 'Réponse A'
-            Button:
-                text: 'Réponse B'
-            Button:
-                text: 'Réponse C'
-        Label:
-            text: 'etc. etc.'
-            font_size: '32dp'
-        Label:
-            text: 'Finalement, merci de renseigner le contexte de votre visite'
-            font_size: '32dp'
+        padding: 20
+        spacing: 20
+        LabelB:
+            text: 'Merci pour ton évaluation. Tu peux maintenant participer au concours en répondant correctement à quelques questions.'
+        LabelB:
+            text: 'Merci de renseigner le contexte de votre visite'
         BoxLayout:
             orientation: 'horizontal'
             size_hint: 1, 1
             ButtonCategory:
-                text: 'Famille'
+                text: 'Enfant'
                 background_normal: "images/picto_family.png"
+                on_press: root.forward()
             ButtonCategory:
-                text: 'Ecole/groupe'
+                text: 'Adultes'
                 background_normal: "images/picto_school.png"
-                on_press: root.confirm()
-            ButtonCategory:
-                text: 'Adultes seuls'
-                background_normal: "images/picto_couple.png"
-                on_press: root.back()
+                on_press: root.forward()
 
 <ConfirmStatsScreen>:
     Button:
