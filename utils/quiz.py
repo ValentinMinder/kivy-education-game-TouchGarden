@@ -19,7 +19,7 @@ class Question:
 class Quiz:
     def __init__(self):
         self.current = -1
-        self.questions = self.shuffle_questions()
+        self.shuffle_questions()
 
     def next_question(self):
         self.current += 1
@@ -40,4 +40,20 @@ class Quiz:
                                Reply(Text(fr="Réponse 3B", de="Antwort 3B"), is_correct=True)})
         questions = {q1, q2, q3}
         selection = questions.__len__()
-        return random.sample(questions, selection)
+        self.questions = random.sample(questions, selection)
+
+        qi1 = Question(question=Text(fr="Question Image 1", de="Frage I 1"),
+                      replies={Reply(text='images/picto_family.png', is_correct=True),
+                               Reply(text='images/picto_school.png', is_correct=False)})
+        qi2 = Question(question=Text(fr="Question Image 2", de="Frage I 2"),
+                       replies={Reply(text='images/picto_family.png', is_correct=True),
+                                Reply(text='images/picto_school.png', is_correct=False)})
+        questions = {qi1, qi2}
+        self.question_images = random.sample(questions, 1)
+
+    question_public = Question(question=Text(fr="Quel public es-tu ?", de="Frage 3"),
+                      replies={Reply(Text(fr="Enfant", de="Kinder"), is_correct=True),
+                               Reply(Text(fr="Adulte", de="Erwaschene"), is_correct=True)})
+    question_public_img = Question(question=Text(fr="Quel public es-tu, enfant ou adulte", de="Frage I 1"),
+                      replies={Reply(text='images/picto_family.png', is_correct=True),
+                               Reply(text='images/picto_school.png', is_correct=True)})

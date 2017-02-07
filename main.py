@@ -18,7 +18,7 @@ from utils.quiz import Quiz
 from utils.category import ElementScatter, AnimatedScatter, Category, Recover
 from utils.gui import ImageWrap, ButtonImage, ButtonImageChoices, LabelWrap
 
-# Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
+#Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 Config.set('graphics', 'width', sizes.width)  # 1366
 Config.set('graphics', 'height', sizes.height)  # 768
 
@@ -92,11 +92,6 @@ class ButtonStar(ToggleButton):
     # on press, toogle all previous stars and untoggle following
     def on_press(self):
         self.parent.parent.parent.check(self)
-
-
-# for category-like buttons
-class ButtonCategory(Button):
-    pass
 
 
 # specialized version of screen that handles keyboard presses and has a cursor system,
@@ -344,16 +339,32 @@ class StatsScreen(BackKeyScreen):
 
 
 class QuestionWidget(BoxLayout):
-    def __init__(self, q):
+    def __init__(self, q, image=False):
         super(QuestionWidget, self).__init__()
         self.question = q
         self.q.text = q.question.get()
         self.selected = -1
         i = q.replies.__len__() - 1
         while (i >= 0):
-            self.r.add_widget(
-                ToggleButton(text=q.replies[i].text.get(), on_press=self.reply, id=str(i), group="question",
-                             background_color=color.back_grey))
+            t = ToggleButton(on_press=self.reply, id=str(i), group="question",
+                         background_color=color.back_grey)
+            self.r.add_widget(t)
+            if image:
+                self.q.size_hint = 1, 0.2
+                self.size_hint = 1, 4
+                im = Image(source=q.replies[i].text)
+                t.add_widget(im)
+
+                def upos(b, c):
+                    b.children[0].pos = c
+
+                def usize(b, c):
+                    b.children[0].size = c
+
+                t.bind(pos=upos)
+                t.bind(size=usize)
+            else:
+                t.text=q.replies[i].text.get()
             i -= 1
 
     def done(self):
@@ -387,6 +398,14 @@ class ContestIntroScreen(BackKeyScreen):
     def __init__(self, **kwargs):
         super(ContestIntroScreen, self).__init__(**kwargs)
 
+        quiz = Quiz()
+        q = quiz.question_public_img
+        im = QuestionWidget(q, image=True)
+        self.l.add_widget(im)
+
+    def check(self):
+        self.forward()
+
     def forward(self):
         self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous), direction='left')
 
@@ -403,22 +422,27 @@ class ContestScreen(BackKeyScreen):
         self.cursor_reverse = True
         self.cursor_wrap = True
 
-        layout = BoxLayout(orientation='vertical', size_hint=(1, 1), padding=10, spacing=20)
+        layout = BoxLayout(orientation='vertical', size_hint=(1, 1), padding=10, spacing=10)
         self.add_widget(layout)
 
         layout.add_widget(
-            Label(text='Merci pour votre réponse, vous pouvez maintenant participer au concours', size_hint=(1, 0.25)))
+            Label(text='Tu peux maintenant participer au concours en répondant correctement à quelques sur l\'exposition',
+                  size_hint=(1, 0.2)))
 
-        self.qlayout = qlayout = BoxLayout(orientation='vertical', size_hint=(1, 1), spacing=20)
+        self.qlayout = qlayout = BoxLayout(orientation='vertical', size_hint=(1, 1), spacing=10)
 
         self.quiz = Quiz()
+        qlayout.add_widget(QuestionWidget(self.quiz.question_public))
+        for qi in self.quiz.question_images:
+            im = QuestionWidget(qi, image=True)
+            qlayout.add_widget(im)
         for qq in self.quiz.questions:
             qw = QuestionWidget(qq)
             qlayout.add_widget(qw)
 
         layout.add_widget(qlayout)
 
-        self.btn_submit = btn = Button(text="répondre d'abord à toutes les questions", size_hint=(1, 0.25),
+        self.btn_submit = btn = Button(text="répondre d'abord à toutes les questions", size_hint=(1, 0.1),
                                        background_normal='', background_down='')
         btn.disabled = True
         btn.background_color = color.back_grey
@@ -436,7 +460,7 @@ class ContestScreen(BackKeyScreen):
                 btn.text = "Bravo, vous avez répondu correctement, vous allez participer au tirage au sort."
             else:
                 btn.background_color = color.back_magenta
-                btn.text = "Quelques erreurs, malheureusement..."
+                btn.text = "Quelques erreurs, malheureusement... à bientôt"
                 # todo: after timeout, move to start screen
 
             btn.on_press = erase

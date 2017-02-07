@@ -604,26 +604,20 @@
         size_hint: 1, 1
 
 <ContestIntroScreen>:
+    l: l
     BoxLayout:
         orientation: 'vertical'
         size_hint: 1, 1
         padding: 20
         spacing: 20
         LabelB:
+            size_hint: 1, 0.2
             text: 'Merci pour ton évaluation. Tu peux maintenant participer au concours en répondant correctement à quelques questions.'
-        LabelB:
-            text: 'Merci de renseigner le contexte de votre visite'
         BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, 1
-            ButtonCategory:
-                text: 'Enfant'
-                background_normal: "images/picto_family.png"
-                on_press: root.forward()
-            ButtonCategory:
-                text: 'Adultes'
-                background_normal: "images/picto_school.png"
-                on_press: root.forward()
+            id: l
+            orientation: 'vertical'
+            size_hint: 1, 0.8
+            spacing: 20
 
 <ConfirmStatsScreen>:
     Button:
