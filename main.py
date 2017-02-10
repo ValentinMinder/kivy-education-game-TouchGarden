@@ -15,7 +15,7 @@ from kivy.uix.widget import Widget
 
 from utils import sizes
 from utils.quiz import Quiz
-from utils.category import ElementScatter, AnimatedScatter, Category, Recover
+from utils.category import ElementScatter, Category, Recover
 from utils.gui import ImageWrap, ButtonImage, ButtonImageChoices, LabelWrap
 
 #Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
@@ -839,12 +839,12 @@ class FloatGameScreen(BackKeyScreen):
 
                 # animation of animals
                 # TODO: real animals!
-                animal = AnimatedScatter()
+                animal = ImageWrap(pos = (sizes.width, sizes.height / 2))
                 animal.image.anim_delay = 0.1
                 animal.image.size = (75, 152)
-                animal.pos = (sizes.width, sizes.height / 2)
                 animal.image.source = 'images/animations/haies/mesange_vole.zip'
                 animal.image.anim_delay = 0.2
+                animal.flip()
                 element.parent.add_widget(animal)
                 anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=2)
                 heart = ImageWrap(pos=(175 / 2 + 200, 175 / 2), size=(46, 50),
@@ -855,7 +855,7 @@ class FloatGameScreen(BackKeyScreen):
 
                 def after_bad(t, r):
                     anim = Animation(x=100 + sizes.width, y=sizes.height / 2, duration=2)
-                    anim.start(animal)
+                    anim.start(animal.image)
                     after_anim()
 
                 def remove_heart(t, r):
@@ -865,7 +865,7 @@ class FloatGameScreen(BackKeyScreen):
                     element.parent.add_widget(heart)
                     anim = Animation(x=250, y=200, duration=1)
                     anim += Animation(x=-100, y=175, duration=2)
-                    anim.start(animal)
+                    anim.start(animal.image)
                     anim.bind(on_complete=remove_heart)
                     after_anim()
 
@@ -873,7 +873,7 @@ class FloatGameScreen(BackKeyScreen):
                     anim.bind(on_complete=add_heart)
                 else:
                     anim.bind(on_complete=after_bad)
-                anim.start(animal)
+                anim.start(animal.image)
                 # todo: remove the animal or make sure it disappear
                 # element.parent.remove_widget(animal)
 
@@ -945,15 +945,14 @@ class FloatGameScreen(BackKeyScreen):
             self.static.image.source = 'images/non_animes/haie_diverses_especes.png'
 
             # todo: better
-            animal = AnimatedScatter()
+            animal = ImageWrap(pos = (0 + sizes.width_left_margin, 768))
             animal.image.anim_delay = 0.1
             animal.image.size = (75, 152)
-            animal.pos = (0 + sizes.width_left_margin, 768)
             animal.image.source = 'images/animations/haies/mesange_vole.zip'
             self.frame.add_widget(animal)
             anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=1)
             anim += Animation(x=1024 + 200 + sizes.width_left_margin, y=212, duration=2)
-            anim.start(animal)
+            anim.start(animal.image)
 
             self.anim_points(1, 175 / 2 + sizes.width_left_margin, 175 / 2, fct_next=self.category_next)
             after_all_choices()
@@ -979,15 +978,15 @@ class FloatGameScreen(BackKeyScreen):
             self.static.image.pos = (400, 0)
 
             # todo: better
-            animal = AnimatedScatter()
+            animal = ImageWrap(pos = (0 + sizes.width_left_margin, 768))
+            animal.flip()
             animal.image.anim_delay = 0.1
             animal.image.size = (75, 152)
-            animal.pos = (0 + sizes.width_left_margin, 768)
             animal.image.source = 'images/animations/haies/mesange_vole.zip'
             self.frame.add_widget(animal)
             anim = Animation(x=175 / 2 + sizes.width_left_margin, y=175 / 2, duration=1)
             anim += Animation(x=1024 + 200 + sizes.width_left_margin, y=212, duration=2)
-            anim.start(animal)
+            anim.start(animal.image)
 
             self.anim_points(1, 175 / 2 + sizes.width_left_margin, 175 / 2, fct_next=self.category_next)
             after_all_choices()

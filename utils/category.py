@@ -3,6 +3,7 @@ from kivy.uix.scatter import Scatter
 
 import texts
 import sizes
+from gui import ImageWrap
 
 
 class Category(object):
@@ -19,19 +20,14 @@ class Recover(object):
         self.solution = solution
         self.correction = correction
 
-# animated scatter element
-#  todo: check disabling all touch
-class AnimatedScatter(Scatter):
-    def __init__(self):
-        super(AnimatedScatter, self).__init__()
-
 
 # draggable element scatter (touchable by children)
-# todo: check if disabling other touch than dragging
 class ElementScatter(Scatter):
     def __init__(self, name, positive, first, img):
         super(ElementScatter, self).__init__()
         self.name = name
+        # disable other moves than translation (drag & drop)
+        self.do_rotation = self.do_scale = False
         # to know wether positive or negative scenario should be activated
         self.positive = positive
         self.size_hint = (None, None)
