@@ -670,12 +670,12 @@ class FloatGameScreen(BackKeyScreen):
         anim.start(self.cursor.image)
 
         # welcoming guy
-        animated = ImageWrap(pos=sizes.human_pos,
+        self.guy = ImageWrap(pos=sizes.human_pos,
                              size=sizes.human_size,
-                             source='images/animations/bonhomme/homme_positif_content_2.gif')
-        animated.image.anim_delay = 0.1
-        animated.image.anim_loop = 5
-        self.frame.add_widget(animated)
+                             source='images/animations/human/hipster_sways.zip')
+        self.guy.image.anim_delay = 0.3
+        self.guy.image.anim_loop = 5
+        self.frame.add_widget(self.guy)
 
         self.speach = LabelWrap(size=(sizes.speach_width, sizes.speach_height),
                                 pos=sizes.speach_pos,
@@ -810,25 +810,25 @@ class FloatGameScreen(BackKeyScreen):
                     self.speach.label.text = txt_game_move_positive()
 
                 # animated guy: happy or not
-                animated = ImageWrap(pos=(790 + sizes.width_left_margin, 386), size=(75, 152),
-                                     source='images/animations/bonhomme/homme_positif_content_2.gif')
-                animated.image.anim_delay = 0.1
-                animated.image.anim_loop = 5
                 if (element.positive):
-                    animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
+                    self.guy.image.source = 'images/animations/human/hipster_happy.zip'
+                    self.guy.image.anim_delay = 0.1
+                    self.guy.image.anim_loop = 5
                 else:
                     # TODO: put the negative animation, remove the placement, remove the non-moving guy
-                    animated.image.source = 'images/animations/bonhomme/homme_positif_content_2.gif'
-                    animated.image.pos = (890 + sizes.width_left_margin, 186)
+                    self.guy.image.source = 'images/animations/human/hipster_wrath.zip'
+                    self.guy.image.anim_delay = 0.2
+                    self.guy.image.anim_loop = 5
 
-                element.parent.add_widget(animated)
 
                 # todo: move to text info + other category, after a while
 
                 def after(screen):
                     self.update_cursor()
                     self.frame.remove_widget(animal)
-                    self.frame.remove_widget(animated)
+                    self.guy.image.source = 'images/animations/human/hipster_sways.zip'
+                    self.guy.image.anim_delay = 0.3
+                    self.guy.image.anim_loop = 0
                     if (element.positive):
                         self.category_next(None)
                     else:

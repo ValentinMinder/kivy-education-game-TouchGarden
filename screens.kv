@@ -322,9 +322,17 @@
                 allow_stretch: False
                 source: 'images/animations/animaux/chevre.zip'
                 anim_delay: 0.4
+            Image:
+                allow_stretch: False
+                source: 'images/animations/animaux/chevre_mange_intro.zip'
+                anim_delay: 0.3
+            Image:
+                allow_stretch: False
+                source: 'images/animations/animaux/chevre_mange_loop.zip'
+                anim_delay: 0.3
         BoxLayout:
             orientation: 'horizontal'
-            size_hint: 1, 0.2
+            size_hint: 1, 0.15
             Image:
                 allow_stretch: False
                 source: 'images/animations/eaux/coeur.zip'
@@ -363,7 +371,7 @@
                 anim_delay: 0.2
         BoxLayout:
             orientation: 'horizontal'
-            size_hint: 1, 0.2
+            size_hint: 1, 0.15
             Image:
                 allow_stretch: False
                 source: 'images/animations/mur/ecureuil_court.zip'
@@ -405,6 +413,21 @@
                 anim_delay: 0.1
             Image:
                 allow_stretch: False
+                source: 'images/animations/human/hipster_happy.zip'
+                anim_delay: 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/human/hipster_wrath.zip'
+                anim_delay: 0.2 #or 0.1
+            Image:
+                allow_stretch: False
+                source: 'images/animations/human/hipster_sways.zip'
+                anim_delay: 0.3 #or 0.5
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.3
+            Image:
+                allow_stretch: False
                 source: 'images/animations/eaux/piscine_plouf.zip'
                 anim_delay: 0.2
             Image:
@@ -432,10 +455,10 @@
                 source: 'images/non_animes/lierre_pour_barriere_beton.png'
             Image:
                 allow_stretch: False
-                source: 'images/non_animes/cone_arbre_antipredateur.png'
+                source: 'images/non_animes/haie_diverses_especes.png'
             Image:
                 allow_stretch: False
-                source: 'images/non_animes/haie_diverses_especes.png'
+                source: 'images/non_animes/haie_de_thuya.png'
         BoxLayout:
             orientation: 'vertical'
             size_hint: 0.2, 1
@@ -454,7 +477,7 @@
 
         BoxLayout:
             orientation: 'vertical'
-            size_hint: 0.5, 1
+            size_hint: 0.30, 1
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/piscine.png'
@@ -478,13 +501,18 @@
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/barrieres_espacee.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/barrieres_ras_de_sol.png'
         BoxLayout:
             orientation: 'vertical'
             size_hint: 1, 1
             Image:
                 allow_stretch: False
-                source: 'images/non_animes/barrieres_ras_de_sol.png'
-
+                source: 'images/non_animes/terrasse_pave_drainant.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/terrasse_gres_noir.png'
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, 1
@@ -493,8 +521,29 @@
                     source: 'images/non_animes/arbre.png'
                 Image:
                     allow_stretch: False
-                    source: 'images/non_animes/haie_de_thuya.png'
+                    source: 'images/non_animes/arbre_oiseau.png'
+                Image:
+                    allow_stretch: False
+                    source: 'images/non_animes/arbre_plume.png'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 0.3
 
+                Image:
+                    allow_stretch: False
+                    source: 'images/non_animes/cone_arbre_antipredateur.png'
+                Image:
+                    allow_stretch: False
+                    source: 'images/non_animes/cone_arbre_antipredateur_v2.png'
+                Image:
+                    allow_stretch: False
+                    source: 'images/non_animes/cone_arbre_antipredateur_v3.png'
+                Image:
+                    allow_stretch: False
+                    source: 'images/non_animes/trou_barriere_v1.png'
+                Image:
+                    allow_stretch: False
+                    source: 'images/non_animes/trou_barriere_v2.png'
             Button:
                 text: 'STOP'
                 size_hint: 1, 0.2
