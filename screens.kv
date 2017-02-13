@@ -404,22 +404,27 @@
             orientation: 'horizontal'
             size_hint: 1, 0.6
             Image:
+                size_hint: 2, 1
                 allow_stretch: False
                 source: 'images/animations/animaux/chat_meurtre.zip'
                 anim_delay: 0.1
             Image:
+                size_hint: 2, 1
                 allow_stretch: False
                 source: 'images/animations/animaux/chat_meurtre_fail.zip'
                 anim_delay: 0.1
             Image:
+                size_hint: 1, 1
                 allow_stretch: False
                 source: 'images/animations/human/hipster_happy.zip'
                 anim_delay: 0.1
             Image:
+                size_hint: 1, 1
                 allow_stretch: False
                 source: 'images/animations/human/hipster_wrath.zip'
                 anim_delay: 0.2 #or 0.1
             Image:
+                size_hint: 1, 1
                 allow_stretch: False
                 source: 'images/animations/human/hipster_sways.zip'
                 anim_delay: 0.3 #or 0.5
@@ -446,13 +451,13 @@
         orientation: 'horizontal'
         BoxLayout:
             orientation: 'vertical'
-            size_hint: 0.25, 1
+            size_hint: 0.2, 1
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/prairie_fleurie.png'
             Image:
                 allow_stretch: False
-                source: 'images/non_animes/lierre_pour_barriere_beton.png'
+                source: 'images/non_animes/tas_de_bois.png'
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/haie_diverses_especes.png'
@@ -468,26 +473,66 @@
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/bac_herbes_aromatiques.png'
-            Image:
-                allow_stretch: False
-                source: 'images/non_animes/table_chaise_de_jardin.png'
-            Image:
-                allow_stretch: False
-                source: 'images/non_animes/tas_de_bois.png'
 
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/barriere_trou_no.png'
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/barriere_trou_yes.png'
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.2, 1
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/piscine_echelle_no.png'
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/piscine_echelle_yes.png'
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/barriere_lierre_no.png'
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/barriere_lierre_yes.png'
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.1, 1
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/piscine_echelle_v1.png'
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/piscine_echelle_v2.png'
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/barriere_trou.png'
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/barriere_lierre.png'
+            Image:
+                allow_stretch: False
+                source: 'images/corrections/arbre_cone.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/arbre_plume.png'
+            Button:
+                text: 'Next'
+                on_press: root.moregraphics()
+                size_hint: 1, 0.2
         BoxLayout:
             orientation: 'vertical'
             size_hint: 0.30, 1
             Image:
                 allow_stretch: False
-                source: 'images/non_animes/piscine.png'
+                source: 'images/corrections/arbre_cone_yes.png'
             Image:
                 allow_stretch: False
-                source: 'images/non_animes/etang.png'
-            Button:
-                text: 'Next'
-                on_press: root.moregraphics()
-                size_hint: 1, 0.2
+                source: 'images/corrections/arbre_cone_no.png'
+            Image:
+                allow_stretch: False
+                source: 'images/non_animes/arbre_oiseau.png'
 
 <TestMoreGraphicsScreen>
     BoxLayout:
@@ -506,7 +551,7 @@
                 source: 'images/non_animes/barrieres_ras_de_sol.png'
         BoxLayout:
             orientation: 'vertical'
-            size_hint: 1, 1
+            size_hint: 1.4, 1
             Image:
                 allow_stretch: False
                 source: 'images/non_animes/terrasse_pave_drainant.png'
@@ -518,32 +563,13 @@
                 size_hint: 1, 1
                 Image:
                     allow_stretch: False
-                    source: 'images/non_animes/arbre.png'
+                    source: 'images/non_animes/piscine.png'
                 Image:
                     allow_stretch: False
-                    source: 'images/non_animes/arbre_oiseau.png'
+                    source: 'images/non_animes/etang.png'
                 Image:
                     allow_stretch: False
-                    source: 'images/non_animes/arbre_plume.png'
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: 1, 0.3
-
-                Image:
-                    allow_stretch: False
-                    source: 'images/non_animes/cone_arbre_antipredateur.png'
-                Image:
-                    allow_stretch: False
-                    source: 'images/non_animes/cone_arbre_antipredateur_v2.png'
-                Image:
-                    allow_stretch: False
-                    source: 'images/non_animes/cone_arbre_antipredateur_v3.png'
-                Image:
-                    allow_stretch: False
-                    source: 'images/non_animes/trou_barriere_v1.png'
-                Image:
-                    allow_stretch: False
-                    source: 'images/non_animes/trou_barriere_v2.png'
+                    source: 'images/non_animes/table_chaise_de_jardin.png'
             Button:
                 text: 'STOP'
                 size_hint: 1, 0.2

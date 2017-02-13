@@ -538,7 +538,7 @@ class FloatGameScreen(BackKeyScreen):
                                source='images/scenery/nav_fond_gauche_200x768px.png'))
         f.add_widget(ImageWrap(pos=(sizes.width_left_margin, sizes.height_ref),
                                size=(sizes.width_game, sizes.height),
-                               source='images/fond/fond_jardin_v5-3.jpg'))
+                               source='images/fond/fond_jardin_v6.png'))
         f.add_widget(ImageWrap(pos=(sizes.width_right_game, sizes.height_ref),
                                size=(sizes.width_right_margin, sizes.height),
                                source='images/scenery/nav_fond_droite_142x768px.png'))
