@@ -71,6 +71,45 @@ category_height = 23
 category_width = 188
 category_number = 6.0
 
+def event(pos, size):
+    return (pos[0] + size[0] / 2, pos[1] + size[1] / 2)
+# waters
+size_c1 = (308,179)
+pos_c1 = (width_left_margin + 191, 415)
+event_c1 = event(pos_c1, size_c1)
+
+#bushes
+size_c2 = (175,175)
+pos_c2 = (width_left_margin + 0, 0)
+event_c2 = event(pos_c2, size_c2)
+
+#walls
+size_c3 = (593,306)
+pos_c3 = (width_left_margin + 0, 463)
+event_c3 = (width_left_margin + 239, 604)
+event_c3alt = (width_left_margin + 239 - 58, 604)
+event_c3alt2 = (width_left_margin + 239 - 58, 604 - 55)
+
+#floor
+size_c4 = (562,273)
+pos_c4 = (width_left_margin + 463, 360)
+event_c4 = event(pos_c4, size_c4)
+
+#flowers (garden)
+size_c5 = (144,109) #todo: check with tree
+pos_c5 = (width_left_margin + 63, 271)
+event_c5 = event(pos_c5, size_c5)
+
+#animals
+size_c6 = (121,75) #todo: check with goats
+pos_c6 = (width_left_margin + 760, 164)
+event_c6 = event(pos_c6, size_c6)
+
+#flowers (balcony)
+size_c7 = (58,65)
+pos_c7 = (width_left_margin + 656, 646)
+event_c7 = event(pos_c7, size_c7)
+
 #remaining size is spread over the 2 elements
 left_margin_elements = (height_left_first - 2 * height_title - width_left_elements - height_button_small - border_small - category_height) / 2
 height_left_second = height_left_first_desc - width_left_elements - left_margin_elements
