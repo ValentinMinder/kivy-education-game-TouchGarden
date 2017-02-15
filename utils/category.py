@@ -340,7 +340,7 @@ def init_category_struct(frame):
         return Animation(pos=sizes.event_c4, duration=duration_start * 1.5)
 
     def anim_end_p4(animal):
-        return Animation(x=0, y=sizes.height / 2, duration=duration_end)
+        return Animation(x=0, y=0, duration=duration_end)
 
     def anim_end_n4(animal):
         def forward(a, i):

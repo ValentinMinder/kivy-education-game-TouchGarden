@@ -683,7 +683,7 @@ class FloatGameScreen(BackKeyScreen):
                                 pos=sizes.speach_pos,
                                 text=Text(fr="FR", de='DE', en='EN'),
                                 font_size=sizes.font_size_large)
-        self.speach.label.text = txt_tutorial_welcome()
+        self.speach.label.text = txt_tutorial_welcome.get()
         self.speach.label.background_color = 1, 1, 1, 0.8
         self.frame.add_widget(self.speach)
 
@@ -693,10 +693,10 @@ class FloatGameScreen(BackKeyScreen):
 
     def category_forward(self, touch):
         if (self.categorynb < sizes.category_number):
-            self.speach.label.text = txt_game_move_pass()
-            self.anim_points(0, (0, 0), self.category_next)
-            print self.quiz.next_question()
+            self.speach.label.text = txt_game_move_pass.get()
+            self.anim_points(0, (0, 0), self.none)
             self.category_clean()
+            self.category_next(touch)
         else:
             self.category_next(touch)
 
@@ -717,7 +717,8 @@ class FloatGameScreen(BackKeyScreen):
         self.category_text.update_cat(self.categorynb)
 
         # forward to next category
-        self.gameturn_setup(self.categories[self.categorynb - 1])
+
+        self.gameturn_setup(self.categories[min(self.categorynb, self.categories.__len__()) - 1])
 
     # does nothing, used for no action after animation
     def none(self, any):
@@ -734,12 +735,15 @@ class FloatGameScreen(BackKeyScreen):
         points_image = ImageWrap(size=(size, size),
                                  pos=(x_start, y_start),
                                  source='images/scenery/points_neutre_500x500px.png')
+        d = 1
         if (points > 0):
             points_image.image.source = 'images/scenery/smile_positif_210x200px.png'
             y_final += y_shift
+            d *= 2
         elif (points < 0):
             points_image.image.source = 'images/scenery/points_negatif_500x500px.png'
             y_final -= y_shift
+            d *= 2
 
         self.frame.add_widget(points_image)
 
@@ -747,7 +751,7 @@ class FloatGameScreen(BackKeyScreen):
             self.frame.remove_widget(points_image)
             fct_next(self)
 
-        d = 3
+
         anim_points = Animation(size=(size_final, size_final), duration=d)
         anim_points &= Animation(x=x_final, y=y_final, duration=d, t='in_quad')
         anim_points.bind(on_complete=remove)
@@ -805,6 +809,13 @@ class FloatGameScreen(BackKeyScreen):
             self.guy.image.anim_delay = 0.3
             self.guy.image.anim_loop = 0
 
+    def hipster_sways_after(self):
+        def after(a, i):
+            self.hipster(0)
+        anim = Animation(duration=4)
+        anim.bind(on_complete = after)
+        anim.start(self.static.image)
+
     def anim_animal(self, element, points, alt=False):
 
         def after(a, i):
@@ -841,7 +852,7 @@ class FloatGameScreen(BackKeyScreen):
         if (isinstance(element, ElementScatter)):
             target = self.current_category.target
             # automatize placement for detection, static image & animation
-            # check collision
+            # check collision, object placed
             if (target.image.collide_widget(element)):
 
                 self.current_element = element
@@ -855,9 +866,10 @@ class FloatGameScreen(BackKeyScreen):
 
                 # text speach update
                 if (not element.positive):
-                    self.speach.label.text = txt_game_move_negative()
+                    self.speach.label.text = txt_game_move_negative.get()
                 else:
-                    self.speach.label.text = txt_game_move_positive()
+                    self.speach.label.text = txt_game_move_positive.get()
+                    self.hipster_sways_after()
 
                 points = 1 if element.positive else -1
                 self.points += points
@@ -874,13 +886,11 @@ class FloatGameScreen(BackKeyScreen):
 
                 # todo : disable all other widget!
                 self.category_clean()
-
-                print 'placed scatter'
             else:
+                #object not placed, return to place and text changed
                 anim = Animation(x=element.x_orig, y=element.y_orig)
                 anim.start(element)
-                self.speach.label.text = txt_game_move_unreached()
-                print 'not placed'
+                self.speach.label.text = txt_game_move_unreached.get()
                 self.currentObj = ObjectProperty(None)
 
     def after_negative(self):
@@ -920,36 +930,47 @@ class FloatGameScreen(BackKeyScreen):
 
         element = self.current_element
 
-        # todo: react to clicks
+        # replace by positive element
         def replace(screen):
-            print 'replace'
             pt = 2
             self.points += pt
             self.static.image.source = element.positive_ref.source
             self.anim_animal(element.positive_ref, pt)
+
+            # text speach update
+            self.speach.label.text = txt_game_move_positive.get()
             self.hipster(pt)
             after_all_choices()
 
+        # add a correction to negative elements
         def correct(screen):
-            print 'correct'
             pt = 1
             self.points += pt
             # add the correcting element and run the altenative negative animation
             self.frame.add_widget(element.correction_img)
             self.anim_animal(element, pt, alt=True)
+
+            # text speach update
+            self.speach.label.text = txt_game_move_positive.get()
             self.hipster(pt)
             after_all_choices()
 
         # keep and remove have no animation
         def remove(screen):
-            print 'remove the object'
-            self.frame.remove_widget(self.static)
             self.points += 1
+            self.frame.remove_widget(self.static)
+
+            # text speach update
+            self.speach.label.text = txt_tuto.get()
+            self.hipster(0)
             after_all_choices()
             self.category_next(None)
 
+        # keep the object
         def keep(screen):
-            print 'keep'
+            # text speach update
+            self.speach.label.text = txt_tuto.get()
+            self.hipster(0)
             after_all_choices()
             self.category_next(None)
 
@@ -957,6 +978,7 @@ class FloatGameScreen(BackKeyScreen):
         def after_all_choices():
             self.frame.remove_widget(window_frame)
             self.update_cursor()
+            self.hipster_sways_after()
 
         class ButtonImageChoicesKeep(ButtonImageChoices):
             def __init__(self, element, pos):
