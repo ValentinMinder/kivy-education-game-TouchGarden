@@ -72,11 +72,14 @@ category_width = 188
 category_number = 6.0
 
 def event(pos, size):
-    return (pos[0] + size[0] / 2, pos[1] + size[1] / 2)
+    return (pos[0] + (size[0] / 2), pos[1] + (size[1] / 2))
 # waters
-size_c1 = (308,179)
-pos_c1 = (width_left_margin + 191, 415)
-event_c1 = event(pos_c1, size_c1)
+size_c1 = (308,302) #swimming pool: (308,179), etang: (222,302)
+pos_c1 = (width_left_margin + 175, 345)
+event_c1bef = event(pos_c1, size_c1)
+event_c1 = (event_c1bef[0] - 30 - 35, event_c1bef[1] - 50 + 5)
+event_c1alt = (event_c1bef[0] - 120, event_c1bef[1] - 8)
+event_c1altanimal = (event_c1bef[0] - 120 - 70, event_c1bef[1] - 30)
 
 #bushes
 size_c2 = (175,175)
@@ -85,15 +88,17 @@ event_c2 = event(pos_c2, size_c2)
 
 #walls
 size_c3 = (593,306)
-pos_c3 = (width_left_margin + 0, 463)
-event_c3 = (width_left_margin + 239, 604)
-event_c3alt = (width_left_margin + 239 - 58, 604)
-event_c3alt2 = (width_left_margin + 239 - 58, 604 - 55)
+pos_c3 = (width_left_margin + 1, 462)
+event_c31 = (width_left_margin + 239, 604)
+event_c32 = (width_left_margin + 239 - 8, 604 - 22)
+event_c31alt = (width_left_margin + 239 - 58, 604 - 3)
+event_c32alt = (width_left_margin + 239 - 58 - 15, 604 - 55 - 30)
 
 #floor
 size_c4 = (562,273)
 pos_c4 = (width_left_margin + 463, 360)
-event_c4 = event(pos_c4, size_c4)
+event_c4bef = event(pos_c4, size_c4)
+event_c4 = (event_c4bef[0] - 200, event_c4bef[1] + 20)
 
 #flowers (garden)
 size_c5 = (144,109) #todo: check with tree
@@ -101,9 +106,11 @@ pos_c5 = (width_left_margin + 63, 271)
 event_c5 = event(pos_c5, size_c5)
 
 #animals
-size_c6 = (121,75) #todo: check with goats
-pos_c6 = (width_left_margin + 760, 164)
-event_c6 = event(pos_c6, size_c6)
+size_c6 = (165, 93) # eating goats, (137, 88) #goats, cats: (121,75)
+size_c6_cat = (121,90) # (102, 90) cats walking, (121, 75) cats couches
+pos_c6 = (width_left_margin + 800, 179)
+event_c6bfe = event(pos_c6, size_c6)
+event_c6 = (pos_c6[0] - 300 + 20, pos_c6[1])
 
 #flowers (balcony)
 size_c7 = (58,65)

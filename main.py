@@ -635,6 +635,7 @@ class FloatGameScreen(BackKeyScreen):
                               size=sizes.tree_size,
                               source='images/non_animes/arbre_oiseau.png')
         f.add_widget(self.tree)
+        f.tree = self.tree
 
         # textual description elements
         self.elem_first_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
@@ -715,16 +716,16 @@ class FloatGameScreen(BackKeyScreen):
         self.category_scale.image.size = (sizes.category_width_progress(self.categorynb), sizes.category_height)
         self.category_text.update_cat(self.categorynb)
 
-        print 'TODO: add new category'
-        self.gameturn_setup(category)
+        # forward to next category
+        self.gameturn_setup(self.categories[self.categorynb - 1])
 
     # does nothing, used for no action after animation
-    def none(self):
+    def none(self, any):
         pass
 
     # animates a smile/a points mark towards scale from the happening area
     # todo: choose if points or smiles
-    def anim_points(self, points, (x_start, y_start), fct_next=none):
+    def anim_points(self, points, (x_start, y_start), fct_next):
         size = 50
         size_final = 200
         x_final = sizes.width - size_final
@@ -773,6 +774,8 @@ class FloatGameScreen(BackKeyScreen):
 
         # target area to carry elements
         self.frame.add_widget(category.target)
+        self.frame.remove_widget(self.guy)
+        self.frame.add_widget(self.guy)
 
         # positive and negative elements to drag & drop
         self.frame.add_widget(category.element1)
@@ -804,26 +807,29 @@ class FloatGameScreen(BackKeyScreen):
 
     def anim_animal(self, element, points, alt=False):
 
-        def after(screen):
+        def after(a, i):
             self.update_cursor()
             # remove the animal or make sure it disappear
             self.frame.remove_widget(animal)
-            #self.hipster(0)
+            # self.hipster(0)
             if (points > 0):
                 self.category_next(None)
             else:
                 self.after_negative()
 
         # animation of animals
+        self.frame.static = self.static
         animal = element.anim_setup()
+        animal.static = self.static
 
         def after_start(t, r):
             if (alt):
                 anim_end = element.anim_end_alt(animal)
             else:
                 anim_end = element.anim_end(animal)
+            anim_end.bind(on_complete=after)
             anim_end.start(animal.image)
-            self.anim_points(points, element.event_pos, fct_next=after)
+            self.anim_points(points, element.event_pos, fct_next=self.none)
 
         anim_start = element.anim_start()
         anim_start.bind(on_complete=after_start)
@@ -841,9 +847,11 @@ class FloatGameScreen(BackKeyScreen):
                 self.current_element = element
                 # put the real object in place of target (suppose both elements have same size!)
                 self.static = ImageWrap(size=target.image.size,
-                                        pos = target.image.pos,
-                                        source = element.image.source)
+                                        pos=target.image.pos,
+                                        source=element.image.source)
                 self.frame.add_widget(self.static)
+                self.frame.remove_widget(self.guy)
+                self.frame.add_widget(self.guy)
 
                 # text speach update
                 if (not element.positive):
