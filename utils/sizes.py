@@ -69,7 +69,7 @@ def cursor_pos_y(step):
 
 category_height = 23
 category_width = 188
-category_number = 6.0
+category_number = 7.0
 
 def event(pos, size):
     return (pos[0] + (size[0] / 2), pos[1] + (size[1] / 2))
@@ -79,7 +79,8 @@ pos_c1 = (width_left_margin + 175 - 50, 345-50)
 event_c1bef = event(pos_c1, size_c1)
 event_c1 = (event_c1bef[0] - 30 - 35, event_c1bef[1] - 50 + 5)
 event_c1alt = (event_c1bef[0] - 120, event_c1bef[1] - 8)
-event_c1altanimal = (event_c1bef[0] - 120 - 70, event_c1bef[1] - 30)
+event_c1altanimal1 = (event_c1bef[0] - 120 - 70, event_c1bef[1])
+event_c1altanimal2 = (event_c1bef[0] - 120 - 70 + 50, event_c1bef[1] - 50)
 
 #bushes
 size_c2 = (175,175)

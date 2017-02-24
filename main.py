@@ -14,6 +14,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 from kivy.uix.widget import Widget
 
+from utils import texts as txt
 from utils import sizes
 from utils.quiz import Quiz
 from utils.category import ElementScatter, init_category_struct
@@ -601,7 +602,7 @@ class FloatGameScreen(BackKeyScreen):
 
         f.add_widget(LabelWrap(size=(sizes.width_right_margin, sizes.height_button_small),
                                pos=(sizes.width_right_game, sizes.height_left_category_title),
-                               text=Text(fr='Score', de='TODE', en='Score'),
+                               text=txt.txt_scenery_score,
                                font_size=sizes.font_size_subtitle, bold=True))
 
     # create and add all dynamic UI elements (some movable, some resizabée, some text or image changeable, no background, some scenery)
@@ -638,28 +639,29 @@ class FloatGameScreen(BackKeyScreen):
         f.tree = self.tree
 
         # textual description elements
+        # fake mock text, actual real text will be loaded afterwards when categories are set up
         self.elem_first_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
                                          pos=(sizes.border_text_min, sizes.height_left_first_desc),
-                                         text=Text(fr="FR", de='DE', en='EN'),
+                                         text=txt.txt_scenery_notxt,
                                          vAlignTop=True)
         f.add_widget(self.elem_first_desc)
 
         self.elem_second_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_title),
                                           pos=(sizes.border_text_min, sizes.height_left_second_desc),
-                                          text=Text(fr="FR", de='DE', en='EN'),
+                                          text=txt.txt_scenery_notxt,
                                           vAlignTop=True)
         f.add_widget(self.elem_second_desc)
 
         self.category_text = LabelWrap(size=(sizes.width_left_margin, sizes.height_left_category_element),
                                        pos=(sizes.width_ref, sizes.height_left_category_title),
-                                       text=Text(fr='Catégorie', de='Kategorie', en='Category'),
+                                       text=txt.txt_scenery_category,
                                        font_size=sizes.font_size_subtitle, bold=True)
         f.add_widget(self.category_text)
         self.category_text.update_cat(self.categorynb)
 
         self.category_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_left_category_element),
                                        pos=(sizes.border_text_min, sizes.height_left_category_desc),
-                                       text=Text(fr="FR", de='DE', en='EN'),
+                                       text=txt.txt_scenery_notxt,
                                        font_size=sizes.font_size_large)
         f.add_widget(self.category_desc)
 
@@ -681,9 +683,9 @@ class FloatGameScreen(BackKeyScreen):
 
         self.speach = LabelWrap(size=(sizes.speach_width, sizes.speach_height),
                                 pos=sizes.speach_pos,
-                                text=Text(fr="FR", de='DE', en='EN'),
+                                text=txt.txt_scenery_notxt,
                                 font_size=sizes.font_size_large)
-        self.speach.label.text = txt_tutorial_welcome.get()
+        self.speach.label.text = txt_game_move_play.get()
         self.speach.label.background_color = 1, 1, 1, 0.8
         self.frame.add_widget(self.speach)
 
@@ -727,7 +729,7 @@ class FloatGameScreen(BackKeyScreen):
     # animates a smile/a points mark towards scale from the happening area
     # todo: choose if points or smiles
     def anim_points(self, points, (x_start, y_start), fct_next):
-        size = 50
+        size = 20
         size_final = 200
         x_final = sizes.width - size_final
         y_final = (sizes.height - size_final) / 2
@@ -741,13 +743,15 @@ class FloatGameScreen(BackKeyScreen):
             y_final += y_shift
             d *= 2
         elif (points < 0):
-            points_image.image.source = 'images/scenery/points_negatif_500x500px.png'
+            points_image.image.source = 'images/scenery/smile_negatif_210x200px.png'
             y_final -= y_shift
             d *= 2
 
         self.frame.add_widget(points_image)
 
         def remove(anim, widget):
+            #update cursor at the end of smiley movement
+            self.update_cursor()
             self.frame.remove_widget(points_image)
             fct_next(self)
 
@@ -819,7 +823,6 @@ class FloatGameScreen(BackKeyScreen):
     def anim_animal(self, element, points, alt=False):
 
         def after(a, i):
-            self.update_cursor()
             # remove the animal or make sure it disappear
             self.frame.remove_widget(animal)
             # self.hipster(0)
@@ -916,7 +919,7 @@ class FloatGameScreen(BackKeyScreen):
         window_frame.add_widget(
             LabelWrap(pos=(x(0), y(sizes.win_height - sizes.win_header)),
                       size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
-                      text=Text(fr="Ce n'est pas le bon choix...", de="TODE", en="TOEN"),
+                      text=txt.txt_recover_header,
                       font_size=sizes.font_size_title,
                       bold=True))
 
@@ -961,15 +964,16 @@ class FloatGameScreen(BackKeyScreen):
             self.frame.remove_widget(self.static)
 
             # text speach update
-            self.speach.label.text = txt_tuto.get()
+            self.speach.label.text = txt_game_move_play.get()
             self.hipster(0)
+            self.update_cursor()
             after_all_choices()
             self.category_next(None)
 
         # keep the object
         def keep(screen):
             # text speach update
-            self.speach.label.text = txt_tuto.get()
+            self.speach.label.text = txt_game_move_play .get()
             self.hipster(0)
             after_all_choices()
             self.category_next(None)
@@ -977,13 +981,12 @@ class FloatGameScreen(BackKeyScreen):
         # remove the recover window and update cursor
         def after_all_choices():
             self.frame.remove_widget(window_frame)
-            self.update_cursor()
             self.hipster_sways_after()
 
         class ButtonImageChoicesKeep(ButtonImageChoices):
             def __init__(self, element, pos):
                 self.pos = pos
-                text = Text("Garder", "TODE", "TOEN")
+                text = txt.txt_recover_keep
                 super(ButtonImageChoicesKeep, self).__init__(keep, pos, text)
 
                 self.add_widget(
@@ -994,7 +997,7 @@ class FloatGameScreen(BackKeyScreen):
         class ButtonImageChoicesRemove(ButtonImageChoices):
             def __init__(self, element, pos):
                 self.pos = pos
-                text = Text(fr="Enlever", de="TODE", en="TOEN")
+                text = txt.txt_recover_remove
                 super(ButtonImageChoicesRemove, self).__init__(remove, pos, text)
 
                 self.add_widget(
@@ -1009,7 +1012,7 @@ class FloatGameScreen(BackKeyScreen):
         class ButtonImageChoicesReplace(ButtonImageChoices):
             def __init__(self, element, pos):
                 self.pos = pos
-                text = Text("Remplacer", "TODE", "TOEN")
+                text = txt.txt_recover_replace
                 super(ButtonImageChoicesReplace, self).__init__(replace, pos, text)
 
                 self.add_widget(
@@ -1032,7 +1035,7 @@ class FloatGameScreen(BackKeyScreen):
         class ButtonImageChoicesCorrect(ButtonImageChoices):
             def __init__(self, element, pos):
                 self.pos = pos
-                text = Text("Corriger", "TODE", "TOEN")
+                text = txt.txt_recover_correct
                 super(ButtonImageChoicesCorrect, self).__init__(correct, pos, text)
 
                 self.add_widget(

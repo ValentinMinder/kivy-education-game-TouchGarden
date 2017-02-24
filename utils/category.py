@@ -4,7 +4,7 @@ from kivy.uix.label import Label
 from kivy.uix.scatter import Scatter
 import random
 
-from utils.texts import Text
+from utils import texts as txt
 import sizes
 from gui import ImageWrap
 
@@ -44,12 +44,12 @@ class ElementScatter(Scatter):
 
 # init for all categories all the possible elements and scenario (including positive, negative and some recover)
 def init_category_struct(frame):
-    duration_start = 2
-    duration_end = 3
+    duration_start = 3
+    duration_end = 4
 
     def anim_setup_p1():
         animal = ImageWrap(
-            pos=(0, sizes.height / 4),
+            pos=(0, sizes.height / 3),
             size=(88, 73),
             source='images/animations/eaux/grenouille_saute.zip',
             anim_delay=0.1)
@@ -102,19 +102,20 @@ def init_category_struct(frame):
         animal.static.image.source = 'images/animations/eaux/piscine_plouf.zip'
         animal.static.image.anim_loop = 1
         animal.flip()
-        anim = Animation(pos=sizes.event_c1altanimal, duration=duration_end * 0.3)
-        anim += Animation(pos=(-50, sizes.height / 4), duration=duration_end * 0.7)
+        anim = Animation(pos=sizes.event_c1altanimal2, duration=duration_end * 0.15)
+        anim += Animation(pos=sizes.event_c1altanimal1, duration=duration_end * 0.15)
+        anim += Animation(pos=(-50, sizes.height / 3), duration=duration_end * 0.7)
         anim.bind(on_complete=after)
         return anim
 
-    p1 = ElementScatter(name=Text(fr="Etang", de="de", en="en"),
+    p1 = ElementScatter(name=txt.txt_cat_pond,
                         first=random.choice([True, False]),
                         source='images/non_animes/etang.png',
                         event_pos=sizes.event_c1,
                         anim_setup=anim_setup_p1,
                         anim_start=anim_start_p1,
                         anim_end=anim_end_p1)
-    n1 = ElementScatter(name=Text(fr="Piscine", de="de", en="en"),
+    n1 = ElementScatter(name=txt.txt_cat_pool,
                         first=not p1.first,
                         positive=False,
                         positive_ref=p1,
@@ -134,7 +135,7 @@ def init_category_struct(frame):
     t1 = ImageWrap(pos=sizes.pos_c1,
                    size=sizes.size_c1,
                    source='images/animations/zones/eaux.zip')
-    c1 = Category(name=Text("Plans d'eau", "de", "en"),
+    c1 = Category(name=txt.txt_cat_water,
                   element1=p1, element2=n1, target=t1)
 
     def anim_setup_p2():
@@ -180,14 +181,14 @@ def init_category_struct(frame):
         # wait.bind(on_complete=after)
         return wait
 
-    p2 = ElementScatter(name=Text(fr="Haies de diverses espèces", de="de", en="en"),
+    p2 = ElementScatter(name=txt.txt_cat_hedge_good,
                         first=random.choice([True, False]),
                         source='images/non_animes/haie_diverses_especes.png',
                         event_pos=sizes.event_c2,
                         anim_setup=anim_setup_p2,
                         anim_start=anim_start_p2,
                         anim_end=anim_end_p2)
-    n2 = ElementScatter(name=Text(fr="Haies de thuyas", de="de", en="en"),
+    n2 = ElementScatter(name=txt.txt_cat_hedge_bad,
                         first=not p2.first,
                         positive=False,
                         positive_ref=p2,
@@ -201,7 +202,7 @@ def init_category_struct(frame):
     t2 = ImageWrap(pos=sizes.pos_c2,
                    size=sizes.size_c2,
                    source='images/animations/zones/haies.zip')
-    c2 = Category(name=Text("Haies", "de", "en"),
+    c2 = Category(name=txt.txt_cat_hedge,
                   element1=p2, element2=n2, target=t2)
 
     def anim_setup_p3():
@@ -215,12 +216,25 @@ def init_category_struct(frame):
         return animal
 
     def anim_setup_n3a():
+        # change anims of nice barrier p3 to have the correct animal and speeds
+        p3.anim_setup = anim_setup_n3a_alt
+        p3.anim_start = anim_start_n3a
+        p3.anim_end = anim_end_p3_alt
         animal = ImageWrap(
             pos=(sizes.width, 0),
             size=(200, 200),
             source='images/animations/mur/ecureuil_court.zip',
             anim_delay=0.1)
         frame.add_widget(animal)
+        return animal
+
+    def anim_setup_n3a_alt():
+        animal = ImageWrap(
+            pos=(sizes.width, 0),
+            size=(200, 200),
+            source='images/animations/mur/ecureuil_court.zip',
+            anim_delay=0.1)
+        frame.add_widget(animal, 4)
         return animal
 
     def anim_start_p3():
@@ -231,21 +245,34 @@ def init_category_struct(frame):
         return anim
 
     def anim_end_p3(animal):
-        anim = Animation(x=sizes.width_left_margin + 50, y=sizes.height, duration=duration_end * 1.5)
+        anim = Animation(x=sizes.width_left_margin, y=sizes.height, duration=duration_end)
+        return anim
+
+    def anim_end_p3_alt(animal):
+        anim = Animation(x=sizes.width_left_margin - 50, y=sizes.height, duration=duration_end * 0.3)
         return anim
 
     def anim_end_n3a_alt(animal):
         def after(a, i):
+            #the squirrel is BEHIND THE WALL
+            frame.remove_widget(animal)
+            frame.add_widget(animal, 3)
+            anim = Animation(x=animal.image.x, y=animal.image.y - 80, duration=duration_end * 0.1)
+            anim += Animation(x=sizes.width_left_margin - 80, y=sizes.height - 80, duration=duration_end * 0.3)
+            anim.start(animal.image)
+
+        def onwall(a,i):
             animal.image.source = 'images/animations/mur/ecureuil_court.zip'
             animal.image.anim_delay = 0.1
-            anim = Animation(x=sizes.width_left_margin - 80, y=sizes.height - 80, duration=duration_end * 0.3)
+            anim = Animation(x=animal.image.x - 28, y=animal.image.y + 16, duration=duration_end * 0.1)
+            anim.bind(on_complete=after)
             anim.start(animal.image)
 
         def climb(a, i):
             animal.image.source = 'images/animations/mur/ecureuil_grimpe.zip'
             animal.image.anim_delay = 0.2
             anim = Animation(y=animal.image.y + 80, duration=duration_end * 0.5)
-            anim.bind(on_complete=after)
+            anim.bind(on_complete=onwall)
             anim.start(animal.image)
 
         def fire(a, i):
@@ -268,11 +295,11 @@ def init_category_struct(frame):
         def fire(a, i):
             animal.image.source = 'images/animations/mur/ecureuil_snif.zip'
             animal.image.anim_delay = 0.1
-            anim = Animation(duration=duration_end * 0.4)
+            anim = Animation(duration=duration_end * 0.35)
             anim.bind(on_complete=fall)
             anim.start(animal.image)
 
-        wait = Animation(duration=duration_end * 1.5)
+        wait = Animation(duration=duration_end * 0.6)
         wait.bind(on_start=fire)
         return wait
 
@@ -282,14 +309,26 @@ def init_category_struct(frame):
         anim = Animation(duration=2)
         return anim
 
-    p3 = ElementScatter(name=Text(fr="Barrière espacée", de="de", en="en"),
+    def anim_end_n3b_alt(animal):
+        # the hole in the barrier was added above the fence
+        # here we remove the fence and replace the hole with the whole fence with hole in transparency
+        # therefore the animal will travel "though the hole and behind the fence"
+        animal.static.image.source = 'images/scenery/transparency.png'
+
+        n3b.correction_img.image.source = 'images/corrections/barriere_trou_whole.png'
+        n3b.correction_img.image.size = (sizes.size_c3)
+        n3b.correction_img.image.pos = (sizes.pos_c3)
+
+        return anim_end_p3(animal)
+
+    p3 = ElementScatter(name=txt.txt_cat_fence_space,
                         first=random.choice([True, False]),
                         source='images/non_animes/barrieres_espacee.png',
                         event_pos=sizes.event_c31,
                         anim_setup=anim_setup_p3,
                         anim_start=anim_start_p3,
                         anim_end=anim_end_p3)
-    n3a = ElementScatter(name=Text(fr="Barriere en béton", de="de", en="en"),
+    n3a = ElementScatter(name=txt.txt_cat_fence_wall,
                          first=random.choice([True, False]),
                          positive=False,
                          positive_ref=p3,
@@ -305,7 +344,7 @@ def init_category_struct(frame):
                          correction_img=ImageWrap(source='images/corrections/barriere_lierre.png',
                                                   size=(126, 117),
                                                   pos=(sizes.event_c31alt)))
-    n3b = ElementScatter(name=Text(fr="Barriere en ras de sol", de="de", en="en"),
+    n3b = ElementScatter(name=txt.txt_cat_fence_nospace,
                          first=not n3a.first,
                          positive=False,
                          positive_ref=p3,
@@ -314,7 +353,7 @@ def init_category_struct(frame):
                          anim_setup=anim_setup_p3,
                          anim_start=anim_start_p3,
                          anim_end=anim_end_n3b,
-                         anim_end_alt=anim_end_p3,
+                         anim_end_alt=anim_end_n3b_alt,
                          correction=True,
                          correction_no='images/corrections/barriere_trou_no.png',
                          correction_yes='images/corrections/barriere_trou_yes.png',
@@ -324,7 +363,7 @@ def init_category_struct(frame):
     t3 = ImageWrap(pos=sizes.pos_c3,
                    size=sizes.size_c3,
                    source='images/animations/zones/mur.zip')
-    c3 = Category(name=Text("Murs", "de", "en"),
+    c3 = Category(name=txt.txt_cat_fence,
                   element1=n3a, element2=n3b, target=t3)
 
     def anim_setup_p4():
@@ -353,14 +392,14 @@ def init_category_struct(frame):
         wait.bind(on_complete=forward)
         return wait
 
-    p4 = ElementScatter(name=Text(fr="Terrasse de pavés drainants", de="de", en="en"),
+    p4 = ElementScatter(name=txt.txt_cat_floor_grass,
                         first=random.choice([True, False]),
                         source='images/non_animes/terrasse_pave_drainant.png',
                         event_pos=sizes.event_c4,
                         anim_setup=anim_setup_p4,
                         anim_start=anim_start_p4,
                         anim_end=anim_end_p4)
-    n4 = ElementScatter(name=Text(fr="Terrasse de grès noir", de="de", en="en"),
+    n4 = ElementScatter(name=txt.txt_cat_floor_stone,
                         first=not p4.first,
                         positive=False,
                         positive_ref=p4,
@@ -373,7 +412,7 @@ def init_category_struct(frame):
     t4 = ImageWrap(pos=sizes.pos_c4,
                    size=sizes.size_c4,
                    source='images/animations/zones/terrasse.zip')
-    c4 = Category(name=Text("Revêtements de terrasses", "de", "en"),
+    c4 = Category(name=txt.txt_cat_floor,
                   element1=p4, element2=n4, target=t4)
 
     def anim_setup_p5():
@@ -404,6 +443,10 @@ def init_category_struct(frame):
         animal.image.source = 'images/animations/abris/herisson_zzz.zip'
         animal.image.anim_delay = 0.5
         animal.image.size = (133, 84)
+
+        #put back the "animal" zzz in front
+        frame.remove_widget(animal)
+        frame.add_widget(animal)
         return Animation(duration=duration_end * 2)
 
     def anim_end_n5(animal):
@@ -451,14 +494,14 @@ def init_category_struct(frame):
         wait = Animation(duration=duration_end)
         return wait
 
-    p5 = ElementScatter(name=Text(fr="Tas de bois", de="de", en="en"),
+    p5 = ElementScatter(name=txt.txt_cat_shelter_wood,
                         first=random.choice([True, False]),
                         source='images/non_animes/tas_de_bois.png',
                         event_pos=sizes.event_c5,
                         anim_setup=anim_setup_p5,
                         anim_start=anim_start_p5,
                         anim_end=anim_end_p5)
-    n5 = ElementScatter(name=Text(fr="Prairie fleurie", de="de", en="en"),
+    n5 = ElementScatter(name=txt.txt_cat_shelter_flower,
                         first=not p5.first,
                         source='images/non_animes/prairie_fleurie.png',
                         event_pos=sizes.event_c5,
@@ -468,7 +511,7 @@ def init_category_struct(frame):
     t5 = ImageWrap(pos=sizes.pos_c5,
                    size=sizes.size_c5,
                    source='images/animations/zones/abris.zip')
-    c5 = Category(name=Text("Abris", "de", "en"),
+    c5 = Category(name=txt.txt_cat_shelter,
                   element1=p5, element2=n5, target=t5)
 
     def anim_setup_p6():
@@ -587,14 +630,14 @@ def init_category_struct(frame):
     def anim_end_n6_alt(animal):
         return anim_end_n6_internal(animal, True)
 
-    p6 = ElementScatter(name=Text(fr="Chèvres", de="de", en="en"),
+    p6 = ElementScatter(name=txt.txt_cat_animal_goat,
                         first=random.choice([True, False]),
                         source='images/animations/animaux/chevre.zip',
                         event_pos=sizes.event_c6,
                         anim_setup=anim_setup_p6,
                         anim_start=anim_start_p6,
                         anim_end=anim_end_p6)
-    n6 = ElementScatter(name=Text(fr="Chat", de="de", en="en"),
+    n6 = ElementScatter(name=txt.txt_cat_animal_cat,
                         first=not p6.first,
                         positive=False,
                         positive_ref=p6,
@@ -613,7 +656,7 @@ def init_category_struct(frame):
     t6 = ImageWrap(pos=sizes.pos_c6,
                    size=sizes.size_c6,
                    source='images/animations/zones/animaux.zip')
-    c6 = Category(name=Text("Animaux", "de", "en"),
+    c6 = Category(name=txt.txt_cat_animal,
                   element1=p6, element2=n6, target=t6)
 
     def anim_setup_p7():
@@ -691,14 +734,14 @@ def init_category_struct(frame):
         anim.bind(on_complete=after)
         return anim
 
-    p7 = ElementScatter(name=Text(fr="Herbes aromatiques", de="de", en="en"),
+    p7 = ElementScatter(name=txt.txt_cat_balcony_herbs,
                         first=random.choice([True, False]),
                         source='images/non_animes/bac_herbes_aromatiques.png',
                         event_pos=sizes.event_c7,
                         anim_setup=anim_setup_p7,
                         anim_start=anim_start_p7,
                         anim_end=anim_end_p7)
-    n7 = ElementScatter(name=Text(fr="Géraniums", de="de", en="en"),
+    n7 = ElementScatter(name=txt.txt_cat_balcony_geranium,
                         first=not p7.first,
                         positive=False,
                         positive_ref=p7,
@@ -711,7 +754,7 @@ def init_category_struct(frame):
     t7 = ImageWrap(pos=sizes.pos_c7,
                    size=sizes.size_c7,
                    source='images/animations/zones/fleurs.zip')
-    c7 = Category(name=Text("Plantes au balcon", "de", "en"),
+    c7 = Category(name=txt.txt_cat_balcony_plants,
                   element1=p7, element2=n7, target=t7)
 
     categories = {c1, c2, c3, c4, c5, c6, c7}
