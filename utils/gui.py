@@ -11,7 +11,7 @@ from utils import sizes
 # widget can be added to a FloatLayout and wrapped Image will be correctly placed
 # to change image properties, access it with widget.image
 class ImageWrap(Widget):
-    def __init__(self, source = 'images/scenery/transparency.png', pos = (100, 100), size = (200,200), allow_stretch = False, keep_ratio=True, anim_delay=0.25, anim_loop=0):
+    def __init__(self, source = 'images/scenery/transparency.png', pos = (100, 100), size = (200,200), allow_stretch = False, keep_ratio=True, anim_delay=0.5, anim_loop=0):
         super(ImageWrap, self).__init__()
         self.image = ImageFlip()
         self.add_widget(self.image)

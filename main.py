@@ -686,8 +686,13 @@ class FloatGameScreen(BackKeyScreen):
                                 text=txt.txt_scenery_notxt,
                                 font_size=sizes.font_size_large)
         self.speach.label.text = txt_game_move_play.get()
+        self.speach.label.padding = (4, 0)
         self.speach.label.background_color = 1, 1, 1, 0.8
         self.frame.add_widget(self.speach)
+
+        self.frame.add_widget(ImageWrap(source='images/non_animes/speach_bubble.png',
+                                        pos = (sizes.speach_pos[0] - 4,sizes.speach_pos[1] - 50 - 4),
+                                        size = (sizes.speach_width + 8, sizes.speach_height + 50 + 8)))
 
     def init_category_struct(self):
         self.categories = init_category_struct(self.frame)
@@ -962,6 +967,10 @@ class FloatGameScreen(BackKeyScreen):
         def remove(screen):
             self.points += 1
             self.frame.remove_widget(self.static)
+
+            #special cat case
+            if (self.static.image.source == 'images/animations/animaux/chat_couche_loop.zip'):
+                self.tree.image.source = 'images/non_animes/arbre_oiseau.png'
 
             # text speach update
             self.speach.label.text = txt_game_move_play.get()

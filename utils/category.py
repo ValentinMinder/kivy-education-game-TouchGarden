@@ -152,34 +152,29 @@ def init_category_struct(frame):
 
     def anim_end_p2(animal):
         def forward(a, i):
-            anim = Animation(x=sizes.width_ref, duration=duration_end * 0.5)
+            anim = Animation(x=sizes.width_ref - 100, duration=duration_end * (1.5 - 2 * f))
             animal.image.source = 'images/animations/haies/mesange_vole.zip'
             animal.image.anim_delay = 0.2
             anim.start(animal.image)
 
         animal.image.source = 'images/animations/haies/mesange_mange.zip'
         animal.image.anim_delay = 0.1
-        anim = Animation(x=animal.image.x - 25, y=animal.image.y - 10, duration=duration_end * 0.25)
-        anim += Animation(x=animal.image.x - 50, y=animal.image.y + 10, duration=duration_end * 0.25)
+        f = 0.5
+        anim = Animation(x=animal.image.x - 25, y=animal.image.y - 10, duration=duration_end * f)
+        anim += Animation(x=animal.image.x - 50, y=animal.image.y + 10, duration=duration_end * f)
         anim.bind(on_complete=forward)
         anim.start(animal.image)
 
-        wait = Animation(duration=duration_end)
+        wait = Animation(duration=duration_end * 1.5)
         return wait
 
     def anim_end_n2(animal):
-        def forward(a, i):
-            animal.image.source = 'images/animations/haies/mesange_vole.zip'
-            anim = Animation(pos=(sizes.width_ref - 100, sizes.height / 3), duration=duration_end * 0.3)
-            anim.start(animal.image)
-
         animal.image.source = 'images/animations/haies/mesange_fachee.zip'
-        fachee = Animation(duration=duration_end * 0.6)
-        fachee.bind(on_complete=forward)
-        fachee.start(animal.image)
-        wait = Animation(duration=duration_end)
-        # wait.bind(on_complete=after)
-        return wait
+        f = 0.2
+        anim = Animation(x=animal.image.x - 25, y=animal.image.y - 10, duration=duration_end * f)
+        anim += Animation(x=animal.image.x - 50, y=animal.image.y + 10, duration=duration_end * f)
+        anim += Animation(pos=(sizes.width_ref - 100, sizes.height / 3), duration=duration_end * f)
+        return anim
 
     p2 = ElementScatter(name=txt.txt_cat_hedge_good,
                         first=random.choice([True, False]),
@@ -379,7 +374,9 @@ def init_category_struct(frame):
         return Animation(pos=sizes.event_c4, duration=duration_start * 1.5)
 
     def anim_end_p4(animal):
-        return Animation(x=0, y=0, duration=duration_end)
+        anim = Animation(pos = sizes.event_c4_next, duration=duration_end * 0.5)
+        anim += Animation(x=sizes.width_ref, y=sizes.height / 3, duration=duration_end * 0.8)
+        return anim
 
     def anim_end_n4(animal):
         def forward(a, i):
@@ -544,6 +541,15 @@ def init_category_struct(frame):
         return anim
 
     def anim_end_p6(animal):
+        def papillon1 (a, i):
+            anim = Animation(x=pap.image.x + 5, y = pap.image.y + 5, duration=duration_end * 0.1)
+            anim += Animation(x=pap.image.x - 5, y=pap.image.y + 5, duration=duration_end * 0.1)
+            anim += Animation(x=pap.image.x + 5, y=pap.image.y - 5, duration=duration_end * 0.1)
+            anim += Animation(x=pap.image.x - 5, y=pap.image.y - 5, duration=duration_end * 0.1)
+            anim += Animation(x=pap.image.x, y=pap.image.y, duration=duration_end * 0.1)
+            anim.bind(on_complete=papillon1)
+            anim.start(pap.image)
+
         def after(a, i):
             animal.image.source = 'images/scenery/transparency.png'
 
@@ -553,7 +559,7 @@ def init_category_struct(frame):
             frame.static.image.anim_loop = 0
             frame.static.image.pos = animal.image.pos
             frame.static.image.size = animal.image.size
-            frame.add_widget(frame.static)
+            frame.add_widget(frame.static, 2)
 
         animal.image.source = 'images/animations/animaux/chevre_mange_intro.zip'
         animal.image.pos = (sizes.event_c6[0] - 15, sizes.event_c6[1])
@@ -565,6 +571,18 @@ def init_category_struct(frame):
         anim = Animation(duration=(f - 1) * d)
         anim.bind(on_complete=after)
         anim.start(animal.image)
+
+        pap = ImageWrap(
+            pos=(sizes.width / 3, sizes.height_ref),
+            size=(50, 65),
+            source='images/animations/fleurs/papillon_rouge.zip',
+            anim_delay=0.1)
+        pap.flip()
+        frame.add_widget(pap)
+        animp = Animation(pos=sizes.event_c6, duration=(f - 1) * d)
+        animp.bind(on_complete=papillon1)
+        animp.start(pap.image)
+
         wait = Animation(duration=duration_end)
         return wait
 
@@ -691,22 +709,30 @@ def init_category_struct(frame):
             size=(50, 65),
             source='images/animations/fleurs/papillon_rouge.zip',
             anim_delay=0.1)
+        a4 = ImageWrap(
+            pos=(sizes.width, sizes.height * 2 / 3),
+            size=(50, 65),
+            source='images/animations/fleurs/papillon_jaune.zip',
+            anim_delay=0.1)
         frame.add_widget(a2)
         frame.add_widget(a3)
+        frame.add_widget(a4)
 
         def after(a, i):
             frame.remove_widget(a2)
             frame.remove_widget(a3)
+            frame.remove_widget(a4)
 
-        f = 0.3
+        f = 0.5
 
         def forward(a, i):
             animal.image.source = 'images/animations/fleurs/papillon_rouge.zip'
-            anim = Animation(pos=(sizes.width_ref, sizes.height * 2 / 3), duration=duration_end * (1 - 2 * f))
+            anim = Animation(x= sizes.width / 3, y =sizes.height, duration=duration_end * f)
             anim.bind(on_complete=after)
             anim.start(animal.image)
             anim.start(a2.image)
             anim.start(a3.image)
+            anim.start(a4.image)
 
         animal.image.source = 'images/animations/fleurs/papillon_rouge_butine.zip'
 
@@ -716,13 +742,16 @@ def init_category_struct(frame):
         anim2 += Animation(x=animal.image.x - 35, y=animal.image.y + 10, duration=duration_end * f)
         anim3 = Animation(x=animal.image.x + 5, y=animal.image.y + 5, duration=duration_end * f)
         anim3 += Animation(x=animal.image.x - 10, y=animal.image.y - 15, duration=duration_end * f)
+        anim4 = Animation(x=animal.image.x + 15, y=animal.image.y - 5, duration=duration_end * f)
+        anim4 += Animation(x=animal.image.x - 5, y=animal.image.y, duration=duration_end * f)
 
         anim.bind(on_complete=forward)
         anim.start(animal.image)
         anim2.start(a2.image)
         anim3.start(a3.image)
+        anim4.start(a4.image)
 
-        wait = Animation(duration=duration_end)
+        wait = Animation(duration=duration_end * f * 3)
         return wait
 
     def anim_end_n7(animal):

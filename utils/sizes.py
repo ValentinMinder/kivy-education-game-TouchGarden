@@ -28,10 +28,11 @@ height_left_category_desc = height_left_category_title - height_title
 height_left_first = height_left_category_desc - width_left_elements - height_left_margin
 height_left_first_desc = height_left_first - height_title
 
-speach_margin = 20
-speach_height = 150
-speach_width = 200
+speach_margin = 12
+speach_height = 150 - 8
+speach_width = 200 - 8
 speach_pos = (width_right_game - speach_width - speach_margin, height - speach_height - speach_margin)
+speach_pos
 
 # static UI
 table_pos = (width_left_margin + 400, height_ref + 585)
@@ -83,7 +84,7 @@ event_c1altanimal1 = (event_c1bef[0] - 120 - 70, event_c1bef[1])
 event_c1altanimal2 = (event_c1bef[0] - 120 - 70 + 50, event_c1bef[1] - 50)
 
 #bushes
-size_c2 = (175,175)
+size_c2 = (181,175)
 pos_c2 = (width_left_margin + 0, 0)
 event_c2 = event(pos_c2, size_c2)
 
@@ -100,6 +101,8 @@ size_c4 = (562,273)
 pos_c4 = (width_left_margin + 463, 360)
 event_c4bef = event(pos_c4, size_c4)
 event_c4 = (event_c4bef[0] - 200, event_c4bef[1] + 20)
+event_c4_next = (event_c4[0] - 250,event_c4[1] + 50)
+
 
 #flowers (garden)
 size_c5 = (144,109) #todo: check with tree
