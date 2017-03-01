@@ -665,6 +665,25 @@ class FloatGameScreen(BackKeyScreen):
                                        font_size=sizes.font_size_large)
         f.add_widget(self.category_desc)
 
+        self.shadow = LabelWrap(size=(sizes.width, sizes.height),
+                                pos=(sizes.width_ref, sizes.height_ref),
+                                text=Text("", "", ""))
+        self.shadow.label.background_color = 1, 1, 1, 0.0
+        f.add_widget(self.shadow)
+        self.button_enabled = True
+        self.button_cat_enabled = True
+
+    #disable background (visually and programmatically)
+    def background_enable(self):
+        self.button_enabled = True
+        self.shadow.label.background_color = 1, 1, 1, 0.0
+
+    def background_disable(self):
+        self.button_enabled = False
+        self.shadow.label.background_color = 1, 1, 1, 0.5
+        self.frame.remove_widget(self.shadow)
+        self.frame.add_widget(self.shadow)
+
     # welcome tutorial: happy guy speaking
     def init_welcome_tuto(self):
         # todo: add this to demo /tuto
@@ -699,13 +718,14 @@ class FloatGameScreen(BackKeyScreen):
         self.gameturn_setup(self.categories[self.categorynb - 1])
 
     def category_forward(self, touch):
-        if (self.categorynb < sizes.category_number):
-            self.speach.label.text = txt_game_move_pass.get()
-            self.anim_points(0, (0, 0), self.none)
-            self.category_clean()
-            self.category_next(touch)
-        else:
-            self.category_next(touch)
+        if (self.button_enabled & self.button_cat_enabled):
+            if (self.categorynb < sizes.category_number):
+                self.speach.label.text = txt_game_move_pass.get()
+                self.anim_points(0, (0, 0), self.none)
+                self.category_clean()
+                self.category_next(touch)
+            else:
+                self.category_next(touch)
 
     def category_clean(self):
         self.frame.remove_widget(self.current_category.target)
@@ -767,8 +787,9 @@ class FloatGameScreen(BackKeyScreen):
         anim_points.start(points_image.image)
 
     def stop_game(self, touch):
-        print 'TODO: ask confirmation to reset/stop game'
-        self.back()
+        if (self.button_enabled):
+            print 'TODO: ask confirmation to reset/stop game'
+            self.back()
 
     # update the cursor placement and gauge filling/color depending on points
     def update_cursor(self):
@@ -826,13 +847,15 @@ class FloatGameScreen(BackKeyScreen):
         anim.start(self.static.image)
 
     def anim_animal(self, element, points, alt=False):
-
         def after(a, i):
             # remove the animal or make sure it disappear
             self.frame.remove_widget(animal)
+
             # self.hipster(0)
             if (points > 0):
                 self.category_next(None)
+                # forward category allowed after positive animation!
+                self.button_cat_enabled = True
             else:
                 self.after_negative()
 
@@ -862,7 +885,8 @@ class FloatGameScreen(BackKeyScreen):
             # automatize placement for detection, static image & animation
             # check collision, object placed
             if (target.image.collide_widget(element)):
-
+                #don't forward category during animation!
+                self.button_cat_enabled = False
                 self.current_element = element
                 # put the real object in place of target (suppose both elements have same size!)
                 self.static = ImageWrap(size=target.image.size,
@@ -978,6 +1002,8 @@ class FloatGameScreen(BackKeyScreen):
             self.update_cursor()
             after_all_choices()
             self.category_next(None)
+            # forward category allowed after positive animation!
+            self.button_cat_enabled = True
 
         # keep the object
         def keep(screen):
@@ -986,11 +1012,14 @@ class FloatGameScreen(BackKeyScreen):
             self.hipster(0)
             after_all_choices()
             self.category_next(None)
+            # forward category allowed after positive animation!
+            self.button_cat_enabled = True
 
         # remove the recover window and update cursor
         def after_all_choices():
             self.frame.remove_widget(window_frame)
             self.hipster_sways_after()
+            self.background_enable()
 
         class ButtonImageChoicesKeep(ButtonImageChoices):
             def __init__(self, element, pos):
@@ -1075,8 +1104,8 @@ class FloatGameScreen(BackKeyScreen):
         if (element.correction):
             window_frame.add_widget(ButtonImageChoicesCorrect(element, pos[3]))
 
+        self.background_disable()
         self.frame.add_widget(window_frame)
-        pass
 
     def more_infos(self, screen):
         print 'know more'
