@@ -133,6 +133,7 @@ font_size_default= 18
 font_size_large = 22
 font_size_subtitle = 24
 font_size_title = 34
+font_size_win = font_size_large
 
 #negative_window
 win_dx = 262

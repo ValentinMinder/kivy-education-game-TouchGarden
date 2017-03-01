@@ -18,7 +18,7 @@ from utils import texts as txt
 from utils import sizes
 from utils.quiz import Quiz
 from utils.category import ElementScatter, init_category_struct
-from utils.gui import ImageWrap, ButtonImage, ButtonImageChoices, LabelWrap
+from utils.gui import ImageWrap, ButtonImage, ButtonImageText, ButtonImageChoices, LabelWrap
 
 # Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 Config.set('graphics', 'width', sizes.width)  # 1366
@@ -528,7 +528,7 @@ class FloatGameScreen(BackKeyScreen):
 
         # init categories and game
         self.init_welcome_tuto()
-        self.init_category_struct()
+        self.start_game_tuto()
 
     # create and add all static UI elements (non-movable, non-changeable, only background and scenery)
     def init_static_UI(self):
@@ -673,7 +673,7 @@ class FloatGameScreen(BackKeyScreen):
         self.button_enabled = True
         self.button_cat_enabled = True
 
-    #disable background (visually and programmatically)
+    # disable background (visually and programmatically)
     def background_enable(self):
         self.button_enabled = True
         self.shadow.label.background_color = 1, 1, 1, 0.0
@@ -710,8 +710,8 @@ class FloatGameScreen(BackKeyScreen):
         self.frame.add_widget(self.speach)
 
         self.frame.add_widget(ImageWrap(source='images/non_animes/speach_bubble.png',
-                                        pos = (sizes.speach_pos[0] - 4,sizes.speach_pos[1] - 50 - 4),
-                                        size = (sizes.speach_width + 8, sizes.speach_height + 50 + 8)))
+                                        pos=(sizes.speach_pos[0] - 4, sizes.speach_pos[1] - 50 - 4),
+                                        size=(sizes.speach_width + 8, sizes.speach_height + 50 + 8)))
 
     def init_category_struct(self):
         self.categories = init_category_struct(self.frame)
@@ -775,16 +775,138 @@ class FloatGameScreen(BackKeyScreen):
         self.frame.add_widget(points_image)
 
         def remove(anim, widget):
-            #update cursor at the end of smiley movement
+            # update cursor at the end of smiley movement
             self.update_cursor()
             self.frame.remove_widget(points_image)
             fct_next(self)
-
 
         anim_points = Animation(size=(size_final, size_final), duration=d)
         anim_points &= Animation(x=x_final, y=y_final, duration=d, t='in_quad')
         anim_points.bind(on_complete=remove)
         anim_points.start(points_image.image)
+
+    def win_dx(self, _x):
+        return _x + sizes.win_dx
+
+    def win_dy(self, _y):
+        return _y + sizes.win_dy
+
+    def win_generate(self, text_title, size=(sizes.win_width + 25, sizes.win_height + 24)):
+        window_frame = FloatLayout(size_hint=(1, 1), pos=(0, 0))
+
+        window_frame.add_widget(ImageWrap(
+            pos=(self.win_dx(-2), self.win_dy(-22)),
+            size=size,
+            source='images/scenery/fenetre_infos_923x624px.png'))
+
+        window_frame.add_widget(
+            LabelWrap(pos=(self.win_dx(0), self.win_dy(sizes.win_height - sizes.win_header)),
+                      size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
+                      text=text_title,
+                      font_size=sizes.font_size_title,
+                      hAlignLeft=False,
+                      bold=True))
+
+        window_frame.label = LabelWrap(pos=(self.win_dx(0), self.win_dy(0)),
+                      size=(sizes.win_width, sizes.win_height - sizes.win_header),
+                      text=txt_scenery_notxt,
+                      hAlignLeft=True)
+        window_frame.add_widget(window_frame.label)
+
+        return window_frame
+
+    def start_game_tuto(self):
+        window_frame = self.win_generate(text_title=txt.txt_tutorial_welcome_p0)
+
+        def on_press(screen):
+            self.frame.remove_widget(window_frame)
+            self.init_category_struct()
+            self.background_enable()
+
+        window_frame.add_widget(ButtonImageText(
+            on_press=on_press,
+            pos=(self.win_dx(sizes.win_width - sizes.win_width_infos), self.win_dy(sizes.win_height - sizes.win_header)),
+            size=(sizes.win_width_infos, sizes.win_header),
+            src_back='images/scenery/back_80x183px_green.png',
+            size_img=(sizes.win_header / 2, sizes.win_header),
+            src='images/scenery/fleche_seule_23x44px_white.png',
+            text=txt_tutorial_play,
+            left=sizes.win_width_infos - sizes.win_header / 2))
+
+        box = BoxLayout(pos=(self.win_dx(0), self.win_dy(0)),
+                        size=(923, 624 - sizes.win_header))
+        window_frame.add_widget(box)
+
+        texts = [txt.txt_tutorial_welcome_p1, txt.txt_tutorial_welcome_p2,
+                 txt.txt_tutorial_welcome_p3, txt.txt_tutorial_welcome_p4,
+                 txt.txt_tutorial_welcome_p5, txt.txt_tutorial_welcome_p6]
+
+        margin = 10
+        available = sizes.win_height - sizes.win_header
+        n = texts.__len__()
+        i = 1.0
+        by = (0.0 + available)/n
+        for t in texts:
+            box.add_widget(LabelWrap(
+                pos=(self.win_dx(margin), self.win_dy(available) - i * available/n),
+                size=(sizes.win_width - 2 * margin, by),
+                text=t,
+                font_size=sizes.font_size_win,
+                hAlignLeft=True))
+            i+=1
+
+        self.background_disable()
+        self.frame.add_widget(window_frame)
+
+    def more_infos(self, element, negative=True):
+        window_frame = self.win_generate(text_title=element.name)
+
+        def close(screen):
+            self.frame.remove_widget(window_frame)
+
+        def negative(screen):
+            #TODO: switch to negative text
+            print 'negative'
+
+        def positive(screen):
+            # TODO: switch to positive text
+            print 'positive'
+
+
+        window_frame.add_widget(ButtonImageText(
+            on_press=close,
+            pos=(self.win_dx(sizes.win_width - sizes.win_header), self.win_dy(sizes.win_height - sizes.win_header)),
+            size=(sizes.win_header, sizes.win_header),
+            src_back='images/scenery/back_80x183px_red.png',
+            size_img=(sizes.win_header, sizes.win_header),
+            src='images/scenery/picto_croix_150x150px.png',
+            text=txt_tutorial_play,
+            left=0))
+
+        # todo: add (negative or default) text to win.label
+
+        if (negative):
+            window_frame.add_widget(ButtonImageText(
+                on_press=positive,
+                pos=(self.win_dx(sizes.win_width - sizes.win_header - sizes.win_width_infos), self.win_dy(sizes.win_height - sizes.win_header)),
+                size=(sizes.win_width_infos, sizes.win_header),
+                src_back='images/scenery/back_80x183px_green.png',
+                size_img=(0, 0),
+                src='images/scenery/picto_croix_150x150px.png',
+                text=txt_interact_solutions,
+                left=sizes.win_width_infos))
+            window_frame.add_widget(ButtonImageText(
+                on_press=negative,
+                pos=(self.win_dx(sizes.win_width - sizes.win_header - 2 * sizes.win_width_infos), self.win_dy(sizes.win_height - sizes.win_header)),
+                size=(sizes.win_width_infos, sizes.win_header),
+                src_back='images/scenery/back_80x183px_red.png',
+                size_img=(0, 0),
+                src='images/scenery/picto_croix_150x150px.png',
+                text=txt_interact_problems,
+                left=sizes.win_width_infos))
+
+        self.background_disable()
+        self.frame.add_widget(window_frame)
 
     def stop_game(self, touch):
         if (self.button_enabled):
@@ -842,8 +964,9 @@ class FloatGameScreen(BackKeyScreen):
     def hipster_sways_after(self):
         def after(a, i):
             self.hipster(0)
+
         anim = Animation(duration=4)
-        anim.bind(on_complete = after)
+        anim.bind(on_complete=after)
         anim.start(self.static.image)
 
     def anim_animal(self, element, points, alt=False):
@@ -880,12 +1003,12 @@ class FloatGameScreen(BackKeyScreen):
     def on_touch_up(self, touch):
         element = self.currentObj
         # react only to element scatter moves ended to right target area
-        if (isinstance(element, ElementScatter)):
+        if (self.button_enabled & isinstance(element, ElementScatter)):
             target = self.current_category.target
             # automatize placement for detection, static image & animation
             # check collision, object placed
             if (target.image.collide_widget(element)):
-                #don't forward category during animation!
+                # don't forward category during animation!
                 self.button_cat_enabled = False
                 self.current_element = element
                 # put the real object in place of target (suppose both elements have same size!)
@@ -919,46 +1042,28 @@ class FloatGameScreen(BackKeyScreen):
                 # todo : disable all other widget!
                 self.category_clean()
             else:
-                #object not placed, return to place and text changed
+                # object not placed, return to place and text changed
                 anim = Animation(x=element.x_orig, y=element.y_orig)
                 anim.start(element)
                 self.speach.label.text = txt_game_move_unreached.get()
                 self.currentObj = ObjectProperty(None)
 
+    # after negative scenario
     def after_negative(self):
-        print 'negative'
+        window_frame = self.win_generate(text_title=txt.txt_recover_header)
 
-        def x(_x):
-            return _x + sizes.win_dx
+        def more_infos(screen):
+            self.more_infos(element)
 
-        def y(_y):
-            return _y + sizes.win_dy
-
-        window_frame = FloatLayout(size_hint=(1, 1), pos=(0, 0))
-
-        window_frame.add_widget(ImageWrap(
-            pos=(x(-2), y(-22)),
-            size=(923, 624),
-            source='images/scenery/fenetre_infos_923x624px.png'))
-
-        window_frame.add_widget(ImageWrap(pos=(x(0), y(sizes.win_height - sizes.win_header)),
-                                          size=(sizes.win_width, sizes.win_header),
-                                          source='images/scenery/bandeau_gris_fenetre_choix_898x80px.png'))
-
-        window_frame.add_widget(
-            LabelWrap(pos=(x(0), y(sizes.win_height - sizes.win_header)),
-                      size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
-                      text=txt.txt_recover_header,
-                      font_size=sizes.font_size_title,
-                      bold=True))
-
-        # todo: separate the text for internationalizazion !
-        window_frame.add_widget(ButtonImage(
-            on_press=self.more_infos,
-            pos=(x(sizes.win_width - sizes.win_width_infos), y(sizes.win_height - sizes.win_header)),
+        window_frame.add_widget(ButtonImageText(
+            on_press=more_infos,
+            pos=(self.win_dx(sizes.win_width - sizes.win_width_infos), self.win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_width_infos, sizes.win_header),
-            size_img=(sizes.win_width_infos, sizes.win_header),
-            src='images/scenery/bouton_plus_d_infos_183x80px.png'))
+            src_back='images/scenery/back_80x183px_green.png',
+            size_img=(sizes.win_header, sizes.win_header),
+            src='images/scenery/picto_info_63x63px.png',
+            text=txt_recover_infos,
+            left=sizes.win_width_infos - sizes.win_header))
 
         element = self.current_element
 
@@ -992,7 +1097,7 @@ class FloatGameScreen(BackKeyScreen):
             self.points += 1
             self.frame.remove_widget(self.static)
 
-            #special cat case
+            # special cat case
             if (self.static.image.source == 'images/animations/animaux/chat_couche_loop.zip'):
                 self.tree.image.source = 'images/non_animes/arbre_oiseau.png'
 
@@ -1008,7 +1113,7 @@ class FloatGameScreen(BackKeyScreen):
         # keep the object
         def keep(screen):
             # text speach update
-            self.speach.label.text = txt_game_move_play .get()
+            self.speach.label.text = txt_game_move_play.get()
             self.hipster(0)
             after_all_choices()
             self.category_next(None)
@@ -1090,10 +1195,10 @@ class FloatGameScreen(BackKeyScreen):
                               source=element.correction_yes))
 
         # random placement of windows
-        pos1 = (x(sizes.win_choice_right), y(sizes.win_choice_down))
-        pos2 = (x(sizes.win_choice_left), y(sizes.win_choice_up))
-        pos3 = (x(sizes.win_choice_right), y(sizes.win_choice_up))
-        pos4 = (x(sizes.win_choice_left), y(sizes.win_choice_down))
+        pos1 = (self.win_dx(sizes.win_choice_right), self.win_dy(sizes.win_choice_down))
+        pos2 = (self.win_dx(sizes.win_choice_left), self.win_dy(sizes.win_choice_up))
+        pos3 = (self.win_dx(sizes.win_choice_right), self.win_dy(sizes.win_choice_up))
+        pos4 = (self.win_dx(sizes.win_choice_left), self.win_dy(sizes.win_choice_down))
         pos = {pos1, pos2, pos3, pos4}
         pos = random.sample(pos, pos.__len__())
 
@@ -1106,9 +1211,6 @@ class FloatGameScreen(BackKeyScreen):
 
         self.background_disable()
         self.frame.add_widget(window_frame)
-
-    def more_infos(self, screen):
-        print 'know more'
 
 
 # launch the app

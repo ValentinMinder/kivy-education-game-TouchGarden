@@ -60,6 +60,30 @@ class ButtonImage(Button):
                       size=size_img,
                       source=src))
 
+# transparent button with centered unstreched image wrapper
+class ButtonImageText(Button):
+    def __init__(self, on_press, pos, size, src_back, size_img, src, text, left):
+        super(ButtonImageText, self).__init__(on_press=on_press, pos=pos, size=size, size_hint=(None, None),
+                                          background_normal='images/scenery/transparency.png')
+
+        self.add_widget(
+            ImageWrap(pos=pos,
+                      size=size,
+                      source=src_back))
+
+        label = LabelWrap(pos=(pos[0], pos[1]),
+                          size=(left, size[1]),
+                          text=text,
+                          hAlignLeft=True,
+                          font_size=sizes.font_size_large)
+        self.add_widget(label)
+        label.label.padding = (5, 0)
+
+        self.add_widget(
+            ImageWrap(pos=(pos[0] + left, pos[1] + (size[1] - size_img[1]) / 2.0),
+                      size=size_img,
+                      source=src))
+
 class ButtonImageChoices(ButtonImage):
     def __init__(self, on_press, pos, text):
         size = (sizes.win_choice_width, sizes.win_choice_height)
@@ -75,7 +99,7 @@ class ButtonImageChoices(ButtonImage):
 
 # for speach
 class LabelWrap(Widget):
-    def __init__(self, pos, size, text, font_size = sizes.font_size_default, bold=False, vAlignTop=False):
+    def __init__(self, pos, size, text, font_size = sizes.font_size_default, bold=False, vAlignTop=False, hAlignLeft = False):
         super(LabelWrap, self).__init__()
         self.label.pos = pos
         self.label.size = size
@@ -86,6 +110,8 @@ class LabelWrap(Widget):
         self.label.font_size = font_size
         if (vAlignTop):
             self.label.valign = 'top'
+        if (hAlignLeft):
+            self.label.halign = 'left'
 
     def bolden(self):
         if (self.bold):

@@ -164,9 +164,9 @@ txt_cat_balcony_geranium = Text(
 # SCENERY ELEMENTS (game setting)
 
 txt_scenery_notxt = Text(
-    fr="pas de texte",
-    de="de",
-    en="no text available")
+    fr="",
+    de="",
+    en="")
 
 txt_scenery_category = Text(
     fr="Catégorie",
@@ -186,6 +186,7 @@ txt_recover_header = Text(
     en="This wasn't the best choice...")
 
 txt_recover_infos = Text(
+    color=color.white,
     fr="Plus d'infos",
     de="TODE",
     en="Tell me more")
@@ -247,6 +248,7 @@ txt_tutorial_welcome_p6 = Text(
     en="TOEN")
 
 txt_tutorial_play = Text(
+    color=color.white,
     fr="Démarrer",
     de="Starten",
     en="Start")
@@ -256,6 +258,18 @@ txt_tutorial_play = Text(
 txt_start_fr = "[b] DEMARRER LE JEU EN FRANCAIS [/b]"
 txt_start_de = "[b] STARTEN DAS SPIEL AUF DEUTSCH [/b]"
 txt_start_en = "[b] START THE GAME IN ENGLISH [/b]"
+
+txt_interact_problems = Text(
+    color=color.white,
+    fr="Problèmes",
+    de="TODE",
+    en="Problems")
+
+txt_interact_solutions = Text(
+    color=color.white,
+    fr="Solutions",
+    de="TODE",
+    en="Solutions")
 
 txt_interact_confirm = Text(
     fr="Confirmation: veux-tu vraiment arrêter le jeu ?",
