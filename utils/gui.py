@@ -52,13 +52,14 @@ class ImageFlip(Image):
 
 # transparent button with centered unstreched image wrapper
 class ButtonImage(Button):
-    def __init__(self, on_press, pos, size, size_img, src):
+    def __init__(self, on_press, pos, size, size_img, src, allow_strech=False):
         super(ButtonImage, self).__init__(on_press=on_press, pos=pos, size=size, size_hint=(None, None),
                                           background_normal='images/scenery/transparency.png')
         self.add_widget(
             ImageWrap(pos=(pos[0] + (size[0] - size_img[0]) / 2.0, pos[1] + (size[1] - size_img[1]) / 2.0),
                       size=size_img,
-                      source=src))
+                      source=src,
+                      allow_stretch=allow_strech))
 
 # transparent button with centered unstreched image wrapper
 class ButtonImageText(Button):
@@ -99,10 +100,11 @@ class ButtonImageChoices(ButtonImage):
 
 # for speach
 class LabelWrap(Widget):
-    def __init__(self, pos, size, text, font_size = sizes.font_size_default, bold=False, vAlignTop=False, hAlignLeft = False):
+    def __init__(self, pos, size, text, font_size = sizes.font_size_default, bold=False, vAlignTop=False, hAlignLeft = False, padding = (0,0)):
         super(LabelWrap, self).__init__()
         self.label.pos = pos
         self.label.size = size
+        self.label.padding = padding
         self.label.text = text.get()
         self.text = text
         self.bold = bold
