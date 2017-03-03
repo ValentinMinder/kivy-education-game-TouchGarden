@@ -171,6 +171,45 @@ class StartScreen(BackKeyScreen):
         self.cursor_reverse = True
         self.cursor_wrap = True
 
+        im = txt.txt_impressum
+
+        window_frame = win_generate(text_title=im)
+        window_frame.label.label.text = txt_impressum_full
+        self.added = False
+
+        def close(screen):
+            self.remove_widget(window_frame)
+            self.added = False
+
+
+        window_frame.add_widget(ButtonImageText(
+            on_press=close,
+            pos=(win_dx(sizes.win_width - sizes.win_header), win_dy(sizes.win_height - sizes.win_header)),
+            size=(sizes.win_header, sizes.win_header),
+            src_back='images/scenery/back_80x183px_red.png',
+            size_img=(sizes.win_header, sizes.win_header),
+            src='images/scenery/picto_croix_150x150px.png',
+            text=txt_scenery_notxt,
+            left=0))
+
+        def impressum(screen):
+            if self.added:
+                close(screen)
+            else:
+                self.add_widget(window_frame)
+                self.added = True
+
+        self.add_widget(ButtonImageText(
+            on_press=impressum,
+            pos=(2 * sizes.width_left_margin, 0),
+            size=(624, 100),
+            src_back='images/scenery/impressum.png',
+            size_img=(1, 1),
+            src='images/scenery/transparency.png',
+            text=im,
+            left=624,
+            vAlignTop=True))
+
     def french(self):
         lang.current = lang.fr
         self.forward()
@@ -507,6 +546,62 @@ class ImageF(Image):
     pass
 
 
+def win_dx(_x):
+    return _x + sizes.win_dx
+
+
+def win_dy(_y):
+    return _y + sizes.win_dy
+
+
+def win_generate(text_title, size=(sizes.win_width + 25, sizes.win_height + 24)):
+    window_frame = FloatLayout(size_hint=(1, 1), pos=(0, 0))
+
+    window_frame.add_widget(ImageWrap(
+        pos=(win_dx(-2), win_dy(-22)),
+        size=size,
+        source='images/scenery/fenetre_infos_923x624px.png'))
+
+    def none (any):
+        pass
+    # fake button to disabled behing contents
+    window_frame.add_widget(
+        ButtonImage(on_press=none,
+                    pos=(win_dx(-2), win_dy(-22)),
+                    size=size,
+                    size_img=size,
+                    allow_strech=True,
+                    src="images/scenery/transparency.png"))
+
+    window_frame.add_widget(
+        LabelWrap(pos=(win_dx(0), win_dy(sizes.win_height - sizes.win_header)),
+                  size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
+                  text=text_title,
+                  font_size=sizes.font_size_title,
+                  hAlignLeft=True,
+                  padding=(10, 0),
+                  bold=True))
+
+    im = ImageWrap(pos=(win_dx(0), win_dy(10)),
+                   size=(sizes.win_width, (sizes.win_height - sizes.win_header) / 2.3),
+                   source="images/scenery/transparency.png")
+    print sizes.win_width
+    print ((sizes.win_height - sizes.win_header) / 2)
+    window_frame.image = im.image
+    window_frame.add_widget(im)
+
+    window_frame.label = LabelWrap(pos=(win_dx(0), win_dy(0)),
+                                   size=(sizes.win_width, sizes.win_height - sizes.win_header),
+                                   text=txt_scenery_notxt,
+                                   font_size=sizes.font_size_large,
+                                   padding=(10, 5),
+                                   vAlignTop=True,
+                                   hAlignLeft=True)
+    window_frame.add_widget(window_frame.label)
+
+    return window_frame
+
+
 # float layout for draggable elements management
 class FloatGameScreen(BackKeyScreen):
     currentObj = ObjectProperty(None)
@@ -786,59 +881,8 @@ class FloatGameScreen(BackKeyScreen):
         anim_points.bind(on_complete=remove)
         anim_points.start(points_image.image)
 
-    def win_dx(self, _x):
-        return _x + sizes.win_dx
-
-    def win_dy(self, _y):
-        return _y + sizes.win_dy
-
-    def win_generate(self, text_title, size=(sizes.win_width + 25, sizes.win_height + 24)):
-        window_frame = FloatLayout(size_hint=(1, 1), pos=(0, 0))
-
-        window_frame.add_widget(ImageWrap(
-            pos=(self.win_dx(-2), self.win_dy(-22)),
-            size=size,
-            source='images/scenery/fenetre_infos_923x624px.png'))
-
-        # fake button to disabled behing contents
-        window_frame.add_widget(
-            ButtonImage(on_press=self.none,
-                        pos=(self.win_dx(-2), self.win_dy(-22)),
-                        size=size,
-                        size_img=size,
-                        allow_strech=True,
-                        src="images/scenery/transparency.png"))
-
-        window_frame.add_widget(
-            LabelWrap(pos=(self.win_dx(0), self.win_dy(sizes.win_height - sizes.win_header)),
-                      size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
-                      text=text_title,
-                      font_size=sizes.font_size_title,
-                      hAlignLeft=True,
-                      padding=(10, 0),
-                      bold=True))
-
-        im = ImageWrap(pos=(self.win_dx(0), self.win_dy(10)),
-                       size=(sizes.win_width, (sizes.win_height - sizes.win_header) / 2.3) ,
-                    source="images/scenery/transparency.png")
-        print sizes.win_width
-        print ((sizes.win_height - sizes.win_header) / 2)
-        window_frame.image = im.image
-        window_frame.add_widget(im)
-
-        window_frame.label = LabelWrap(pos=(self.win_dx(0), self.win_dy(0)),
-                                       size=(sizes.win_width, sizes.win_height - sizes.win_header),
-                                       text=txt_scenery_notxt,
-                                       font_size=sizes.font_size_large,
-                                       padding=(10, 5),
-                                       vAlignTop=True,
-                                       hAlignLeft=True)
-        window_frame.add_widget(window_frame.label)
-
-        return window_frame
-
     def start_game_tuto(self):
-        window_frame = self.win_generate(text_title=txt.txt_tutorial_welcome_p0)
+        window_frame = win_generate(text_title=txt.txt_tutorial_welcome_p0)
 
         def on_press(screen):
             self.frame.remove_widget(window_frame)
@@ -848,7 +892,7 @@ class FloatGameScreen(BackKeyScreen):
         window_frame.add_widget(ButtonImageText(
             on_press=on_press,
             pos=(
-            self.win_dx(sizes.win_width - sizes.win_width_infos), self.win_dy(sizes.win_height - sizes.win_header)),
+            win_dx(sizes.win_width - sizes.win_width_infos), win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_width_infos, sizes.win_header),
             src_back='images/scenery/back_80x183px_green.png',
             size_img=(sizes.win_header / 2, sizes.win_header),
@@ -862,7 +906,7 @@ class FloatGameScreen(BackKeyScreen):
         self.frame.add_widget(window_frame)
 
     def more_infos(self, element, negative=True):
-        window_frame = self.win_generate(text_title=element.name)
+        window_frame = win_generate(text_title=element.name)
 
         def close(screen):
             self.frame.remove_widget(window_frame)
@@ -877,7 +921,7 @@ class FloatGameScreen(BackKeyScreen):
 
         window_frame.add_widget(ButtonImageText(
             on_press=close,
-            pos=(self.win_dx(sizes.win_width - sizes.win_header), self.win_dy(sizes.win_height - sizes.win_header)),
+            pos=(win_dx(sizes.win_width - sizes.win_header), win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_header, sizes.win_header),
             src_back='images/scenery/back_80x183px_red.png',
             size_img=(sizes.win_header, sizes.win_header),
@@ -891,8 +935,8 @@ class FloatGameScreen(BackKeyScreen):
         if (not negative):
             window_frame.add_widget(ButtonImageText(
                 on_press=positive,
-                pos=(self.win_dx(sizes.win_width - sizes.win_header - sizes.win_width_infos),
-                     self.win_dy(sizes.win_height - sizes.win_header)),
+                pos=(win_dx(sizes.win_width - sizes.win_header - sizes.win_width_infos),
+                     win_dy(sizes.win_height - sizes.win_header)),
                 size=(sizes.win_width_infos, sizes.win_header),
                 src_back='images/scenery/back_80x183px_green.png',
                 size_img=(0, 0),
@@ -901,8 +945,8 @@ class FloatGameScreen(BackKeyScreen):
                 left=sizes.win_width_infos))
             window_frame.add_widget(ButtonImageText(
                 on_press=negative,
-                pos=(self.win_dx(sizes.win_width - sizes.win_header - 2 * sizes.win_width_infos),
-                     self.win_dy(sizes.win_height - sizes.win_header)),
+                pos=(win_dx(sizes.win_width - sizes.win_header - 2 * sizes.win_width_infos),
+                     win_dy(sizes.win_height - sizes.win_header)),
                 size=(sizes.win_width_infos, sizes.win_header),
                 src_back='images/scenery/back_80x183px_red.png',
                 size_img=(0, 0),
@@ -1054,7 +1098,7 @@ class FloatGameScreen(BackKeyScreen):
 
     # after negative scenario
     def after_positive(self, element):
-        window_frame = self.win_generate(text_title=element.name)
+        window_frame = win_generate(text_title=element.name)
 
         def close(screen):
             self.frame.remove_widget(window_frame)
@@ -1067,7 +1111,7 @@ class FloatGameScreen(BackKeyScreen):
         window_frame.add_widget(ButtonImageText(
             on_press=close,
             pos=(
-            self.win_dx(sizes.win_width - sizes.win_width_infos), self.win_dy(sizes.win_height - sizes.win_header)),
+            win_dx(sizes.win_width - sizes.win_width_infos), win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_width_infos, sizes.win_header),
             src_back='images/scenery/back_80x183px_green.png',
             size_img=(sizes.win_header / 2, sizes.win_header),
@@ -1082,7 +1126,7 @@ class FloatGameScreen(BackKeyScreen):
 
     # after negative scenario
     def after_negative(self, element):
-        window_frame = self.win_generate(text_title=txt.txt_recover_header)
+        window_frame = win_generate(text_title=txt.txt_recover_header)
 
         def more_infos(screen):
             self.more_infos(element)
@@ -1090,7 +1134,7 @@ class FloatGameScreen(BackKeyScreen):
         window_frame.add_widget(ButtonImageText(
             on_press=more_infos,
             pos=(
-            self.win_dx(sizes.win_width - sizes.win_width_infos), self.win_dy(sizes.win_height - sizes.win_header)),
+            win_dx(sizes.win_width - sizes.win_width_infos), win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_width_infos, sizes.win_header),
             src_back='images/scenery/back_80x183px_green.png',
             size_img=(sizes.win_header, sizes.win_header),
@@ -1226,10 +1270,10 @@ class FloatGameScreen(BackKeyScreen):
                               source=element.correction_yes))
 
         # random placement of windows
-        pos1 = (self.win_dx(sizes.win_choice_right), self.win_dy(sizes.win_choice_down))
-        pos2 = (self.win_dx(sizes.win_choice_left), self.win_dy(sizes.win_choice_up))
-        pos3 = (self.win_dx(sizes.win_choice_right), self.win_dy(sizes.win_choice_up))
-        pos4 = (self.win_dx(sizes.win_choice_left), self.win_dy(sizes.win_choice_down))
+        pos1 = (win_dx(sizes.win_choice_right), win_dy(sizes.win_choice_down))
+        pos2 = (win_dx(sizes.win_choice_left), win_dy(sizes.win_choice_up))
+        pos3 = (win_dx(sizes.win_choice_right), win_dy(sizes.win_choice_up))
+        pos4 = (win_dx(sizes.win_choice_left), win_dy(sizes.win_choice_down))
         pos = {pos1, pos2, pos3, pos4}
         pos = random.sample(pos, pos.__len__())
 

@@ -163,6 +163,27 @@ txt_cat_balcony_geranium = Text(
 
 # SCENERY ELEMENTS (game setting)
 
+txt_impressum = Text(
+    fr="Impressum",
+    de="Impressum")
+
+txt_impressum_full = \
+    "[b]Mon jardin peut être un corridor biologique[/b]\n" \
+    "Jeu pédagogique et interactif d'éducation à l'environnement\n" \
+    "[i]Interactive serious game about environment education[/i]\n\n" \
+    "[b]Mandataire[/b]: Centre Pro Natura de Champ-Pittet, Yverdon, Suisse\n" \
+    "[b]Illustrations[/b]: Ariane Nicollier (Fabrica Collective), Lucas Oetlli\n" \
+    "[b]Contenus et textes[/b]: Briséïs Castella, Layne Meinich\n" \
+    "[b]Traductions[/b]: Alena Wehrli, Mira Maeder\n" \
+    "[b]Relectures[/b]: Florence Kupferschmid, Marie Bovay, Andrea Strässle, Lucas Oettli\n" \
+    "[b]Conception graphique[/b]: Marc-Olivier Schatz\n" \
+    "[b]Développement et programmation[/b]: Valentin Minder\n" \
+    "[b]Parainage[/b]: IICT Institute for Information and Communication Technologies (HEIG-VD)\n" \
+    "[b]Ecrans tactiles[/b]: Haute Ecole d'Ingénierie et de Gestion Vaud (HEIG-VD)\n" \
+    "Haute Ecole Spécialisée de Suisse Occidentale(HES-SO)\n" \
+    "[i]University of Applied Sciences and Arts Western Switzerland[/i]\n\n" \
+    "[b]Copyright[/b] ProNatura 2016-2018\n"
+
 txt_scenery_notxt = Text(
     fr="",
     de="",
@@ -192,24 +213,24 @@ txt_recover_infos = Text(
     en="Tell me more")
 
 txt_recover_keep = Text(
-    fr="Garder l'objet",
+    fr="Garder",
     de="TODE",
-    en="Keep object")
+    en="Keep")
 
 txt_recover_remove = Text(
-    fr="Enlever l'objet",
+    fr="Enlever",
     de="TODE",
     en="Remove object")
 
 txt_recover_replace = Text(
-    fr="Remplacer l'objet",
+    fr="Remplacer",
     de="TODE",
-    en="Replace object")
+    en="Replace")
 
 txt_recover_correct = Text(
-    fr="Corriger l'objet",
+    fr="Corriger",
     de="TODE",
-    en="Adapt object")
+    en="Adapt")
 
 # WELCOME AND INSTRUCTIONS
 txt_tutorial_welcome_p0 = Text(
