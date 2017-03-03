@@ -622,19 +622,29 @@ def init_category_struct(frame):
             frame.static.image.anim_loop = 0
             frame.static.image.pos = animal.image.pos
             frame.static.image.size = animal.image.size
+            frame.static.image.flip()
             frame.add_widget(frame.static)
+
+            if recover:
+                frame.cat_reverse = False
+            else:
+                frame.cat = frame.static.image
+                frame.cat_reverse = True
 
         def forward(a, i):
             animal.image.source = 'images/animations/animaux/chat_couche_intro.zip'
             animal.image.anim_delay = 0.1
             animal.image.size = sizes.size_c6_cat
-            animal.image.pos = (sizes.event_c6[0] - 161, sizes.event_c6[1] - 7)
+            #animal.image.pos = (sizes.event_c6[0] - 161, sizes.event_c6[1] - 7)
             animal.image.anim_loop = 1
 
+            animal.image.flip()
             if (recover):
                 animal.image.pos = (sizes.event_c6[0] + 5, sizes.event_c6[1] - 7)
                 frame.tree.image.source = 'images/non_animes/arbre_oiseau.png'
             else:
+                animal.image.pos = (sizes.event_c6[0] + 49 - 5, sizes.event_c6[1] - 7)
+
                 frame.tree.image.source = 'images/non_animes/arbre_plume.png'
             f = 4
             d = 0.1
@@ -646,11 +656,11 @@ def init_category_struct(frame):
         frame.tree.image.source = 'images/scenery/transparency.png'
 
         if (recover):
-            animal.image.source = 'images/animations/animaux/chat_meurtre_fail.zip'
-            f = 22
+            animal.image.source = 'images/animations/animaux/chat_grimpe_fail.zip'
+            f = 16
         else:
-            animal.image.source = 'images/animations/animaux/chat_meurtre.zip'
-            f = 36
+            animal.image.source = 'images/animations/animaux/chat_grimpe.zip'
+            f = 17
 
         animal.image.size = (274, 245)
         animal.image.pos = (sizes.width_left_margin + 350, 175)
@@ -664,7 +674,7 @@ def init_category_struct(frame):
         anim.bind(on_complete=forward)
         anim.start(animal.image)
 
-        wait = Animation(duration=(f + 4) * d + 1)
+        wait = Animation(duration=(f + 4) * d + 1.5)
         return wait
 
     def anim_end_n6_alt(animal):
@@ -696,7 +706,7 @@ def init_category_struct(frame):
                         correction_yes='images/corrections/arbre_cone_yes.png',
                         correction_img=ImageWrap(source='images/corrections/arbre_cone.png',
                                                  size=(48, 29),
-                                                 pos=(sizes.width_left_margin + 454 - 10, 225)))
+                                                 pos=(sizes.width_left_margin + 454 - 10 - 19, 225 + 22)))
     t6 = ImageWrap(pos=sizes.pos_c6,
                    size=sizes.size_c6,
                    source='images/animations/zones/animaux.zip')
@@ -793,7 +803,7 @@ def init_category_struct(frame):
                         first=random.choice([True, False]),
                         source='images/non_animes/bac_herbes_aromatiques.png',
                         txt_info=txt.txt_info_balcony_herbs,
-                        info_img="images/scenery/transparency.png",
+                        info_img='images/photos/haies.jpg', #info_img="images/scenery/transparency.png",
                         event_pos=sizes.event_c7,
                         anim_setup=anim_setup_p7,
                         anim_start=anim_start_p7,

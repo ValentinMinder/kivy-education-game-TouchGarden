@@ -533,6 +533,7 @@ class FloatGameScreen(BackKeyScreen):
     # create and add all static UI elements (non-movable, non-changeable, only background and scenery)
     def init_static_UI(self):
         f = self.frame
+        self.frame.cat_reverse = False
 
         # garden background and large borders left/right
         f.add_widget(ImageWrap(pos=(sizes.width_ref, sizes.height_ref),
@@ -914,6 +915,8 @@ class FloatGameScreen(BackKeyScreen):
     def stop_game(self, touch):
         if (self.button_enabled):
             print 'TODO: ask confirmation to reset/stop game'
+            if self.frame.cat_reverse:
+                self.frame.cat.flip()
             self.back()
 
     # update the cursor placement and gauge filling/color depending on points

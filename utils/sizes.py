@@ -112,9 +112,9 @@ event_c5 = event(pos_c5, size_c5)
 #animals
 size_c6 = (165, 93) # eating goats, (137, 88) #goats, cats: (121,75)
 size_c6_cat = (121,90) # (102, 90) cats walking, (121, 75) cats couches
-pos_c6 = (width_left_margin + 800, 179)
+pos_c6 = (width_left_margin + 800, 177)
 event_c6bfe = event(pos_c6, size_c6)
-event_c6 = (pos_c6[0] - 300 + 20, pos_c6[1])
+event_c6 = (width_left_margin + 505 - 28 - 7, pos_c6[1])
 
 #flowers (balcony)
 size_c7 = (58,65)

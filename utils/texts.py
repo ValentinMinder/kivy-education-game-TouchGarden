@@ -287,7 +287,7 @@ txt_interact_timeout = Text(
 
 txt_end_level1 = Text(
     color=color.green,
-    fr="Tu as obtenu plus de 3 points, ton jardin est un véritable couloir biologique! Ton arrière-cour est un endroit où les divers animaux se sentent bien pour vivre, se déplacer, se reproduire, se nourrir, entre autres.",
+    fr="Tu as obtenu plus de 3 points, ton jardin est un véritable corridor biologique! Ton arrière-cour est un endroit où les divers animaux se sentent bien pour vivre, se déplacer, se reproduire, se nourrir, entre autres.",
     de="TODE",
     en="TOEN")
 
