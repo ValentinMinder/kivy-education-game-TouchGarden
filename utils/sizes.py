@@ -51,7 +51,7 @@ def gauge_height(step):
 gauge_width = 24
 gauge_left_margin = width_right_game + 22
 gauge_left_start = gauge_left_margin + 47
-gauge_bottom_margin = 150
+gauge_bottom_margin = 150 - 17
 gauge_bottom_start = gauge_bottom_margin + 9
 gauge_bottom_first = 18
 gauge_bottom_next = 34.3
@@ -61,7 +61,7 @@ smiley_size = 29
 gauge_smiley_left = gauge_left_start + (gauge_width - smiley_size) / 2.0
 gauge_smiley_margin = 11
 gauge_smiley_bottom = gauge_bottom_margin - gauge_smiley_margin - smiley_size
-gauge_smiley_top = gauge_bottom_start + gauge_height(2 * gauge_number) + 27
+gauge_smiley_top = gauge_bottom_start + gauge_height(2 * gauge_number + 1) + 27
 
 cursor_height = 20
 cursor_left = gauge_left_start + 15
@@ -138,8 +138,8 @@ font_size_win = font_size_large
 #negative_window
 win_dx = 262
 win_dy = 82
-win_width = 898
-win_height = 600
+win_width = 897
+win_height = 601
 win_header = 80
 win_width_infos = 183
 win_choice_width = 400

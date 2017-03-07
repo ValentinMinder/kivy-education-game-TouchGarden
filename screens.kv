@@ -56,39 +56,11 @@
 <StartScreen>
     layout: layout
     FloatLayout:
+        id: layout
         Image:
             source: 'images/fond/game.png'
         LabelB:
             background_color: 1,1,1,0.4
-        BoxLayout:
-            orientation: 'vertical'
-            padding: 10
-            spacing: 10
-            size_hint: 0.7, 0.4
-            pos_hint: {'center_x': 0.52, 'center_y': 0.4}
-            BoxLayout:
-                id:layout
-                orientation: 'horizontal'
-                padding: 0
-                spacing: 50
-                Button:
-                    text: txt.txt_start_fr
-                    valign: 'bottom'
-                    size_hint: 1, 0.66
-                    background_normal: 'images/flags/french.png'
-                    on_press: root.french()
-                Button:
-                    text: txt.txt_start_de
-                    valign: 'bottom'
-                    size_hint: 1, 0.66
-                    background_normal: 'images/flags/german.png'
-                    on_press: root.german()
-                Button:
-                    text: txt.txt_start_en
-                    valign: 'bottom'
-                    size_hint: 1, 0.66
-                    background_normal: 'images/flags/english.png'
-                    on_press: root.english()
 
 <TestScreen>:
     bback: bback

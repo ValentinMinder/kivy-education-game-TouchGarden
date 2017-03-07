@@ -48,6 +48,27 @@ class Text:
         }
         return self.color + switch.get(lang.current)  # + color.end
 
+txt_main_title = Text(
+    fr="Mon jardin peut être un corridor biologique!",
+    de="Mein Garten kann ein Wildtierkorridor sein!",
+    en="My garden could be a wildlife corridor!")
+
+txt_main_title_fr = Text(
+    fr="Mon jardin peut être un corridor biologique!",
+    de="Mon jardin peut être un corridor biologique!")
+
+txt_main_title_de = Text(
+    fr="Mein Garten kann ein Wildtierkorridor sein!",
+    de="Mein Garten kann ein Wildtierkorridor sein!")
+
+txt_main_title_en = Text(
+    fr="My garden could be a wildlife corridor!",
+    de="My garden could be a wildlife corridor!")
+
+txt_watermark_heig = Text(
+    fr="Projet de service civil réalisé en parternariat entre ProNatura et l'HEIG-VD Ecole d'Ingénieurs Vaud.\n Retrouvez ce jeu dans l'exposition à Champ-Pittet du 15 mars au 1er novembre 2017 et 2018.",
+    de="TODE HEIG-VD -> HEIG-VD Fachhochschule Waadt",
+    en="Swiss civilian service project within a partnership bewteen ProNatura and HEIG-VD School of Engineering Vaud. \n Find this game in the annual exhibition of Champ-Pittet, Yverdon, Switzerland, from March 15th to November 1st 2017 and 2018.")
 
 # CATEGORIES and objects names
 
@@ -87,14 +108,9 @@ txt_cat_fence = Text(
     en="Fences and walls")
 
 txt_cat_fence_space = Text(
-    fr="Barrière de jardin avec espace",
-    de="Gartenzaun",  # TODE: check
-    en="Garden fence with space underneath")
-
-txt_cat_fence_nospace = Text(
-    fr="Barrière de jardin à ras du sol",
-    de="Gartenzaun",  # TODE: check
-    en="Garden fence close to the ground ")
+    fr="Barrière de jardin",
+    de="Gartenzaun",
+    en="Garden fence")
 
 txt_cat_fence_wall = Text(
     fr="Mur en béton",
@@ -102,7 +118,7 @@ txt_cat_fence_wall = Text(
     en="Concrete wall")
 
 txt_cat_floor = Text(
-    fr="Revêtements de terrasses",
+    fr="Revêtements de terrasse",
     de="de",
     en="Patio's floor")
 
@@ -189,6 +205,7 @@ txt_scenery_notxt = Text(
     de="",
     en="")
 
+# general layout
 txt_scenery_category = Text(
     fr="Catégorie",
     de="Kategorie",
@@ -196,46 +213,46 @@ txt_scenery_category = Text(
 
 txt_scenery_score = Text(
     fr="Score",
-    de="TODE",
+    de="Punktzahl",
     en="Score")
 
 # RECOVER OPTIONS (window)
 
 txt_recover_header = Text(
     fr="Ce n'était pas le meilleur choix...",
-    de="TODE",
+    de="Das war nicht die beste Wahl...",
     en="This wasn't the best choice...")
 
 txt_recover_infos = Text(
     color=color.white,
     fr="Plus d'infos",
-    de="TODE",
+    de="Mehr Infos",
     en="Tell me more")
 
 txt_recover_keep = Text(
     fr="Garder",
-    de="TODE",
+    de="Behalten",
     en="Keep")
 
 txt_recover_remove = Text(
     fr="Enlever",
-    de="TODE",
-    en="Remove object")
+    de="Entfernen",
+    en="Remove")
 
 txt_recover_replace = Text(
     fr="Remplacer",
-    de="TODE",
+    de="Ersetzen",
     en="Replace")
 
 txt_recover_correct = Text(
     fr="Corriger",
-    de="TODE",
+    de="Anpassen",
     en="Adapt")
 
 # WELCOME AND INSTRUCTIONS
 txt_tutorial_welcome_p0 = Text(
     fr="Bienvenue dans mon jardin !",
-    de="TODE",
+    de="Herzlich Willkommen in meinem Garten!",
     en="Welcome in  my garden!")
 
 txt_tutorial_welcome_p1 = Text(
@@ -257,122 +274,166 @@ txt_tutorial_play = Text(
 # INTERACTIONS
 
 txt_start_fr = "[b] DEMARRER LE JEU EN FRANCAIS [/b]"
-txt_start_de = "[b] STARTEN DAS SPIEL AUF DEUTSCH [/b]"
-txt_start_en = "[b] START THE GAME IN ENGLISH [/b]"
+txt_start_de = "[b] SPIEL AUF DEUTSCH STARTEN[/b]"
+txt_start_en = "[b] START GAME IN ENGLISH [/b]"
 
 txt_interact_problems = Text(
     color=color.white,
     fr="Problèmes",
-    de="TODE",
+    de="Probleme",
     en="Problems")
 
 txt_interact_solutions = Text(
     color=color.white,
     fr="Solutions",
-    de="TODE",
+    de="Lösungen",
     en="Solutions")
 
 txt_interact_confirm = Text(
     fr="Confirmation: veux-tu vraiment arrêter le jeu ?",
-    de="DE",
+    de="Bestätigung: Willst du das Spiel wirklich beenden?",
     en="Confirmation: stop playing this game ?")
 
-txt_interact_confirm_lang = "Tu pourras changer la langue en redémarrant le jeu. Du kannst die Sprache wechseln. You can change the language by stopping the game."
+txt_interact_confirm_lang = "Tu pourras changer la langue en redémarrant le jeu. Du kannst die Sprache wechseln, indem du das Spiel neustartest. You can change the language by stopping the game."
 
 txt_interact_continue = Text(
     fr="Non, continuer à jouer ce jeu",
-    de="DE",
+    de="Nein, ich will weiterspielen",
     en="No, continue playing this game")
 
 txt_interact_stop = Text(
     fr="Oui, arrêter et redémarrer le jeu",
-    de="DE",
+    de="Ja, Spiel abbrechen und neustarten",
     en="Yes, Abort game and start over")
 
 txt_interact_infos = Text(
     fr="Tu peux accéder à plus d'informations ou passer à la suite du jeu.",
-    de="TODE",
+    de="Du kannst noch mehr Informationen abrufen oder weiterspielen",
     en="TOEN")
 
 txt_interact_forward = Text(
     color=color.white,
     fr="Continuer",
-    de="TODE",
+    de="Weiter- spielen",
     en="TOEN")
 
 txt_interact_timeout = Text(
     color=color.magenta,
     fr="Aucune action réalisée, redémarrage du jeu dans 10 secondes.",
-    de="TODE",
+    de="Keine Handlungen vorgenommen, das Spiel wird in 10 Sekunden neugestartet",
     en="TOEN")
 
 txt_end_level1 = Text(
     color=color.green,
-    fr="Tu as obtenu plus de 3 points, ton jardin est un véritable corridor biologique! Ton arrière-cour est un endroit où les divers animaux se sentent bien pour vivre, se déplacer, se reproduire, se nourrir, entre autres.",
-    de="TODE",
+    fr="[b]Bravo et félicitations[/b] \n [b]Vous avez obtenu plus de 3 points, votre jardin est un véritable corridor biologique![/b] Les animaux s’y sentent bien pour vivre, se déplacer, se reproduire, se nourrir, etc…",
+    de="[b]Herzlichen Glückwunsch ! [/b] \n [b]Sie haben mehr als 3 Punkte erreicht, Ihr Garten ist ein echter biologischer Korridor![/b] Die Tiere fühlen sich wohl bei Ihnen und können sich frei bewegen,  fortpflanzen, ernähren etc…",
     en="TOEN")
 
 txt_end_level2 = Text(
     color=color.orange,
-    fr="Tu as obtenu entre 0 et 3 points, ton jardin est partiellement un couloir biologique, mais cela pourrait être mieux! Certains animaux sentent bien pour vivre, se déplacer, se reproduire, se nourrir, mais d'autres auront plus de difficultés.",
-    de="TODE",
+    fr="[b]Bravo mais vous pouvez encore apporter quelques améliorations![/b] \n [b]Vous avez obtenu entre 0 et 3 points, votre jardin est peut-être un corridor biologique pour quelques animaux[/b], mais pour d’autres, il y aura des pièges!",
+    de="[b]Nicht schlecht, aber Sie können noch einige Verbesserungen anbringen! [/b] \n [b] Sie haben zwischen 0 und 3 Punkten erreicht, Ihr Garten kann einigen Tieren als biologischer  Korridor dienen[/b]. Für  andere jedoch birgt er Fallen!",
     en="TOEN")
 
 txt_end_level3 = Text(
     color=color.magenta,
-    fr="Tu n'as obtenu que des points négatifs, ton jardin n'est pas du tout un couloir biologique! La plupart des animaux auront beaucoup de difficultés pour vivre, se déplacer, se reproduire, se nourrir, entre autres.",
-    de="TODE",
+    fr="[b]C'est pas terrible… [/b] \n [b]Vous n’avez obtenu que des points négatifs, votre jardin n'est pas du tout un corridor biologique![/b] La plupart des animaux auront beaucoup de difficultés pour vivre, se déplacer, se reproduire et se nourrir chez vous.",
+    de="[b]Nicht gerade umwerfend… [/b] \n [b] Sie haben nur Negativpunkte erhalten, Ihr Garten ist überhaupt kein biologischer Korridor![/b] Die meisten Tierarten werde grosse Schwierigkeiten haben, sich bei Ihnen frei  zu bewegen,  fortzupflanzen und zu ernähren.",
     en="TOEN")
 
 txt_end_play = Text(
     fr="Redémarrer et jouer à nouveau",
-    de="TODE",
-    en="TOEN")
+    de="Spiel neustarten und nochmals spielen",
+    en="Abort game and start over again")
+
+txt_end_score = Text(
+    color=color.magenta,
+    fr="Score final: \n",
+    de="Endpunktzahl: \n",
+    en="Final score: \n")
+
+txt_end_category = Text(
+    fr="[b]Fin du jeu![/b]",
+    de="[b]Ende das Spiel![/b]",
+    en="[b]The end![/b]")
+
+txt_end_point = Text(
+    color=color.magenta,
+    fr=" point",
+    de=" Punkt",
+    en=" point")
+
+txt_end_points = Text(
+    color=color.magenta,
+    fr=" points",
+    de=" Punkte",
+    en=" points")
+
 
 # SPEECH
 # instructions
 txt_game_move_play = Text(
     fr="Choisis un objet et glisse-le sur la zone clignotante",
-    de="TODE",
+    de="Wähle ein Objekt aus und ziehe es in den blinkenden Bereich",
     en="Choose an object and drag it to the blinking area")
 
 # game move when target is not reached
 txt_game_move_unreached = Text(
     fr="Pas le bon endroit, essaie encore...",
-    de="TODE",
+    de="Nicht der richtige Ort, versuche es nochmals...",
     en="Not the right spot, try again...")
 
 # game move target reached, correct positive element
 txt_game_move_positive = Text(
     color=color.green,
     fr="Bravo, bien joué!",
-    de="TODE",
+    de="Gut gemacht!",
     en="Well done!")
 
 # game move target reached, uncorrect negative element
 txt_game_move_negative = Text(
     color=color.magenta,
     fr="Ce n'est pas le meilleur choix...",
-    de="TODE",
+    de="Das ist nicht die beste Wahl...",
     en="It is not the best choice...")
 
 # game move target reached, uncorrect negative element
 txt_game_move_pass = Text(
     color=color.orange,
     fr="Catégorie passée, aucun point attribué",
-    de="TODE",
+    de="übersprungene Kategorie, keine Punkte erreicht",
     en="Skipped category, no point recieved")
 
 # quiz
 
 txt_quiz_intro_fr = "Merci d'évaluer l'exposition pour participer au concours"
-txt_quiz_intro_de = "TODE Bitte geben Sie uns eine Note"
+txt_quiz_intro_de = "Bitte geben Sie uns eine Bewertung um am Wettbewerb teilzunehmen"
 txt_quiz_intro_conf_fr = "Réponse enregsitrée, merci!"
-txt_quiz_intro_conf_de = "TODE Antwort gespeichert, Danke!"
+txt_quiz_intro_conf_de = "Antwort gespeichert, danke!"
 
 txt_quiz_conf = Text(
-    fr="Merci pour ton évaluation. Tu peux maintenant participer au concours en répondant correctement à quelques questions.",
-    de="TODE")
+    fr="Merci pour votre évaluation. Vous pouvez maintenant participer au concours en répondant correctement à quelques questions.",
+    de="Vielen Dank für Ihre Bewertung. Sie können jetzt am Wettbewerb teilnehmen, indem Sie einige Fragen richtig beantworten.")
+
+txt_quiz_end_positive = Text(
+    fr="Bravo, vous avez répondu correctement à toutes les questions, vous allez participer au tirage au sort.",
+    de="Bravo, Sie haben alle Fragen richtig beantwortet! Sie werden an der Auslosung teilnehmen.")
+
+txt_quiz_end_negative = Text(
+    fr="Vous avez fait quelques erreurs, malheureusement… à bientôt!",
+    de="Sie haben leider einige Fehler gemacht… Auf Wiedersehen und bis bald!")
+
+txt_quiz_tombola_start = Text(
+    fr="Attention, tirage au sort en cours!",
+    de="Achtung, die Auslosung findet statt!")
+
+txt_quiz_tombola_win = Text(
+    fr="Bravo, vous avez gagné! Veuillez vous présenter à la réception avec le code suivant:",
+    de="Bravo, Sie haben gewonnen! Bitte melden Sie sich mit folgendem Code an der Rezeption:")
+
+txt_quiz_tombola_win = Text(
+    fr="Désolé, c'est perdu... à la prochaine!'",
+    de="Leider kein Glück gehabt… bis zum nächsten Mal!")
 
 txt_info_problems_fr = "" + color.magenta + "[b]Problèmes:[/b] \n" + color.end
 txt_info_problems_de = "" + color.magenta + "[b]Problemen:[/b] \n" + color.end
@@ -381,7 +442,7 @@ txt_info_problem_de = "" + color.magenta + "[b]Problem:[/b] " + color.end
 txt_info_warning_fr = "" + color.magenta + "[b]Attention:[/b] " + color.end
 txt_info_warning_de = "" + color.magenta + "[b]Achtung:[/b] " + color.end
 txt_info_solutions_fr = "" + color.green + "[b]Solutions:[/b] \n" + color.end
-txt_info_solutions_de = "" + color.green + "[b]TODE:[/b] \n" + color.end
+txt_info_solutions_de = "" + color.green + "[b]Lösungen[/b] \n" + color.end
 
 txt_info_pond = Text(
     fr=" •   Un étang constitue un [b]relais important dans un corridor biologique.[/b]\n" \
@@ -462,14 +523,14 @@ txt_info_hedge_bad = Text(
 txt_info_fence_nospace = Text(
     fr=txt_info_problem_fr + "Une barrière ou un grillage touchant le sol [b]ne laisse pas passer les animaux terrestres[/b] tels que les hérissons ou les renards.\n\n" \
        + txt_info_solutions_fr +
-       " •   Surélever la barrière d’au moins 15 centimètres.\n" \
        " •   Faire un trou dans le bas du grillage d’au moins 15 centimètres de hauteur et de largeur.\n" \
-       " •   Plus d’infos dans la Charte des jardins",
+       " •   Surélever la barrière d’au moins 15 centimètres. Plus d’infos dans la [b]Charte des jardins[/b].\n" \
+       " •   Illustration: A favoriser - exemple de clotûres permettant le libre passage de la petite faune. Ces méthodes d'espace ou de trous au pied peuvent également être appliquées aux murs et palissades. [i][crédits Ecotec][/i]",
     de=txt_info_problem_de + "Zäune oder Gitter, die bis auf den Boden reichen, [b]sind Barrieren für Landtiere wie Igel oder Füchse.[/b]\n\n" \
        + txt_info_solutions_de +
        " •   [b]Heben Sie den Zaun an[/b], mindestens um 15 Zentimeter.\n" \
-       " •   [b]Schneiden Sie am Boden ein Loch in das Gitter[b/], mindestens 15 Zentimeter hoch und breit.\n" \
-       " •   Weitere Infos in der Garten-Charta.",
+       " •   [b]Schneiden Sie am Boden ein Loch in das Gitter[/b], mindestens 15 Zentimeter hoch und breit. Weitere Infos in der [b]Garten-Charta[/b].\n" \
+       " •   Bild: Vorzuziehen - Beispiele von Zäunen, welche kleinen Tieren einen freien Durchgang ermöglichen. Diese Methode -Abstand oder Löcher am unteren Ende- kann auch bei Mauern und Palisaden angewandt werden. [i][Ecotec][/i]",
     en="Garden fence close to the ground ")
 
 # two fences have the same texts (chang it if not logical)
@@ -480,12 +541,12 @@ txt_info_fence_wall = Text(
        + txt_info_solutions_fr +
        " •   [b]Faire pousser des plantes grimpantes sur votre mur.[/b] Le lierre, par exemple, servira de cachette et de garde-manger à de nombreux animaux et permettra également aux écureuils d’escalader le mur pour se déplacer dans le jardin voisin.\n" \
        " •   [b]Créer de petites ouvertures[/b] d’au moins 15 centimètres de largeur et de hauteur, près du sol. Les hérissons et les grenouilles, par exemple, pourront facilement passer de l’autre côté du mur.\n" \
-       " •   Plus d’infos dans la [b]Charte des jardins.[/b]",
+       " •   Plus d’infos dans la [b]Charte des jardins.[/b] [i]Illustration: Reverdy Carrasco/flickr.[/i]",
     de=txt_info_problem_de + "Betonmauern sind [b]für viele Tiere unüberwindbare Hindernisse.[/b]\n" \
        + txt_info_solutions_de +
        " •   [b]Lassen Sie Kletterpflanzen an Ihrer Mauer hochwachsen.[/b] Efeu zum Beispiel wird von vielen Tieren als Versteck und Vorratskammer genutzt und dient Eichhörnchen als Klettergerüst, wenn ihnen die Mauer den Weg in den Nachbargarten versperrt.\n" \
        " •   [b]Öffnen Sie am Fuss der Mauer kleine Durchgänge[/b] von mindestens 15 Zentimeter Höhe und Breite, damit kleinere Tiere wie Igel oder Frösche auf die andere Seite der Mauer gelangen können.\n" \
-       " •   Weitere Infos in der [b]Garten-Charta.[/b]",
+       " •   Weitere Infos in der [b]Garten-Charta[/b]. [i]Bild: Reverdy Carrasco/flickr.[/i]",
     en="Concrete wall")
 
 txt_info_floor_grass = Text(
@@ -509,7 +570,7 @@ txt_info_floor_stone = Text(
     de=txt_info_problems_de +
        " •   [b]Grosse Betonplatten oder dunkle Steine werden in der Sonne schnell heiss.[/b]\n" \
        " •   [b]Eine von der Sonne aufgeheizte Terrasse ist für viele kleine Landtiere nicht begehbar.[/b]\n" \
-       " •   [b]Das Regenwasser kann nicht im Untergrund versickern[/b], sodass der Boden rund um die Terrasse verschlammt\n\n."
+       " •   [b]Das Regenwasser kann nicht im Untergrund versickern[/b], sodass der Boden rund um die Terrasse verschlammt.\n\n"
        + txt_info_solutions_de +
        " •   [b]Kies, Schotter oder Rasengittersteine heizen sich in der Sonne viel weniger stark auf.[/b] Eine Terrasse mit Rasengittersteinen bleibt frisch, auch wenn die Sonne brennt.",
     en="Patio with black sandstone floor")
@@ -558,15 +619,18 @@ txt_info_animal_goat = Text(
 txt_info_animal_cat = Text(
     fr=txt_info_problems_fr +
        " •   [b]Les chats sont des prédateurs redoutables.[/b] Certaines études les citent même comme [b]la première cause de mortalité pour la petite faune sauvage[/b] (oiseaux, petits mammifères, amphibiens et insectes).\n" \
-       " •   [b]Les colliers à clochettes ne sont pas efficaces[/b] pour empêcher les chats de s’attaquer à la petite faune sauvage car ils développent des stratégies pour chasser encore plus furtivement et discrètement.\n\n"
-       + txt_info_solutions_fr +
+       " •   [b]Les colliers à clochettes ne sont pas efficaces[/b] pour empêcher les chats de s’attaquer à la petite faune sauvage car ils développent des stratégies pour chasser encore plus furtivement et discrètement.",
+    de=txt_info_problems_de +
+       " •   [b]Katzen sind geschickte Jäger.[/b] Manchen Studien zufolge sind sie sogar [b]die häufigste Todesursache für kleine Wildtiere[/b] (Vögel, kleine Säugetiere, Amphibien und Insekten).\n" \
+       " •   [b]Ein Halsband mit Glöckchen hindert die Katze nicht[/b] daran, kleine Wildtiere zu erbeuten. Sie entwickelt dann einfach Strategien, um noch lautloser und vorsichtiger zu jagen.",
+    en="cat")
+
+txt_info_animal_cat_sol = Text(
+    fr=txt_info_solutions_fr +
        " •   [b]Mettre un collier très coloré au chat[/b] pour le rendre plus visible et permettre à beaucoup d’animaux de s’enfuir. \n" \
        " •   [b]Dans les arbres, installer des collerettes[/b] qui empêcheront le chat de grimper. \n" \
        " •   [b]Garder le chat à l’intérieur durant la nuit[/b] car c’est le moment où beaucoup de petits animaux sortent et se déplacent.",
-    de=txt_info_problems_de +
-       " •   [b]Katzen sind geschickte Jäger.[/b] Manchen Studien zufolge sind sie sogar [b]die häufigste Todesursache für kleine Wildtiere[/b] (Vögel, kleine Säugetiere, Amphibien und Insekten).\n" \
-       " •   [b]Ein Halsband mit Glöckchen hindert die Katze nicht[/b] daran, kleine Wildtiere zu erbeuten. Sie entwickelt dann einfach Strategien, um noch lautloser und vorsichtiger zu jagen.\n\n"
-       + txt_info_solutions_de +
+    de=txt_info_solutions_de +
        " •   [b]Ihr Balkon kann ein wichtiger Trittstein in einer Vernetzungsachse werden.[b]\n" \
        " •   [b]Mit ein paar Gewürzpflanzen machen Sie aus Ihrem Balkon eine Bar für Schmetterlinge.[/b] Diese saugen bei den Blüten von Origano, Melisse, Thymian oder Rosmarin gerne Nektar.\n" \
        " •   [b]Die Kräuter verströmen angenehme Düfte und liefern Ihnen die nötigen Zutaten für köstliche Tees und würzige Speisen.[/b]",

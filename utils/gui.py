@@ -63,7 +63,7 @@ class ButtonImage(Button):
 
 # transparent button with centered unstreched image wrapper
 class ButtonImageText(Button):
-    def __init__(self, on_press, pos, size, src_back, size_img, src, text, left, vAlignTop = False):
+    def __init__(self, on_press, pos, size, src_back, size_img, src, text, left, vAlignTop = False, font_size = sizes.font_size_large):
         super(ButtonImageText, self).__init__(on_press=on_press, pos=pos, size=size, size_hint=(None, None),
                                           background_normal='images/scenery/transparency.png')
 
@@ -76,10 +76,10 @@ class ButtonImageText(Button):
                           size=(left, size[1]),
                           text=text,
                           hAlignLeft=True,
-                          font_size=sizes.font_size_large,
+                          font_size=font_size,
                           vAlignTop = vAlignTop)
         self.add_widget(label)
-        label.label.padding = (5, 0)
+        label.label.padding = (10, 0)
 
         self.add_widget(
             ImageWrap(pos=(pos[0] + left, pos[1] + (size[1] - size_img[1]) / 2.0),
@@ -121,5 +121,5 @@ class LabelWrap(Widget):
             self.label.text = "[b]" + self.label.text + "[/b]"
 
     def update_cat(self, current_cat):
-        self.label.text = self.text.get() + " " + str(current_cat) + "/" + str(sizes.gauge_number)
+        self.label.text = self.text.get() + " " + str(current_cat) + "/" + str(sizes.gauge_number + 1)
         self.bolden()
