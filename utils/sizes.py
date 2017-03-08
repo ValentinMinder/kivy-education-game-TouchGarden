@@ -142,6 +142,7 @@ win_width = 897
 win_height = 601
 win_header = 80
 win_width_infos = 183
+win_text_margin = 20
 win_choice_width = 400
 win_choice_height = 194
 win_choice_header = 38

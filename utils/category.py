@@ -44,8 +44,8 @@ class ElementScatter(Scatter):
 
 # init for all categories all the possible elements and scenario (including positive, negative and some recover)
 def init_category_struct(frame):
-    duration_start = 3
-    duration_end = 4
+    duration_start = 3 * 0.1
+    duration_end = 4* 0.1
 
     def anim_setup_p1():
         animal = ImageWrap(
@@ -513,7 +513,7 @@ def init_category_struct(frame):
                         first=random.choice([True, False]),
                         source='images/non_animes/tas_de_bois.png',
                         txt_info=txt.txt_info_shelter_wood,
-                        info_img="images/photos/cachettes.jpg",
+                        info_img="images/photos/bois.jpg",
                         event_pos=sizes.event_c5,
                         anim_setup=anim_setup_p5,
                         anim_start=anim_start_p5,
@@ -522,7 +522,7 @@ def init_category_struct(frame):
                         first=not p5.first,
                         source='images/non_animes/prairie_fleurie.png',
                         txt_info=txt.txt_info_shelter_flower,
-                        info_img="images/photos/cachettes.jpg",
+                        info_img="images/photos/prairie.jpg",
                         event_pos=sizes.event_c5,
                         anim_setup=anim_setup_n5,
                         anim_start=anim_start_n5,

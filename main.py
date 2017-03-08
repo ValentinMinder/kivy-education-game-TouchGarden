@@ -14,6 +14,8 @@ from kivy.uix.boxlayout import BoxLayout
 
 from kivy.uix.widget import Widget
 
+from kivy.graphics.fbo import Fbo
+
 from utils import texts as txt
 from utils import sizes
 from utils.quiz import Quiz
@@ -39,7 +41,7 @@ from kivy.app import App
 from kivy.uix.button import Button
 
 from kivy.core.audio import SoundLoader
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, Clock
 from kivy.lang import Builder
 from kivy.factory import Factory
 from kivy.uix.screenmanager import Screen, ScreenManager
@@ -614,7 +616,7 @@ def win_generate(text_title, size=(sizes.win_width + 26, sizes.win_height + 23))
         size=size,
         source='images/scenery/fenetre_infos_923x624px.png'))
 
-    def none (any):
+    def none (*any):
         pass
     # fake & invisible & no effects button to disabled behing contents
     fakebutton = ButtonImage(on_press=none,
@@ -635,22 +637,53 @@ def win_generate(text_title, size=(sizes.win_width + 26, sizes.win_height + 23))
                   padding=(10, 0),
                   bold=True))
 
-    im = ImageWrap(pos=(win_dx(0), win_dy(10)),
-                   size=(sizes.win_width, (sizes.win_height - sizes.win_header) / 2.3),
+    padding = 10
+    im = ImageWrap(pos=(win_dx(padding), win_dy(padding)),
+                   size=(sizes.win_width - 2 * padding, (sizes.win_height - sizes.win_header) / 2.4),
                    source="images/scenery/transparency.png")
     print sizes.win_width
     print ((sizes.win_height - sizes.win_header) / 2)
     window_frame.image = im.image
     window_frame.add_widget(im)
 
-    window_frame.label = LabelWrap(pos=(win_dx(0), win_dy(0)),
-                                   size=(sizes.win_width, sizes.win_height - sizes.win_header),
+    size = sizes.font_size_large
+
+
+    window_frame.label = LabelWrap(pos=(win_dx(sizes.win_text_margin), win_dy(0)),
+                                   size=(sizes.win_width - sizes.win_text_margin, sizes.win_height - sizes.win_header),
                                    text=txt_scenery_notxt,
-                                   font_size=sizes.font_size_large,
-                                   padding=(10, 5),
+                                   font_size=size,
+                                   padding=(padding, padding),
                                    vAlignTop=True,
                                    hAlignLeft=True)
     window_frame.add_widget(window_frame.label)
+
+
+    # add dots at anchors
+    window_frame.try_again = True
+    def add_dots(*kw):
+        anchors = window_frame.label.label.anchors
+        if window_frame.try_again & (anchors == {}):
+            print 'try again'
+            window_frame.try_again = False
+            Clock.schedule_once(add_dots, 1/4)
+        for key in anchors:
+            v = anchors[key]
+            # start of new lines for dots
+            if 'dot' in key:
+                window_frame.add_widget(LabelWrap(
+                   pos=(win_dx(0), win_dy(sizes.win_height - sizes.win_header) - v[1] - size),
+                   size=(sizes.win_text_margin + padding,size * 3/4),
+                   text=txt_dot,
+                   font_size=size,
+                   hAlignLeft=True))
+            # end of text for image sizes and positioning
+            if 'end' in key:
+                im.image.size[1] = sizes.win_height - sizes.win_header - v[1] - size - 2 * padding
+
+    #this should be done by waiting for the end of rendering. 99.9% fo times it will be finished before the 1/25 (40ms) threshold,
+    # and 1/25 is not perpectible by eye. In the worst case it's tried a second time after 1/4 second. (250 ms)
+    Clock.schedule_once(add_dots, 1 / 25)
 
     return window_frame
 
@@ -955,7 +988,7 @@ class FloatGameScreen(BackKeyScreen):
             self.gameturn_setup(self.categories[min(self.categorynb, self.categories.__len__()) - 1])
 
     # does nothing, used for no action after animation
-    def none(self, any):
+    def none(self, *any):
         pass
 
     # animates a smile/a points mark towards scale from the happening area
@@ -993,7 +1026,7 @@ class FloatGameScreen(BackKeyScreen):
         anim_points.start(points_image.image)
 
     def start_game_tuto(self):
-        window_frame = win_generate(text_title=txt.txt_tutorial_welcome_p0)
+        window_frame = win_generate(text_title=txt.txt_main_title) #todo txt.txt_tutorial_welcome_p0
 
         def on_press(screen):
             self.frame.remove_widget(window_frame)
@@ -1016,18 +1049,21 @@ class FloatGameScreen(BackKeyScreen):
         self.background_disable()
         self.frame.add_widget(window_frame)
 
-    def more_infos(self, element, negative=True):
+    def more_infos(self, element, fct, negative=True, alternate=False):
         window_frame = win_generate(text_title=element.name)
 
         def close(screen):
             self.frame.remove_widget(window_frame)
-            if (not negative):
+            if negative:
+                fct()
+            else:
                 self.background_enable()
                 self.category_next(None)
                 # forward category allowed after positive animation!
                 self.button_cat_enabled = True
 
-        if negative:
+        button_switch = not negative if alternate else negative
+        if button_switch:
             window_frame.add_widget(ButtonImageText(
                 on_press=close,
                 pos=(win_dx(sizes.win_width - sizes.win_header), win_dy(sizes.win_height - sizes.win_header)),
@@ -1052,18 +1088,22 @@ class FloatGameScreen(BackKeyScreen):
         window_frame.label.label.text = element.txt_info.get()
         window_frame.image.source = element.info_img
 
-        print 'hello'
         # special cat case
         if (element.name == txt.txt_cat_animal_cat):
+            # re-adapt image size (but not dots....)
+            def after(*any):
+                v = window_frame.label.label.anchors['end']
+                window_frame.image.size[1] = sizes.win_height - sizes.win_header - v[1] - sizes.font_size_large - 2 * 10
 
             def next_solutions(any):
                 window_frame.label.label.text = element.txt_info_alt.get()
                 window_frame.image.source = element.info_img_alt
                 window_frame.remove_widget(solutions)
+                Clock.schedule_once(after, 1/4)
 
             solutions = ButtonImageText(
                 on_press=next_solutions,
-                pos=(win_dx((sizes.win_width - 223 ) /2), win_dy(sizes.win_header)),
+                pos=(win_dx((sizes.win_width - 200 ) /2), win_dy(sizes.win_header * 1.5)),
                 size=(200, 97),
                 src_back='images/scenery/fenetre_infos_200x97px_green.png',
                 size_img=(23, 44),
@@ -1219,14 +1259,14 @@ class FloatGameScreen(BackKeyScreen):
 
     # after negative scenario
     def after_positive(self, element):
-        self.more_infos(element, negative=False)
+        self.more_infos(element, fct=self.none, negative=False)
 
     # after negative scenario
     def after_negative(self, element):
         window_frame = win_generate(text_title=txt.txt_recover_header)
 
         def more_infos(screen):
-            self.more_infos(element)
+            self.more_infos(element, fct=self.none)
 
         window_frame.add_widget(ButtonImageText(
             on_press=more_infos,
@@ -1241,15 +1281,17 @@ class FloatGameScreen(BackKeyScreen):
 
         # replace by positive element
         def replace(screen):
-            pt = 2
-            self.points += pt
-            self.static.image.source = element.positive_ref.source
-            self.anim_animal(element.positive_ref, pt)
+            def fct(**kw):
+                pt = 2
+                self.points += pt
+                self.static.image.source = element.positive_ref.source
+                self.anim_animal(element.positive_ref, pt)
 
-            # text speach update
-            self.speach.label.text = txt_game_move_positive.get()
-            self.hipster(pt)
-            after_all_choices()
+                # text speach update
+                self.speach.label.text = txt_game_move_positive.get()
+                self.hipster(pt)
+                after_all_choices()
+            self.more_infos(element, fct=fct, negative=True, alternate=True)
 
         # add a correction to negative elements
         def correct(screen):
@@ -1266,31 +1308,35 @@ class FloatGameScreen(BackKeyScreen):
 
         # keep and remove have no animation
         def remove(screen):
-            self.points += 1
-            self.frame.remove_widget(self.static)
+            def fct(**kw):
+                self.points += 1
+                self.frame.remove_widget(self.static)
 
-            # special cat case
-            if (self.static.image.source == 'images/animations/animaux/chat_couche_loop.zip'):
-                self.tree.image.source = 'images/non_animes/arbre_oiseau.png'
+                # special cat case
+                if (self.static.image.source == 'images/animations/animaux/chat_couche_loop.zip'):
+                    self.tree.image.source = 'images/non_animes/arbre_oiseau.png'
 
-            # text speach update
-            self.speach.label.text = txt_game_move_play.get()
-            self.hipster(0)
-            self.update_cursor()
-            after_all_choices()
-            self.category_next(None)
-            # forward category allowed after positive animation!
-            self.button_cat_enabled = True
+                # text speach update
+                self.speach.label.text = txt_game_move_play.get()
+                self.hipster(0)
+                self.update_cursor()
+                after_all_choices()
+                self.category_next(None)
+                # forward category allowed after positive animation!
+                self.button_cat_enabled = True
+            self.more_infos(element, fct=fct, negative=True, alternate=True)
 
         # keep the object
         def keep(screen):
-            # text speach update
-            self.speach.label.text = txt_game_move_play.get()
-            self.hipster(0)
-            after_all_choices()
-            self.category_next(None)
-            # forward category allowed after positive animation!
-            self.button_cat_enabled = True
+            def fct(**kw):
+                # text speach update
+                self.speach.label.text = txt_game_move_play.get()
+                self.hipster(0)
+                after_all_choices()
+                self.category_next(None)
+                # forward category allowed after positive animation!
+                self.button_cat_enabled = True
+            self.more_infos(element,fct=fct, negative=True, alternate=True)
 
         # remove the recover window and update cursor
         def after_all_choices():
