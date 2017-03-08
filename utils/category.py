@@ -44,12 +44,12 @@ class ElementScatter(Scatter):
 
 # init for all categories all the possible elements and scenario (including positive, negative and some recover)
 def init_category_struct(frame):
-    duration_start = 3 * 0.1
-    duration_end = 4* 0.1
+    duration_start = 3
+    duration_end = 4
 
     def anim_setup_p1():
         animal = ImageWrap(
-            pos=(0, sizes.height / 3),
+            pos=(0, sizes.height * 0.4),
             size=(88, 73),
             source='images/animations/eaux/grenouille_saute.zip',
             anim_delay=0.1)
@@ -57,12 +57,15 @@ def init_category_struct(frame):
         return animal
 
     def anim_start_p1():
-        return Animation(pos=sizes.event_c1, duration=duration_start)
+        return Animation(pos=sizes.event_c1pos, duration=duration_start)
+
+    def anim_start_n1():
+        return Animation(pos=sizes.event_c1neg, duration=duration_start)
 
     def anim_end_p1(animal):
         heart = ImageWrap(source='images/animations/eaux/coeur.zip',
                           size=(40, 40),
-                          pos=sizes.event_c1,
+                          pos=sizes.event_c1pos_heart,
                           anim_delay=0.1)
         frame.add_widget(heart)
 
@@ -77,7 +80,7 @@ def init_category_struct(frame):
         d = 0.2
         animal.static.image.anim_delay = d
         animal.static.image.anim_loop = 1
-        anim = Animation(duration=f * d)
+        anim = Animation(duration=f * d + 0.9)
         anim.bind(on_complete=after)
         return anim
 
@@ -94,26 +97,39 @@ def init_category_struct(frame):
         return anim
 
     def anim_end_n1alt(animal):
-        def after(a, i):
+        def after(*any):
+            animal.flip()
+
+        def forward (*any):
             animal.static.image.source = 'images/animations/eaux/piscine_scintille.zip'
             animal.static.image.anim_loop = 0
-            animal.flip()
+            animal.image.size = (88, 73)
+            anim = Animation(pos=sizes.event_c1altanimal1, duration=duration_end * 0.2)
+            anim += Animation(pos=(-50, sizes.height * 0.4), duration=duration_end * 0.8)
+            anim.start(animal.image)
+
 
         animal.static.image.source = 'images/animations/eaux/piscine_plouf.zip'
         animal.static.image.anim_loop = 1
+        f = 18
+        d = 0.15
+        animal.static.image.anim_delay = d
         animal.flip()
-        anim = Animation(pos=sizes.event_c1altanimal2, duration=duration_end * 0.15)
-        anim += Animation(pos=sizes.event_c1altanimal1, duration=duration_end * 0.15)
-        anim += Animation(pos=(-50, sizes.height / 3), duration=duration_end * 0.7)
-        anim.bind(on_complete=after)
-        return anim
+        animal.image.size = 0, 0
+
+        anim = Animation(pos=sizes.event_c1altanimal2, duration= f * d)
+        anim.bind(on_complete=forward)
+        anim.start(animal.image)
+
+        wait = Animation(duration=f * d + duration_end)
+        return wait
 
     p1 = ElementScatter(name=txt.txt_cat_pond,
                         first=random.choice([True, False]),
                         source='images/non_animes/etang.png',
                         txt_info=txt.txt_info_pond,
                         info_img="images/scenery/transparency.png",
-                        event_pos=sizes.event_c1,
+                        event_pos=sizes.event_c1pos_heart,
                         anim_setup=anim_setup_p1,
                         anim_start=anim_start_p1,
                         anim_end=anim_end_p1)
@@ -124,9 +140,9 @@ def init_category_struct(frame):
                         source='images/animations/eaux/piscine_scintille.zip',
                         txt_info = txt.txt_info_pool,
                         info_img="images/scenery/transparency.png",
-                        event_pos=sizes.event_c1,
+                        event_pos=sizes.event_c1neg,
                         anim_setup=anim_setup_p1,
-                        anim_start=anim_start_p1,
+                        anim_start=anim_start_n1,
                         anim_end=anim_end_n1,
                         anim_end_alt=anim_end_n1alt,
                         correction=True,
@@ -244,7 +260,7 @@ def init_category_struct(frame):
         return Animation(pos=sizes.event_c32, duration=duration_start * 2.5)
 
     def anim_start_n3a():
-        anim = Animation(pos=sizes.event_c32alt, duration=duration_start)
+        anim = Animation(pos=sizes.event_c32alt, duration=duration_start * 1.5)
         return anim
 
     def anim_end_p3(animal):
@@ -252,7 +268,7 @@ def init_category_struct(frame):
         return anim
 
     def anim_end_p3_alt(animal):
-        anim = Animation(x=sizes.width_left_margin - 50, y=sizes.height, duration=duration_end * 0.3)
+        anim = Animation(x=sizes.width_left_margin - 50, y=sizes.height, duration=duration_end * 0.5)
         return anim
 
     def anim_end_n3a_alt(animal):
@@ -298,11 +314,11 @@ def init_category_struct(frame):
         def fire(a, i):
             animal.image.source = 'images/animations/mur/ecureuil_snif.zip'
             animal.image.anim_delay = 0.1
-            anim = Animation(duration=duration_end * 0.35)
+            anim = Animation(duration=duration_end * 0.5)
             anim.bind(on_complete=fall)
             anim.start(animal.image)
 
-        wait = Animation(duration=duration_end * 0.6)
+        wait = Animation(duration=duration_end)
         wait.bind(on_start=fire)
         return wait
 
@@ -385,10 +401,11 @@ def init_category_struct(frame):
         return animal
 
     def anim_start_p4():
-        return Animation(pos=sizes.event_c4, duration=duration_start * 1.5)
+        return Animation(pos=sizes.event_c4_step1, duration=duration_start)
 
     def anim_end_p4(animal):
-        anim = Animation(pos = sizes.event_c4_next, duration=duration_end * 0.5)
+        anim = Animation(pos=sizes.event_c4_step2, duration=duration_end * 0.5)
+        anim += Animation(pos = sizes.event_c4_step3, duration=duration_end * 0.5)
         anim += Animation(x=sizes.width_ref, y=sizes.height / 3, duration=duration_end * 0.8)
         return anim
 
@@ -399,6 +416,9 @@ def init_category_struct(frame):
         animal.image.source = 'images/animations/terrasses/musaraigne_flambe.zip'
         animal.image.anim_delay = 0.2
         animal.image.anim_loop = 1
+        anim = Animation(pos=sizes.event_c4_step2, duration=duration_end)
+        anim.start(animal.image)
+
         wait = Animation(duration=duration_end)
         wait.bind(on_complete=forward)
         return wait
@@ -408,7 +428,7 @@ def init_category_struct(frame):
                         source='images/non_animes/terrasse_pave_drainant.png',
                         txt_info=txt.txt_info_floor_grass,
                         info_img="images/photos/terrasses.jpg",
-                        event_pos=sizes.event_c4,
+                        event_pos=sizes.event_c4_step1,
                         anim_setup=anim_setup_p4,
                         anim_start=anim_start_p4,
                         anim_end=anim_end_p4)
@@ -419,7 +439,7 @@ def init_category_struct(frame):
                         source='images/non_animes/terrasse_gres_noir.png',
                         txt_info = txt.txt_info_floor_stone,
                         info_img="images/photos/terrasses.jpg", #"images/scenery/transparency.png",
-                        event_pos=sizes.event_c4,
+                        event_pos=sizes.event_c4_step1,
                         anim_setup=anim_setup_p4,
                         anim_start=anim_start_p4,
                         anim_end=anim_end_n4,
@@ -432,7 +452,7 @@ def init_category_struct(frame):
 
     def anim_setup_p5():
         animal = ImageWrap(
-            pos=(sizes.width / 2, sizes.height_ref),
+            pos=(sizes.width / 2 + 140, sizes.height_ref),
             size=(52, 44),
             source='images/animations/abris/herisson_marche.zip',
             anim_delay=0.1)
@@ -456,22 +476,25 @@ def init_category_struct(frame):
 
     def anim_end_p5(animal):
         animal.image.source = 'images/animations/abris/herisson_zzz.zip'
-        animal.image.anim_delay = 0.5
+        f = 0.5
+        n = 7
+        animal.image.anim_delay = f
         animal.image.size = (133, 84)
+
 
         #put back the "animal" zzz in front
         frame.remove_widget(animal)
         frame.add_widget(animal)
-        return Animation(duration=duration_end * 2)
+        return Animation(duration= (n-1) * f * 2)
 
     def anim_end_n5(animal):
         a2 = ImageWrap(
-            pos=(sizes.width / 2 - 100, sizes.height_ref),
+            pos=(sizes.width / 2 - 370, sizes.height_ref),
             size=(55, 56),
             source='images/animations/abris/abeille.zip',
             anim_delay=0.05)
         a3 = ImageWrap(
-            pos=(sizes.width / 2 - 50, sizes.height_ref),
+            pos=(sizes.width / 2 - 150, sizes.height_ref),
             size=(55, 56),
             source='images/animations/abris/abeille.zip',
             anim_delay=0.05)
@@ -484,13 +507,18 @@ def init_category_struct(frame):
             animal.flip()
             pass
 
-        f = 0.3
+
+        m = 1.8
+        f = m / 3.0
 
         def forward(a, i):
             animal.flip()
-            anim = Animation(pos=(sizes.width * 2 / 3, sizes.height), duration=duration_end * (1 - 2 * f))
+            d_end = duration_end * (m - 2 * f)
+            anim = Animation(pos=(sizes.width * 2 / 3 + 100, sizes.height), duration=d_end)
             anim.start(animal.image)
+            anim = Animation(pos=(sizes.width * 2 / 3 - 150, sizes.height), duration=d_end)
             anim.start(a2.image)
+            anim = Animation(pos=(sizes.width * 2 / 3 - 450, sizes.height), duration=d_end)
             anim.start(a3.image)
             anim.bind(on_complete=after)
 
@@ -498,15 +526,15 @@ def init_category_struct(frame):
         anim += Animation(x=animal.image.x - 20, y=animal.image.y - 10, duration=duration_end * f)
         anim2 = Animation(x=animal.image.x - 15, y=animal.image.y - 10, duration=duration_end * f)
         anim2 += Animation(x=animal.image.x - 35, y=animal.image.y + 10, duration=duration_end * f)
-        anim3 = Animation(x=animal.image.x + 5, y=animal.image.y + 5, duration=duration_end * f)
-        anim3 += Animation(x=animal.image.x - 10, y=animal.image.y - 15, duration=duration_end * f)
+        anim3 = Animation(x=animal.image.x + 5, y=animal.image.y - 50, duration=duration_end * f)
+        anim3 += Animation(x=animal.image.x - 10, y=animal.image.y - 35, duration=duration_end * f)
 
         anim.bind(on_complete=forward)
         anim.start(animal.image)
         anim2.start(a2.image)
         anim3.start(a3.image)
 
-        wait = Animation(duration=duration_end)
+        wait = Animation(duration=duration_end * m)
         return wait
 
     p5 = ElementScatter(name=txt.txt_cat_shelter_wood,
@@ -601,11 +629,11 @@ def init_category_struct(frame):
             anim_delay=0.1)
         pap.flip()
         frame.add_widget(pap)
-        animp = Animation(pos=sizes.event_c6, duration=(f - 1) * d)
+        animp = Animation(pos=sizes.event_c6, duration= (f - 1) * d)
         animp.bind(on_complete=papillon1)
         animp.start(pap.image)
 
-        wait = Animation(duration=duration_end)
+        wait = Animation(duration= f * d + duration_end * 0.7)
         return wait
 
     def anim_end_n6(animal):
@@ -743,12 +771,12 @@ def init_category_struct(frame):
             source='images/animations/fleurs/papillon_rouge.zip',
             anim_delay=0.1)
         a3 = ImageWrap(
-            pos=(sizes.width, sizes.height * 2 / 3),
+            pos=(sizes.width, sizes.height * 2 / 3 + 110),
             size=(50, 65),
             source='images/animations/fleurs/papillon_rouge.zip',
             anim_delay=0.1)
         a4 = ImageWrap(
-            pos=(sizes.width, sizes.height * 2 / 3),
+            pos=(sizes.width, sizes.height * 2 / 3 - 70),
             size=(50, 65),
             source='images/animations/fleurs/papillon_jaune.zip',
             anim_delay=0.1)
@@ -761,15 +789,18 @@ def init_category_struct(frame):
             frame.remove_widget(a3)
             frame.remove_widget(a4)
 
-        f = 0.5
+        f = 0.6
 
         def forward(a, i):
             animal.image.source = 'images/animations/fleurs/papillon_rouge.zip'
             anim = Animation(x= sizes.width / 3, y =sizes.height, duration=duration_end * f)
             anim.bind(on_complete=after)
             anim.start(animal.image)
+            anim = Animation(x=sizes.width / 3 + 260, y=sizes.height, duration=duration_end * f)
             anim.start(a2.image)
+            anim = Animation(x=sizes.width / 3 + 120, y=sizes.height, duration=duration_end * f)
             anim.start(a3.image)
+            anim = Animation(x=sizes.width / 3 + 70, y=sizes.height, duration=duration_end * f)
             anim.start(a4.image)
 
         animal.image.source = 'images/animations/fleurs/papillon_rouge_butine.zip'
@@ -780,8 +811,8 @@ def init_category_struct(frame):
         anim2 += Animation(x=animal.image.x - 35, y=animal.image.y + 10, duration=duration_end * f)
         anim3 = Animation(x=animal.image.x + 5, y=animal.image.y + 5, duration=duration_end * f)
         anim3 += Animation(x=animal.image.x - 10, y=animal.image.y - 15, duration=duration_end * f)
-        anim4 = Animation(x=animal.image.x + 15, y=animal.image.y - 5, duration=duration_end * f)
-        anim4 += Animation(x=animal.image.x - 5, y=animal.image.y, duration=duration_end * f)
+        anim4 = Animation(x=animal.image.x + 5, y=animal.image.y - 25, duration=duration_end * f)
+        anim4 += Animation(x=animal.image.x - 15, y=animal.image.y - 10, duration=duration_end * f)
 
         anim.bind(on_complete=forward)
         anim.start(animal.image)
