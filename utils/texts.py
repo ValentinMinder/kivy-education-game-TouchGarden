@@ -66,16 +66,17 @@ txt_main_title_en = Text(
     de="My garden could be a wildlife corridor!")
 
 txt_watermark_heig = Text(
-    fr="Projet de service civil réalisé en parternariat entre ProNatura et l'HEIG-VD Ecole d'Ingénieurs Vaud.\n Retrouvez ce jeu dans l'exposition à Champ-Pittet du 18 mars au 1er novembre 2017 et 2018.",
-    de="TODE HEIG-VD -> HEIG-VD Fachhochschule Waadt",
-    en="Swiss civilian service project within a partnership bewteen ProNatura and HEIG-VD School of Engineering Vaud. \n Find this game in the annual exhibition of Champ-Pittet, Yverdon, Switzerland, from March 18th to November 1st 2017 and 2018.")
+    fr="Projet de service civil réalisé en partenariat entre Pro Natura et l'HEIG-VD (IICT). Retrouvez ce jeu dans l'exposition du Centre Pro Natura de Champ-Pittet du 18 mars au 1er novembre 2017.",
+    de="Ein Projekt des Zivildienstes, in Zusammenarbeit mit Pro Natura und der Fachhochschule HEIG-VD. Das Spiel ist im Ausstellung im Champ-Pittet vom 15. März bis am 1. November 2017 vorzufinden.",
+    en="Swiss civilian project in a partnership bewteen Pro Natura and HEIG-VD School of Engineering. Find this game in the exhibition of Champ-Pittet, Yverdon, from March 18th to November 1st 2017.")
 
 # CATEGORIES and objects names
 
+# CATEGORIES TITLES
 txt_cat_water = Text(
-    fr="Plan d'eau",
-    de="de",
-    en="Body of water")
+    fr="Plans d'eau",
+    de="Gewässer",
+    en="Bodies of water")
 
 txt_cat_pond = Text(
     fr="Étang",
@@ -104,7 +105,7 @@ txt_cat_hedge_bad = Text(
 
 txt_cat_fence = Text(
     fr="Murs et barrières",
-    de="de",
+    de="Mauern und Absperrungen",
     en="Fences and walls")
 
 txt_cat_fence_space = Text(
@@ -118,9 +119,9 @@ txt_cat_fence_wall = Text(
     en="Concrete wall")
 
 txt_cat_floor = Text(
-    fr="Revêtements de terrasse",
-    de="de",
-    en="Patio's floor")
+    fr="Terrasse",
+    de="Terrasse",
+    en="Patios")
 
 txt_cat_floor_grass = Text(
     fr="Terrasse en pavés herbeux",
@@ -134,7 +135,7 @@ txt_cat_floor_stone = Text(
 
 txt_cat_shelter = Text(
     fr="Abris et cachettes",
-    de="de",
+    de="Unterschlüpfe und Verstecke",
     en="Shelters and hideouts")
 
 txt_cat_shelter_wood = Text(
@@ -149,7 +150,7 @@ txt_cat_shelter_flower = Text(
 
 txt_cat_animal = Text(
     fr="Animaux de compagnie",
-    de="de",
+    de="Haustiere",
     en="Animals / pets")
 
 txt_cat_animal_goat = Text(
@@ -164,7 +165,7 @@ txt_cat_animal_cat = Text(
 
 txt_cat_balcony_plants = Text(
     fr="Plantes au balcon",
-    de="de",
+    de="Balkonpflanzen",
     en="Plants at the balcony")
 
 txt_cat_balcony_herbs = Text(
@@ -184,9 +185,9 @@ txt_impressum = Text(
     de="Impressum")
 
 txt_impressum_full = \
-    "[b]Mon jardin peut être un corridor biologique[/b]\n" \
     "Jeu pédagogique et interactif d'éducation à l'environnement\n" \
-    "[i]Interactive serious game about environment education[/i]\n\n" \
+    "[i]Interaktives pädagogisches Spiel zur Umweltbildung[/i]\n" \
+    "[i]Interactive serious game about environmental education[/i]\n\n" \
     "[b]Mandataire[/b]: Centre Pro Natura de Champ-Pittet, Yverdon, Suisse\n" \
     "[b]Illustrations[/b]: Ariane Nicollier (Fabrica Collective), Lucas Oetlli\n" \
     "[b]Contenus et textes[/b]: Briséïs Castella, Layne Meinich\n" \
@@ -325,20 +326,20 @@ txt_interact_timeout = Text(
 
 txt_end_level1 = Text(
     color=color.green,
-    fr="[b]Bravo et félicitations[/b] \n [b]Vous avez obtenu plus de 3 points, votre jardin est un véritable corridor biologique![/b] Les animaux s’y sentent bien pour vivre, se déplacer, se reproduire, se nourrir, etc…",
-    de="[b]Herzlichen Glückwunsch ! [/b] \n [b]Sie haben mehr als 3 Punkte erreicht, Ihr Garten ist ein echter biologischer Korridor![/b] Die Tiere fühlen sich wohl bei Ihnen und können sich frei bewegen,  fortpflanzen, ernähren etc…",
+    fr="[b]Bravo et félicitations ![/b]\n\n[b]Vous avez obtenu plus de 3 points, votre jardin est un véritable corridor biologique![/b] Les animaux s’y sentent bien pour vivre, se déplacer, se reproduire, se nourrir, etc…",
+    de="[b]Herzlichen Glückwunsch ![/b]\n\n[b]Sie haben mehr als 3 Punkte erreicht, Ihr Garten ist ein echter biologischer Korridor![/b] Die Tiere fühlen sich wohl bei Ihnen und können sich frei bewegen,  fortpflanzen, ernähren etc…",
     en="TOEN")
 
 txt_end_level2 = Text(
     color=color.orange,
-    fr="[b]Bravo mais vous pouvez encore apporter quelques améliorations![/b] \n [b]Vous avez obtenu entre 0 et 3 points, votre jardin est peut-être un corridor biologique pour quelques animaux[/b], mais pour d’autres, il y aura des pièges!",
-    de="[b]Nicht schlecht, aber Sie können noch einige Verbesserungen anbringen! [/b] \n [b] Sie haben zwischen 0 und 3 Punkten erreicht, Ihr Garten kann einigen Tieren als biologischer  Korridor dienen[/b]. Für  andere jedoch birgt er Fallen!",
+    fr="[b]Bravo mais vous pouvez encore apporter quelques améliorations![/b]\n\n[b]Vous avez obtenu entre 0 et 3 points, votre jardin est peut-être un corridor biologique pour quelques animaux[/b], mais pour d’autres, il y aura des pièges!",
+    de="[b]Nicht schlecht, aber Sie können noch einige Verbesserungen anbringen! [/b]\n\n[b] Sie haben zwischen 0 und 3 Punkten erreicht, Ihr Garten kann einigen Tieren als biologischer  Korridor dienen[/b]. Für  andere jedoch birgt er Fallen!",
     en="TOEN")
 
 txt_end_level3 = Text(
     color=color.magenta,
-    fr="[b]C'est pas terrible… [/b] \n [b]Vous n’avez obtenu que des points négatifs, votre jardin n'est pas du tout un corridor biologique![/b] La plupart des animaux auront beaucoup de difficultés pour vivre, se déplacer, se reproduire et se nourrir chez vous.",
-    de="[b]Nicht gerade umwerfend… [/b] \n [b] Sie haben nur Negativpunkte erhalten, Ihr Garten ist überhaupt kein biologischer Korridor![/b] Die meisten Tierarten werde grosse Schwierigkeiten haben, sich bei Ihnen frei  zu bewegen,  fortzupflanzen und zu ernähren.",
+    fr="[b]C'est pas terrible… [/b]\n\n[b]Vous n’avez obtenu que des points négatifs, votre jardin n'est pas du tout un corridor biologique![/b]\n La plupart des animaux auront beaucoup de difficultés pour vivre, se déplacer, se reproduire et se nourrir chez vous.",
+    de="[b]Nicht gerade umwerfend… [/b]\n\n[b] Sie haben nur Negativpunkte erhalten, Ihr Garten ist überhaupt kein biologischer Korridor![/b]\n Die meisten Tierarten werde grosse Schwierigkeiten haben, sich bei Ihnen frei  zu bewegen,  fortzupflanzen und zu ernähren.",
     en="TOEN")
 
 txt_end_play = Text(

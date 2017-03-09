@@ -47,6 +47,10 @@ def init_category_struct(frame):
     duration_start = 3
     duration_end = 4
 
+    def rand_elem():
+        # bad element has 2/4 chances to be on top
+        return random.choice([True, False, False, False])
+
     def anim_setup_p1():
         animal = ImageWrap(
             pos=(0, sizes.height * 0.4),
@@ -125,7 +129,7 @@ def init_category_struct(frame):
         return wait
 
     p1 = ElementScatter(name=txt.txt_cat_pond,
-                        first=random.choice([True, False]),
+                        first=rand_elem(),
                         source='images/non_animes/etang.png',
                         txt_info=txt.txt_info_pond,
                         info_img="images/scenery/transparency.png",
@@ -197,7 +201,7 @@ def init_category_struct(frame):
         return anim
 
     p2 = ElementScatter(name=txt.txt_cat_hedge_good,
-                        first=random.choice([True, False]),
+                        first=rand_elem(),
                         source='images/non_animes/haie_diverses_especes.png',
                         txt_info=txt.txt_info_hedge_good,
                         info_img="images/scenery/transparency.png", #TODO: info_img="images/photos/haies.JPG",
@@ -341,7 +345,7 @@ def init_category_struct(frame):
         return anim_end_p3(animal)
 
     p3 = ElementScatter(name=txt.txt_cat_fence_space,
-                        first=random.choice([True, False]),
+                        first=rand_elem(),
                         source='images/non_animes/barrieres_espacee.png',
                         txt_info=txt.txt_info_fence_space,
                         info_img="images/photos/clotures.png",
@@ -350,7 +354,7 @@ def init_category_struct(frame):
                         anim_start=anim_start_p3,
                         anim_end=anim_end_p3)
     n3a = ElementScatter(name=txt.txt_cat_fence_wall,
-                         first=random.choice([True, False]),
+                         first=rand_elem(),
                          positive=False,
                          positive_ref=p3,
                          source='images/non_animes/barriere_beton.png',
@@ -424,7 +428,7 @@ def init_category_struct(frame):
         return wait
 
     p4 = ElementScatter(name=txt.txt_cat_floor_grass,
-                        first=random.choice([True, False]),
+                        first=rand_elem(),
                         source='images/non_animes/terrasse_pave_drainant.png',
                         txt_info=txt.txt_info_floor_grass,
                         info_img="images/photos/terrasses.jpg",
@@ -538,7 +542,7 @@ def init_category_struct(frame):
         return wait
 
     p5 = ElementScatter(name=txt.txt_cat_shelter_wood,
-                        first=random.choice([True, False]),
+                        first=rand_elem(),
                         source='images/non_animes/tas_de_bois.png',
                         txt_info=txt.txt_info_shelter_wood,
                         info_img="images/photos/bois.jpg",
@@ -709,7 +713,7 @@ def init_category_struct(frame):
         return anim_end_n6_internal(animal, True)
 
     p6 = ElementScatter(name=txt.txt_cat_animal_goat,
-                        first=random.choice([True, False]),
+                        first=rand_elem(),
                         source='images/animations/animaux/chevre.zip',
                         txt_info=txt.txt_info_animal_goat,
                         info_img='images/photos/chevres.jpg',
@@ -833,7 +837,7 @@ def init_category_struct(frame):
         return anim
 
     p7 = ElementScatter(name=txt.txt_cat_balcony_herbs,
-                        first=random.choice([True, False]),
+                        first=rand_elem(),
                         source='images/non_animes/bac_herbes_aromatiques.png',
                         txt_info=txt.txt_info_balcony_herbs,
                         info_img='images/photos/haies.jpg', #info_img="images/scenery/transparency.png",

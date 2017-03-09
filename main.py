@@ -222,7 +222,7 @@ class StartScreen(BackKeyScreen):
 
         self.add_widget(ButtonImageText(
             on_press=self.french,
-            pos=(sizes.width_left_margin + (sizes.width_game - 2 * 223) / 5 * 2, 330),
+            pos=(sizes.width_left_margin + (sizes.width_game - 2 * 223) / 5 * 2, 260),
             size=(200, 97),
             src_back='images/scenery/fenetre_infos_200x97px_green.png',
             size_img=(23, 30),
@@ -234,7 +234,7 @@ class StartScreen(BackKeyScreen):
 
         self.add_widget(ButtonImageText(
             on_press=self.german,
-            pos=(sizes.width_left_margin + (sizes.width_game - 2 * 223) / 5 * 3 + 223, 330),
+            pos=(sizes.width_left_margin + (sizes.width_game - 2 * 223) / 5 * 3 + 223, 260),
             size=(200, 97),
             src_back='images/scenery/fenetre_infos_200x97px_white.png',
             size_img=(23, 30),
@@ -722,7 +722,7 @@ class FloatGameScreen(BackKeyScreen):
                                source='images/scenery/nav_fond_gauche_200x768px.png'))
         f.add_widget(ImageWrap(pos=(sizes.width_left_margin, sizes.height_ref),
                                size=(sizes.width_game, sizes.height),
-                               source='images/fond/fond_jardin_v6.png'))
+                               source='images/fond/fond_jardin_v5-4.png'))
         f.add_widget(ImageWrap(pos=(sizes.width_right_game, sizes.height_ref),
                                size=(sizes.width_right_margin, sizes.height),
                                source='images/scenery/nav_fond_droite_142x768px.png'))
@@ -802,7 +802,7 @@ class FloatGameScreen(BackKeyScreen):
                 sizes.pos_c2 = (sizes.pos_c2[0],sizes.pos_c2[1] + sizes.height_button_small)
                 sizes.event_c2 = (sizes.event_c2[0], sizes.event_c2[1] + sizes.height_button_small)
 
-            watermark.label.background_color = 1, 1, 1, 0.7
+            watermark.label.background_color = 1, 1, 1, 0.5
 
 
     # create and add all dynamic UI elements (some movable, some resizabée, some text or image changeable, no background, some scenery)
@@ -963,18 +963,16 @@ class FloatGameScreen(BackKeyScreen):
                 txt_score.color = color.green
                 txt_point.color = color.green
             watermark = LabelWrap(
-                #  TODO: to have all screen: remove -+ sizes.size_c2[0] in 2 next lines
-                pos=(sizes.width_left_margin + sizes.size_c2[0], sizes.pos_c2[1]),
-                size=(sizes.width_game - sizes.size_c2[0], sizes.height_button_small * 2),
+                pos=(sizes.width_left_margin, sizes.pos_c2[1]),
+                size=(sizes.width_game, sizes.height_button_small * 2),
                 text=txt,
                 font_size=sizes.font_size_large
             )
 
             self.speach.label.text = txt_score.get() + str(self.points) + txt_point.get()
 
-
             self.frame.add_widget(watermark)
-            watermark.label.background_color = 1, 1, 1, 0.5
+            watermark.label.background_color = 1, 1, 1, 0.25
         else:
             category = self.current_category
 
