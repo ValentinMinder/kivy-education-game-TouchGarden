@@ -5,8 +5,8 @@ from kivy.uix.scatter import Scatter
 import random
 
 from utils import texts as txt
-import sizes
-from gui import ImageWrap
+from utils import sizes
+from utils.gui import ImageWrap
 
 
 class Category(object):

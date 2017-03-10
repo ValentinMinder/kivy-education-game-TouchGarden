@@ -393,8 +393,6 @@ class StatsScreen(BackKeyScreen):
         add_star(self.star_de)
 
     def check(self, btn):
-        print btn
-        print btn.id
         nb = int(btn.id)
         self.rate = nb
 
@@ -427,9 +425,7 @@ class StatsScreen(BackKeyScreen):
         lang.current = lang.de
         self.forward()
 
-    def forward_(self, a, b):
-        print a
-        print b
+    def forward_(self, *any):
         self.forward()
 
     def forward(self):
@@ -597,8 +593,8 @@ class TouchGardenApp(App):
 
         # set starting screen
         #self.manager.switch_to(MainMenuScreen(name="MainMenu"))
-	#start the game already
-	self.manager.switch_to(StartScreen(name="StartScreen"))
+        #start the game already
+        self.manager.switch_to(StartScreen(name="StartScreen"))
         return self.manager
 
 
@@ -647,8 +643,6 @@ def win_generate(text_title, size=(sizes.win_width + 26, sizes.win_height + 23))
     im = ImageWrap(pos=(win_dx(padding), win_dy(padding)),
                    size=(sizes.win_width - 2 * padding, (sizes.win_height - sizes.win_header) / 2.4),
                    source="images/scenery/transparency.png")
-    print sizes.win_width
-    print ((sizes.win_height - sizes.win_header) / 2)
     window_frame.image = im.image
     window_frame.add_widget(im)
 
@@ -670,7 +664,7 @@ def win_generate(text_title, size=(sizes.win_width + 26, sizes.win_height + 23))
     def add_dots(*kw):
         anchors = window_frame.label.label.anchors
         if window_frame.try_again & (anchors == {}):
-            print 'try again'
+            # should 'try again' to add anchors
             window_frame.try_again = False
             Clock.schedule_once(add_dots, 1/4)
         for key in anchors:
@@ -927,7 +921,7 @@ class FloatGameScreen(BackKeyScreen):
         if (self.button_enabled & self.button_cat_enabled):
             if (self.categorynb < sizes.category_number):
                 self.speach.label.text = txt_game_move_pass.get()
-                self.anim_points(0, (0, 0), self.none)
+                self.anim_points(0, 0, 0, self.none)
                 self.category_clean()
                 self.category_next(touch)
             else:
@@ -997,7 +991,7 @@ class FloatGameScreen(BackKeyScreen):
 
     # animates a smile/a points mark towards scale from the happening area
     # todo: choose if points or smiles
-    def anim_points(self, points, (x_start, y_start), fct_next):
+    def anim_points(self, points, x_start, y_start, fct_next):
         size = 20
         size_final = 200
         x_final = sizes.width - size_final
@@ -1123,7 +1117,7 @@ class FloatGameScreen(BackKeyScreen):
 
     def stop_game(self, touch):
         if (self.button_enabled):
-            print 'TODO: ask confirmation to reset/stop game'
+            # 'TODO: ask confirmation to reset/stop game'
             if self.frame.cat_reverse:
                 self.frame.cat.flip()
             self.back()
@@ -1207,7 +1201,7 @@ class FloatGameScreen(BackKeyScreen):
                 anim_end = element.anim_end(animal)
             anim_end.bind(on_complete=after)
             anim_end.start(animal.image)
-            self.anim_points(points, element.event_pos, fct_next=self.none)
+            self.anim_points(points, element.event_pos[1], element.event_pos[1], fct_next=self.none)
 
         anim_start = element.anim_start()
         anim_start.bind(on_complete=after_start)
