@@ -21,9 +21,23 @@ sudo apt-get --yes install python-kivy
 cd ~/Desktop
 git clone https://github.com/ValentinMinder/TouchGarden garden
 
-# copy update and start files on desktop for easy access
-cp garden/update.sh update.sh
+# copy start file on desktop for easy access
 cp garden/start.sh start.sh
-chmod u+x update.sh
 chmod u+x start.sh
+chmod u+x garden/update.sh
 
+# copy auto-start script in place (home folder, name '.gnomerc' and executable)
+cp garden/autostart.sh ~/.gnomerc
+chmod u+x ~/gnomerc
+
+# should set delay of screen disabling to 'never' (no delay) 
+gsettings set org.gnome.desktop.session idle-delay 0
+# disable screen locking
+gsettings set org.gnome.desktop.screensaver lock-enabled  false
+# no lock
+gsettings set org.gnome.desktop.screensaver lock-delay 0
+#disable screen diming
+gsettings set org.gnome.settings-daemon.plugins.power idle-dim false
+
+# change background image
+gsettings set org.gnome.desktop.background picture-uri file:///home/touchgarden/Desktop/garden/images/fond/wallpaper.png
