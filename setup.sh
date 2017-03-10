@@ -30,6 +30,7 @@ chmod u+x garden/update.sh
 cp garden/autostart.sh ~/.gnomerc
 chmod u+x ~/gnomerc
 
+# THESE LINES ARE ALSO IN UPDATE.SH
 # should set delay of screen disabling to 'never' (no delay) 
 gsettings set org.gnome.desktop.session idle-delay 0
 # disable screen locking
