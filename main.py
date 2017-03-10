@@ -1,7 +1,11 @@
 # coding=utf-8
-# must be imported first to prevent issues
+# UTF-8 MUST be imported FIRST to prevent issues
+
+#todo: not useful ?
+#from PIL import Image
+
 import random
-from PIL import Image
+
 from kivy.animation import Animation
 from kivy.config import Config
 from kivy.core.image import Image
@@ -22,7 +26,7 @@ from utils.quiz import Quiz
 from utils.category import ElementScatter, init_category_struct
 from utils.gui import ImageWrap, ButtonImage, ButtonImageText, ButtonImageChoices, LabelWrap
 
-# Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
+Config.set('graphics', 'fullscreen', 'auto')  # set to 'auto' for production
 Config.set('graphics', 'width', sizes.width)  # 1366
 Config.set('graphics', 'height', sizes.height)  # 768
 
@@ -168,7 +172,7 @@ class MainMenuScreen(KeyScreen):
 
 
 # start screen to choose language and see credits
-class StartScreen(BackKeyScreen):
+class StartScreen(KeyScreen):
     def __init__(self, **kwargs):
         super(StartScreen, self).__init__(**kwargs)
 
@@ -592,7 +596,9 @@ class TouchGardenApp(App):
             music.play()
 
         # set starting screen
-        self.manager.switch_to(MainMenuScreen(name="MainMenu"))
+        #self.manager.switch_to(MainMenuScreen(name="MainMenu"))
+	#start the game already
+	self.manager.switch_to(StartScreen(name="StartScreen"))
         return self.manager
 
 
