@@ -99,8 +99,8 @@ event_c31alt = (width_left_margin + 239 - 58, 604 - 3)
 event_c32alt = (width_left_margin + 239 - 58 - 15, 604 - 55 - 30)
 
 #floor
-size_c4 = (562,273)
-pos_c4 = (width_left_margin + 463, 360)
+size_c4 = (560,272)
+pos_c4 = (width_left_margin + 465, 361)
 event_c4bef = event(pos_c4, size_c4)
 event_c4_step1 = (event_c4bef[0] - 200 + 200 + 70, event_c4bef[1] + 20 - 180)
 event_c4_step2 = (event_c4bef[0] - 200 - 20, event_c4bef[1] + 20)

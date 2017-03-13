@@ -67,7 +67,7 @@ txt_main_title_en = Text(
 
 txt_watermark_heig = Text(
     fr="Projet de service civil réalisé en partenariat entre Pro Natura et l'HEIG-VD (IICT). Retrouvez ce jeu dans l'exposition du Centre Pro Natura de Champ-Pittet du 18 mars au 1er novembre 2017.",
-    de="Ein Projekt des Zivildienstes, in Zusammenarbeit mit Pro Natura und der Fachhochschule HEIG-VD. Das Spiel ist im Ausstellung im Champ-Pittet vom 15. März bis am 1. November 2017 vorzufinden.",
+    de="Ein Projekt des Zivildienstes, in Zusammenarbeit mit Pro Natura und der Fachhochschule HEIG-VD. Das Spiel ist im Ausstellung im Champ-Pittet vom 18. März bis am 1. November 2017 vorzufinden.",
     en="Swiss civilian project in a partnership bewteen Pro Natura and HEIG-VD School of Engineering. Find this game in the exhibition of Champ-Pittet, Yverdon, from March 18th to November 1st 2017.")
 
 # CATEGORIES and objects names
@@ -185,21 +185,21 @@ txt_impressum = Text(
     de="Impressum")
 
 txt_impressum_full = \
-    "Jeu pédagogique et interactif d'éducation à l'environnement\n" \
-    "[i]Interaktives pädagogisches Spiel zur Umweltbildung[/i]\n" \
+    "[b]Jeu pédagogique et interactif d'éducation à l'environnement[/b]\n" \
+    "Interaktives pädagogisches Spiel zur Umweltausbildung\n" \
     "[i]Interactive serious game about environmental education[/i]\n\n" \
-    "[b]Mandataire[/b]: Centre Pro Natura de Champ-Pittet, Yverdon, Suisse\n" \
-    "[b]Illustrations[/b]: Ariane Nicollier (Fabrica Collective), Lucas Oetlli\n" \
-    "[b]Contenus et textes[/b]: Briséïs Castella, Layne Meinich\n" \
-    "[b]Traductions[/b]: Alena Wehrli, Mira Maeder\n" \
-    "[b]Relectures[/b]: Florence Kupferschmid, Marie Bovay, Andrea Strässle, Lucas Oettli\n" \
+    "[b]Mandataire[/b]: Centre Pro Natura de Champ-Pittet, Yverdon-les-Bains, Suisse\n" \
+    "[b]Illustrations[/b]: Ariane Nicollier / Fabrica Collective, Lucas Oettli\n" \
     "[b]Conception graphique[/b]: Marc-Olivier Schatz\n" \
-    "[b]Développement et programmation[/b]: Valentin Minder\n" \
-    "[b]Parainage[/b]: IICT Institute for Information and Communication Technologies (HEIG-VD)\n" \
-    "[b]Ecrans tactiles[/b]: Haute Ecole d'Ingénierie et de Gestion Vaud (HEIG-VD)\n" \
-    "Haute Ecole Spécialisée de Suisse Occidentale(HES-SO)\n" \
+    "[b]Contenus et textes[/b]: Briséïs Castella, Layne Meinich\n" \
+    "[b]Traductions [i]deutsch[/i][/b]: Alena Wehrli, Florence Kupferschmid, Mira Maeder\n" \
+    "[b]Relectures[/b]: Marie Bovay, Andrea Strässle, Lucas Oettli, Alan Regley\n" \
+    "[b]Développement informatique et programmation[/b]: Valentin Minder\n" \
+    "[b]Partenaire[/b]: Institute for Information and Communication Technologies ([b]IICT[/b])\n" \
+    "Haute Ecole d'Ingénierie et de Gestion Vaud ([b]HEIG-VD[/b])\n" \
+    "Haute Ecole Spécialisée de Suisse Occidentale ([b]HES-SO[/b])\n" \
     "[i]University of Applied Sciences and Arts Western Switzerland[/i]\n\n" \
-    "[b]Copyright[/b] ProNatura 2016-2018\n"
+    "[b]Copyright (C)[/b] Pro Natura 2016-2018\n"
 
 txt_scenery_notxt = Text(
     fr="",
@@ -254,17 +254,26 @@ txt_recover_correct = Text(
 txt_tutorial_welcome_p0 = Text(
     fr="Bienvenue dans mon jardin !",
     de="Herzlich Willkommen in meinem Garten!",
-    en="Welcome in  my garden!")
-txt_dot = Text(fr="  •  ", de = "  •  ")
+    en="Welcome in my garden!")
+txt_dot = Text(fr="  •  ", de="  •  ")
 txt_tutorial_welcome_p1 = Text(
-    fr="[b][size=25]Bienvenue dans mon jardin, le but de ce jeu est de m'aider à l'aménager![/size][/b]\n\n\n" \
-       "[anchor=dot000x]Dans l'aménagement idéal, [b]mon jardin peut être un corridor biologique[/b], c'est à dire un endroit où les divers animaux se sentent bien pour vivre, se déplacer, se reproduire, se nourrir, entre autres.\n" \
-       "[anchor=dot000y]Pour chaque catégorie d'objet, il y a [b]le choix entre deux objets[/b] dans le menu de gauche. Par glisser-déposer, place l'objet dans le jardin sur la zone clignotante prévue pour l'accueillir.\n" \
-       "[anchor=dot000z]Une fois l'objet correctement placé, une animation avec un animal va apparaitre, et un point sera gagné ou perdu.\n" \
-       "[anchor=dot000w]Dans le cas d'un mauvais choix, il est encore possible de changer d'avis ou tenter d'améliorer le choix.\n" \
-       "[anchor=dot000u]Dans tous les cas, on peut [b]accéder à plus d'informations et des explications[/b], afin de comprendre pourquoi tel objet est utile ou néfaste aux mouvements des animaux.",
-    de="TODE",
-    en="The goal of the game is to help me set up my backyard layout, like in a simple garden-version of 'simcity'.")
+    fr="\n\n[b]BUT DU JEU[/b]\n" \
+       "Aménager des corridors biologiques dans son jardin.\n\n\n" \
+       "[b]DEROULEMENT DU JEU[/b]\n" \
+       "[anchor=dot000x]Dans la colonne de gauche, une série d’objets pour aménager le jardin apparaissent.\n" \
+       "[anchor=dot000y]Choisir un objet, le glisser et le déposer dans le jardin.\n" \
+       "[anchor=dot000z]Chaque bon choix rapporte des points. Chaque mauvais choix enlève des points. Plus le score sera élevé, plus le jardin sera accueillant pour la faune qui le traverse.\n\n\n" \
+       "[b]CHOIX STRATEGIQUE[/b]\n" \
+       "On apprend en faisant des erreurs ! Il est possible de corriger les mauvaix choix et d’améliorer son score.\n",
+    de="\n\n[b]ZIEL DES SPIELS[/b]\n" \
+       "Gestalten eines biologischen Korridors im eigenen Garten\n\n" \
+       "[b]ABLAUF DES SPIELS[/b]\n" \
+       "[anchor=dot000x]In der linken Kolonne erscheint eine Auswahl von Objekten, mit denen der Garten eingerichtet werden kann.\n" \
+       "[anchor=dot000y]Ein Objekt aussuchen, in den Garten ziehen und positionieren.\n" \
+       "[anchor=dot000z]Jede gute Wahl bringt Punkte ein. Bei jeder schlechten Wahl werdent Punkte abgezogen. Je höher die Punktzahl, desto einladender ist der Garten für die Wildtiere, die ihn durchqueren.\n\n" \
+       "[b]STRATEGIE[/b]\n" \
+       "Aus Fehlern lernt man ! Eine schlechte Wahl kann korrigiert und die Punktzahl verbessert werden.",
+    en="The goal of the game is to help me set up my backyard layout.")
 
 txt_tutorial_play = Text(
     color=color.white,

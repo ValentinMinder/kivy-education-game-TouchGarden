@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# linux computers are setup with admin username:touchgarden and password: touchgarden
+# Ubuntu 16.04.2 LTS Long Term Support is installed and supported until April 2021
+# run this script with 'sh setup.sh' (sudo admin password is then asked, don't do 'sudo su' as this change to root user, and so things needs to be done as main touchgarden user)
+
 # SETUP file to run only ONCE!
 # update.sh is then created and run this one just to update the app
 # from terminal: 'sh update.sh'
@@ -28,7 +32,7 @@ chmod u+x garden/update.sh
 
 # copy auto-start script in place (home folder, name '.gnomerc' and executable)
 cp garden/autostart.sh ~/.gnomerc
-chmod u+x ~/gnomerc
+chmod u+x ~/.gnomerc
 
 # THESE LINES ARE ALSO IN UPDATE.SH
 # should set delay of screen disabling to 'never' (no delay) 
@@ -42,3 +46,29 @@ gsettings set org.gnome.settings-daemon.plugins.power idle-dim false
 
 # change background image
 gsettings set org.gnome.desktop.background picture-uri file:///home/touchgarden/Desktop/garden/images/fond/wallpaper.png
+
+# TODO: setting up rtcwake and cron AS ROOT USER (for automated shutdown and restart), execute:
+## sudo -su
+## crontab -e
+# choose nano and add the following line with ##
+
+# everyday at 17:45 shutdown and programm restart at 9:45 the next day (16h later)
+# min hour day-of-month month day-of-week(0-6) command
+# every day from march-october, schedule restart on tomorrow at 9:45 (16 * 3600)
+## 45 17 * 3-10 * sudo killall elousbd & sudo rtcwake -m off -s 57600
+# every 1st of November, schedule a restart 4 month later (4 * 31 * 3600)
+## 45 17 1 11 * sudo killall elousbd & sudo rtcwake -m off -s 10713600
+
+# TODO: in file manager (nautilus), Edit > Preferences > Behavior > Single click to activate items + run executable files
+
+# TODO: install driver from archive SW602479_Elo_Linux_ST_USB_Driver_v4.3.1_x86_64.zip
+# follow guidelines at Elo-Linux-ST-USB-Driver-v4.3.1_Installation-Instructions.txt
+
+# to re-calibrate, execute the following
+# cd /etc/opt/elo-usb
+# sudo ./elova --nvram
+
+# to disable beep sound, execute the following
+# cd /etc/opt/elo-usb
+# sudo ./cplcmd
+# then type 6, enter, y, enter, 0, enter

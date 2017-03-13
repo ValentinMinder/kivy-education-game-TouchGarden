@@ -722,7 +722,7 @@ class FloatGameScreen(BackKeyScreen):
                                source='images/scenery/nav_fond_gauche_200x768px.png'))
         f.add_widget(ImageWrap(pos=(sizes.width_left_margin, sizes.height_ref),
                                size=(sizes.width_game, sizes.height),
-                               source='images/fond/fond_jardin_v5-4.png'))
+                               source='images/fond/fond_jardin_v7a.png'))
         f.add_widget(ImageWrap(pos=(sizes.width_right_game, sizes.height_ref),
                                size=(sizes.width_right_margin, sizes.height),
                                source='images/scenery/nav_fond_droite_142x768px.png'))
@@ -1024,7 +1024,7 @@ class FloatGameScreen(BackKeyScreen):
         anim_points.start(points_image.image)
 
     def start_game_tuto(self):
-        window_frame = win_generate(text_title=txt.txt_main_title) #todo txt.txt_tutorial_welcome_p0
+        window_frame = win_generate(text_title=txt.txt_tutorial_welcome_p0)
 
         def on_press(screen):
             self.frame.remove_widget(window_frame)
