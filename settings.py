@@ -1,7 +1,6 @@
 # registering fonts, as suggested by
 # http://cheparev.com/kivy-connecting-font/
 # https://github.com/eviltnan/kivy-font-example
-KIVY_DEFAULT_FONT = "CorporativeSans"
 
 KIVY_FONTS = [
     {
@@ -33,4 +32,7 @@ KIVY_FONTS = [
         "fn_bolditalic": "fonts/CorporativeSans/CorporativeSans-BoldItalic.otf",
     },
 ]
+
+# this is used everywhere as default (and Label class uses this default)
+KIVY_DEFAULT_FONT = "CorporativeSans"
 

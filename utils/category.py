@@ -73,7 +73,7 @@ def init_category_struct(frame):
                           anim_delay=0.1)
         frame.add_widget(heart)
 
-        def after(a, i):
+        def after(*any):
             animal.static.image.source = 'images/non_animes/etang_final.png'
             animal.static.image.anim_loop = 0
             frame.remove_widget(heart)

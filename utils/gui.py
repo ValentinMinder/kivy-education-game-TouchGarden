@@ -41,7 +41,7 @@ class ImageFlip(Image):
         self.texture.flip_horizontal()
 
     #react to texture changes, eg. to flip the image (only when needed
-    def on_texture(self, *args):
+    def on_texture(self, *any):
         if (self.should_flip):
             if (self.texture.tex_coords == self.tex_ref):
                 self.texture.flip_horizontal()
@@ -120,6 +120,7 @@ class LabelWrap(Widget):
         if (self.bold):
             self.label.text = "[b]" + self.label.text + "[/b]"
 
-    def update_cat(self, current_cat):
-        self.label.text = self.text.get() + " " + str(current_cat) + "/" + str(sizes.gauge_number + 1)
+    # update the text for category x/y (warning: categories start at 0)
+    def update_cat(self, nb_current_category):
+        self.label.text = self.text.get() + " " + str(nb_current_category + 1) + "/" + str(sizes.gauge_number + 1)
         self.bolden()

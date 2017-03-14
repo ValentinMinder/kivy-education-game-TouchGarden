@@ -48,6 +48,8 @@ class Text:
         }
         return self.color + switch.get(lang.current)  # + color.end
 
+txt_main_title_short = "TouchGarden"
+
 txt_main_title = Text(
     fr="Mon jardin peut être un corridor biologique!",
     de="Mein Garten kann ein Wildtierkorridor sein!",
@@ -282,10 +284,6 @@ txt_tutorial_play = Text(
     en="Start")
 
 # INTERACTIONS
-
-txt_start_fr = "[b] DEMARRER LE JEU EN FRANCAIS [/b]"
-txt_start_de = "[b] SPIEL AUF DEUTSCH STARTEN[/b]"
-txt_start_en = "[b] START GAME IN ENGLISH [/b]"
 
 txt_interact_problems = Text(
     color=color.white,

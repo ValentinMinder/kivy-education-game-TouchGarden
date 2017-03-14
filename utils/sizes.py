@@ -34,6 +34,13 @@ speach_width = 200 - 8
 speach_pos = (width_right_game - speach_width - speach_margin, height - speach_height - speach_margin)
 speach_pos
 
+# font size of text
+font_size_default= 18
+font_size_large = 22
+font_size_subtitle = 24
+font_size_title = 34
+font_size_win = font_size_large
+
 # static UI
 table_pos = (width_left_margin + 400, height_ref + 585)
 
@@ -69,8 +76,19 @@ def cursor_pos_y(step):
     return gauge_bottom_start + gauge_height(step) - cursor_height/2.0
 
 category_height = 23
-category_width = 188
+category_width = 188.0
 category_number = 7.0
+
+#remaining size is spread over the 2 elements
+left_margin_elements = (height_left_first - 2 * height_title - width_left_elements - height_button_small - border_small - category_height) / 2
+height_left_second = height_left_first_desc - width_left_elements - left_margin_elements
+height_left_second_desc = height_left_second - height_title
+
+def category_width_progress (step):
+    return step * category_width / category_number
+
+
+# EVENTS AND ANIMATIONS
 
 def event(pos, size):
     return (pos[0] + (size[0] / 2), pos[1] + (size[1] / 2))
@@ -116,7 +134,6 @@ event_c5 = event(pos_c5, size_c5)
 size_c6 = (165, 93) # eating goats, (137, 88) #goats, cats: (121,75)
 size_c6_cat = (121,90) # (102, 90) cats walking, (121, 75) cats couches
 pos_c6 = (width_left_margin + 800, 177)
-event_c6bfe = event(pos_c6, size_c6)
 event_c6 = (width_left_margin + 505 - 28 - 7, pos_c6[1])
 
 #flowers (balcony)
@@ -124,21 +141,9 @@ size_c7 = (58,65)
 pos_c7 = (width_left_margin + 656, 646)
 event_c7 = event(pos_c7, size_c7)
 
-#remaining size is spread over the 2 elements
-left_margin_elements = (height_left_first - 2 * height_title - width_left_elements - height_button_small - border_small - category_height) / 2
-height_left_second = height_left_first_desc - width_left_elements - left_margin_elements
-height_left_second_desc = height_left_second - height_title
 
-def category_width_progress (step):
-    return step * category_width / category_number
+# POPUP WINDOW
 
-font_size_default= 18
-font_size_large = 22
-font_size_subtitle = 24
-font_size_title = 34
-font_size_win = font_size_large
-
-#negative_window
 win_dx = 262
 win_dy = 82
 win_width = 897
