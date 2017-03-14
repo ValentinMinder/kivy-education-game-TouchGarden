@@ -461,14 +461,14 @@ txt_info_pond = Text(
        "[anchor=dot102][b]Ne pas y installer d’animaux[/b], ils viendront très vite tous seuls. \n" \
        "[anchor=dot103][b]Ne pas introduire de poissons ou de tortues[/b], ils mangeraient les têtards et les larves de libellules.\n" \
        "[anchor=dot104][b]Ne pas construire un étang si le jardin est entouré de routes.[/b]\n" \
-       "[anchor=dot105]Plus d’infos dans la [b]brochure Pro Natura « Des amphibiens près de chez vous »[anchor=end].[/b]",
+       "[anchor=dot105]Plus d’infos dans la [b]brochure Pro Natura « Des amphibiens près de chez vous[anchor=end] »[/b]",
     de="[anchor=dot100]Weiher sind [b]wichtige Elemente von Vernetzungsachsen.[/b]\n" \
        "[anchor=dot101]Zahlreiche Amphibien und viele aquatische Insekten wie Libellenlarven verbringen darin einen Teil ihres Lebens.\n\n" \
        + txt_info_warning_de + "\n" +
        "[anchor=dot102][b]Setzen Sie keine Tiere in den Weiher um[/b] – sie werden rasch von selbst zuwandern.\n" \
        "[anchor=dot103][b]Setzen Sie keine Fische oder Schildkröten in den Weiher[/b], denn sie fressen die Kaulquappen und Libellenlarven.\n" \
        "[anchor=dot104][b]Bauen Sie keinen Weiher, wenn Ihr Garten von Strassen umgeben ist.[/b]\n" \
-       "[anchor=dot105]Weitere Infos im Pro Natura Faltblatt [b]«Amphibien rund ums Haus»[anchor=end].[/b]",
+       "[anchor=dot105]Weitere Infos im Pro Natura Faltblatt [b]„Amphibien rund ums Haus[anchor=end]“[/b]",
     en="Pond")
 
 txt_info_pool = Text(
@@ -479,7 +479,7 @@ txt_info_pool = Text(
        "[anchor=dot102][b]Installer une petite rampe[/b] qui permettra aux animaux de ressortir de l’eau sans difficulté.\n" \
        "[anchor=dot103][b]Veiller à éteindre l’éclairage de la piscine durant la nuit[/b] pour éviter un plongeon mortel à bon nombre d’insectes.\n" \
        "[anchor=dot104][b]Eviter de désinfecter la piscine avec du chlore.[/b] Les traitements par électrolyse ou à base de magnésium sont des alternatives moins nocives.\n" \
-       "[anchor=dot105]Plus d’infos dans la [b]Charte des jardins[/b] et dans la [b]brochure Pro Natura « Des amphibiens près de chez vous »[anchor=end].[/b]",
+       "[anchor=dot105]Plus d’infos dans la [b]Charte des jardins[/b] et dans la [b]brochure Pro Natura « Des amphibiens près de chez vous[anchor=end] »[/b]",
     de=txt_info_problems_de +
        "[anchor=dot100][b]Wenn Frösche, Igel oder Insekten in ein Schwimmbecken fallen, ertrinken sie[/b], weil sie an den senkrechten und glatten Wänden nicht mehr hochklettern können.\n" \
        "[anchor=dot101][b]Chloriertes Wasser ist für Amphibien sehr schädlich[/b], weil die Tiere auch über die Haut atmen.\n\n" \
@@ -487,7 +487,7 @@ txt_info_pool = Text(
        "[anchor=dot102][b]Bringen Sie eine kleine Rampe an[/b], über welche die Tiere problemlos aus dem Wasser steigen können.\n" \
        "[anchor=dot103][b]Schalten Sie die Poolbeleuchtung über Nacht aus[/b], damit die Insekten nicht haufenweise ertrinken.\n" \
        "[anchor=dot104][b]Desinfizieren Sie Ihr Schwimmbad möglichst nicht mit Chlor.[/b] Als weniger schädliche Alternativen bieten sich die Elektrolyse und die Wasseraufbereitung mit Magnesium an.\n" \
-       "[anchor=dot105]Weitere Infos in der [b]Garten-Charta[/b] und im Pro Natura Faltblatt [b]«Amphibien rund ums Haus»[anchor=end].[/b]",
+       "[anchor=dot105]Weitere Infos in der [b]Garten-Charta[/b] und im Pro Natura Faltblatt [b]„Amphibien rund ums Haus[anchor=end]“[/b]",
     en="Swimming pool")
 
 txt_info_hedge_good = Text(
@@ -504,7 +504,7 @@ txt_info_hedge_good = Text(
        "[anchor=dot103][b]Einheimische Hecken bieten einer grossen Zahl von Tieren Unterschlupf und Nahrung.[/b]\n" \
        "[anchor=dot104][b]Sie benötigen nicht viel Pflege.[/b]\n" \
        "[anchor=dot105][b]Sie bringen Farbe[/b] in den Garten und liefern köstliche Zutaten zur Herstellung von [b]Sirups und Konfitüren.[/b]\n" \
-       "[anchor=dot106]Weitere Infos in der [b]Garten-Charta[b] oder im Pro Natura Faltblatt [b]“Invasive Neophyten im Garten[anchor=end]»[/b]",
+       "[anchor=dot106]Weitere Infos in der [b]Garten-Charta[b] oder im Pro Natura Faltblatt [b]„Invasive Neophyten im Garten[anchor=end]“[/b]",
     en="Hedge of various native species")
 
 txt_info_hedge_bad = Text(
@@ -517,7 +517,7 @@ txt_info_hedge_bad = Text(
        + txt_info_solutions_fr +
        "[anchor=dot105][b]Remplacer votre haie de thuyas ou de laurelles par une haie indigène[/b] constituée d’espèces d’arbustes locaux. Elle offrira de la nourriture et des abris aux animaux ainsi que des [b]petits fruits ou fleurs pour fabriquer de délicieux sirops ou confitures.[/b] \n" \
        "[anchor=dot106][b]Faire quelques trous dans votre haie[/b], au niveau du sol, pour permettre à des animaux tels que les hérissons de se déplacer d’un jardin à l’autre. \n" \
-       "[anchor=dot107]Plus d’infos dans la [b]Charte des jardins[/b] ou dans la [b]brochure de Pro Natura Genève «Planter des haies indigènes[anchor=end].[/b]",
+       "[anchor=dot107]Plus d’infos dans la [b]Charte des jardins[/b] ou dans la [b]brochure de Pro Natura Genève «Planter des haies indigènes[anchor=end]»[/b]",
     de=txt_info_problems_de +
        "[anchor=dot100][b]Thuja und Kirschlorbeer sind asiatische Sträucher[/b], die nur für sehr wenige einheimische Tiere nützlich sind.\n" \
        "[anchor=dot101]Als grüne «Wände» schirmen sie zwar gut vor Strassen oder Nachbarn ab, [b]der Tieren bieten sie aber weder Nahrung noch Unterschlupf.[/b]\n" \
@@ -527,7 +527,7 @@ txt_info_hedge_bad = Text(
        + txt_info_solutions_de +
        "[anchor=dot105][b]Ersetzen Sie Ihre Thuja- oder Kirschlorbeerhecke durch eine einheimische Hecke[/b] aus Wildsträuchern aus der Region. Eine solche Hecke bietet den Tieren Nahrung und Unterschlupf und liefert [b]Beeren oder Blüten, aus denen sich feine Sirups und Konfitüren herstellen lassen.[/b]\n" \
        "[anchor=dot106][b]Öffnen Sie am Fuss Ihrer Hecke ein paar Durchgänge[/b], damit Igel und andere Tiere mühelos von einem in den anderen Garten gelangen können.\n" \
-       "[anchor=dot107]Weitere Infos in der [b]Garten-Charta[/b] oder im Pro Natura Faltblatt [b]“Invasive Neophyten im Garten»[anchor=end].[/b]",
+       "[anchor=dot107]Weitere Infos in der [b]Garten-Charta[/b] oder im Pro Natura Faltblatt [b]„Invasive Neophyten im Garten[anchor=end]“[/b]",
     en="Hedge of thuja and laurel")
 
 txt_info_fence_nospace = Text(
@@ -601,12 +601,12 @@ txt_info_shelter_wood = Text(
 txt_info_shelter_flower = Text(
     fr="[anchor=dot100][b]Les prairies fleuries sont des éléments importants des corridors biologiques.[/b]\n" \
        "[anchor=dot101][b]Les prairies fleuries sont utiles à beaucoup d’animaux.[/b] Les papillons, par exemple, y trouvent du nectar pour se nourrir et des plantes où pondre leurs œufs. C’est aussi un refuge pour beaucoup de petits mammifères, oiseaux, amphibiens et insectes. \n" \
-       "[anchor=dot102][b]Une prairie fleurie demande beaucoup moins d’entretien que le gazon[/b], il suffit de la faucher une ou deux fois par année. Plus d’infos dans les [b]brochures de Pro Natura « Des papillons dans son jardin » et « Prairies fleuries, aménagement et entretien ».[/b]\n" \
+       "[anchor=dot102][b]Une prairie fleurie demande beaucoup moins d’entretien que le gazon[/b], il suffit de la faucher une ou deux fois par année. Plus d’infos dans les brochures de Pro Natura « [i]Des papillons dans son jardin[/i] » et « [i]Prairies fleuries, aménagement et entretien[/i] » (en vente)\n" \
        "[anchor=dot103]" + txt_info_warning_fr + " Pour une belle prairie fleurie, [b]ne pas utiliser d’engrais ou de désherbant.[/b]\n" \
                                        "[anchor=dot104][b]Ne pas utiliser de pesticides[/b], ce sont des poisons pour la plupart des animaux qui se réfugient dans les prairies fleuries.  [i]Crédits photo: CSD Ingénieurs [anchor=end]SA[/i]",
     de="[anchor=dot100][b]Blumenwiesen sind wichtige Elemente von Vernetzungsachsen.[/b]\n" \
        "[anchor=dot101][b]Blumenwiesen sind für viele Tiere nützlich.[/b] So liefern sie zum Beispiel Schmetterlingen Nahrung in Form von Nektar sowie geeignete Pflanzen für die Eiablage. Sie dienen aber auch zahlreichen kleinen Säugetieren, Vögeln, Amphibien und Insekten als Unterschlupf.\n" \
-       "[anchor=dot102][b]Eine Blumenwiese braucht viel weniger Pflege als ein Rasen.[/b] Es genügt, sie ein- oder zweimal pro Jahr zu mähen. Weitere Infos im Pro Natura Faltblatt [b]«Schmetterlinge im Garten»[/b] und in der Pro Natura Broschüre [b]„Blumenwiesen anlegen und pflegen“[/b].\n" \
+       "[anchor=dot102][b]Eine Blumenwiese braucht viel weniger Pflege als ein Rasen.[/b] Es genügt, sie ein- oder zweimal pro Jahr zu mähen. Weitere Infos im Pro Natura Faltblatt [i]„Schmetterlinge im Garten“[/i] und Broschüre [i]„Blumenwiesen anlegen und pflegen“[/i] (zu kaufen an der Rezeption)\n" \
        "[anchor=dot103]" + txt_info_warning_de + " Wer eine schöne Blumenwiese wünscht, darf [b]weder Dünger noch Unkrautvertilger einsetzen.[/b] " \
                                        "[b]Verwenden Sie keine Pestizide. Sie sind für die meisten Tiere der Blumenwiesen giftig.[/b]  [i]Bild: CSD Ingénieurs [anchor=end]SA[/i]",
     en="Portion of meadow covered in flowers")
