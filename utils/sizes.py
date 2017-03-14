@@ -24,7 +24,17 @@ width_left_images = width_left_elements - 2 * border_small
 width_border_left = (width_left_margin - width_left_elements) / 2
 height_left_margin = width_border_left
 height_left_category_title = height_used - height_title
+height_left_category_title_filet = height_left_category_title
+height_left_score = height_left_category_title
 height_left_category_desc = height_left_category_title - height_title
+height_left_category_desc
+
+# TODO: Disabled (False): category number x/y and category description follow each other, both on TOP of left menu
+# Enabled (True): category description is at the TOP and category number x/y at the BOTTOM of left menu
+exchange_menus = True
+if exchange_menus:
+    height_left_category_desc = height_left_category_title
+
 height_left_first = height_left_category_desc - width_left_elements - height_left_margin
 height_left_first_desc = height_left_first - height_title
 
@@ -80,9 +90,14 @@ category_width = 188.0
 category_number = 7.0
 
 #remaining size is spread over the 2 elements
-left_margin_elements = (height_left_first - 2 * height_title - width_left_elements - height_button_small - border_small - category_height) / 2
+elem = 3 if exchange_menus else 2
+left_margin_elements = (height_left_first - elem * height_title - width_left_elements - height_button_small - border_small - category_height) / 2
 height_left_second = height_left_first_desc - width_left_elements - left_margin_elements
 height_left_second_desc = height_left_second - height_title
+
+if exchange_menus:
+    height_left_category_title = height_left_second_desc - left_margin_elements - height_title
+    height_left_category_title_filet = height_left_category_title + height_title
 
 def category_width_progress (step):
     return step * category_width / category_number

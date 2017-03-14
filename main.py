@@ -610,11 +610,11 @@ class FloatGameScreen(BackKeyScreen):
                                  src="images/scenery/bouton_eteindre_200x200px.png"))
 
         # nice ui elements
-        f.add_widget(ImageWrap(pos=(sizes.width_border_left, sizes.height_left_category_title - sizes.border_small),
+        f.add_widget(ImageWrap(pos=(sizes.width_border_left, sizes.height_left_category_title_filet - sizes.border_small),
                                size=(sizes.width_left_elements, sizes.border_small),
                                source='images/scenery/filet_souligne_144x6px.png'))
         f.add_widget(ImageWrap(pos=(
-            sizes.width_right_game + sizes.width_border_left, sizes.height_left_category_title - sizes.border_small),
+            sizes.width_right_game + sizes.width_border_left, sizes.height_left_score - sizes.border_small),
             size=(sizes.width_right_margin - 2 * sizes.width_border_left, sizes.border_small),
             source='images/scenery/filet_souligne_144x6px.png',
             allow_stretch=True,
@@ -632,7 +632,7 @@ class FloatGameScreen(BackKeyScreen):
                                source='images/scenery/fond_menu_gauche_144x144px.png'))
 
         f.add_widget(LabelWrap(size=(sizes.width_right_margin, sizes.height_button_small),
-                               pos=(sizes.width_right_game, sizes.height_left_category_title),
+                               pos=(sizes.width_right_game, sizes.height_left_score),
                                text=txt.txt_scenery_score,
                                font_size=sizes.font_size_subtitle, bold=True))
 
@@ -711,12 +711,12 @@ class FloatGameScreen(BackKeyScreen):
         self.category_desc = LabelWrap(size=(sizes.width_text_max, sizes.height_left_category_element),
                                        pos=(sizes.border_text_min, sizes.height_left_category_desc),
                                        text=txt.txt_scenery_notxt,
-                                       font_size=sizes.font_size_large)
+                                       font_size=sizes.font_size_large, bold=True)
         f.add_widget(self.category_desc)
 
         self.shadow = LabelWrap(size=(sizes.width, sizes.height),
                                 pos=(sizes.width_ref, sizes.height_ref),
-                                text=Text("", "", ""))
+                                text=txt.txt_scenery_notxt)
         self.shadow.label.background_color = 1, 1, 1, 0.0
         f.add_widget(self.shadow)
         self.button_enabled = True
@@ -989,6 +989,7 @@ class FloatGameScreen(BackKeyScreen):
         self.frame.add_widget(category.element1)
         self.frame.add_widget(category.element2)
         self.category_desc.label.text = category.name.get()
+        self.category_desc.bolden()
         if (category.element1.first):
             t1 = category.element1.name.get()
             t2 = category.element2.name.get()

@@ -121,8 +121,8 @@ txt_cat_fence_wall = Text(
     en="Concrete wall")
 
 txt_cat_floor = Text(
-    fr="Terrasse",
-    de="Terrasse",
+    fr="Terrasses",
+    de="Terrassen",
     en="Patios")
 
 txt_cat_floor_grass = Text(
