@@ -99,6 +99,12 @@ if exchange_menus:
     height_left_category_title = height_left_second_desc - left_margin_elements - height_title
     height_left_category_title_filet = height_left_category_title + height_title
 
+end_height_element = 80
+end_start = height - 2 * border_small
+if not exchange_menus:
+    end_start -= height_title
+end_margin = (width_left_margin - 2 * end_height_element) / 3
+
 def category_width_progress (step):
     return step * category_width / category_number
 

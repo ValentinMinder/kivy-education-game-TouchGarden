@@ -133,11 +133,11 @@ def win_generate(text_title, size=(sizes.win_width + 26, sizes.win_height + 23))
                              size=size,
                              size_img=size,
                              allow_strech=True,
-                             src="images/scenery/transparency.png")
+                             source="images/scenery/transparency.png")
     fakebutton.background_down = fakebutton.background_normal
     window_frame.add_widget(fakebutton)
 
-    #title
+    # title
     window_frame.add_widget(
         LabelWrap(pos=(win_dx(0), win_dy(sizes.win_height - sizes.win_header)),
                   size=(sizes.win_width - sizes.win_width_infos, sizes.win_header),
@@ -550,6 +550,7 @@ class FloatGameScreen(BackKeyScreen):
 
         self.frame = FloatLayout(size_hint=(1, 1))
         self.init_static_UI()
+        self.init_pseudo_static_UI()
         self.init_dynamic_UI()
 
         # add main layout to root
@@ -602,17 +603,18 @@ class FloatGameScreen(BackKeyScreen):
                                  pos=(sizes.width_ref, sizes.border_small),
                                  size=(sizes.width_left_margin, sizes.height_button_small),
                                  size_img=(75, 44),
-                                 src="images/scenery/fleche_suite_75x44px.png"))
+                                 source="images/scenery/fleche_suite_75x44px.png"))
         f.add_widget(ButtonImage(on_press=self.stop_game,
                                  pos=(sizes.width_right_game, sizes.border_small),
                                  size=(sizes.width_right_margin, sizes.height_button_small),
                                  size_img=(57, 57),
-                                 src="images/scenery/bouton_eteindre_200x200px.png"))
+                                 source="images/scenery/bouton_eteindre_200x200px.png"))
 
-        # nice ui elements
-        f.add_widget(ImageWrap(pos=(sizes.width_border_left, sizes.height_left_category_title_filet - sizes.border_small),
-                               size=(sizes.width_left_elements, sizes.border_small),
-                               source='images/scenery/filet_souligne_144x6px.png'))
+        # nice ui elements and score text
+        f.add_widget(LabelWrap(size=(sizes.width_right_margin, sizes.height_button_small),
+                               pos=(sizes.width_right_game, sizes.height_left_score),
+                               text=txt.txt_scenery_score,
+                               font_size=sizes.font_size_subtitle, bold=True))
         f.add_widget(ImageWrap(pos=(
             sizes.width_right_game + sizes.width_border_left, sizes.height_left_score - sizes.border_small),
             size=(sizes.width_right_margin - 2 * sizes.width_border_left, sizes.border_small),
@@ -620,21 +622,6 @@ class FloatGameScreen(BackKeyScreen):
             allow_stretch=True,
             keep_ratio=False)
         )
-        f.add_widget(ImageWrap(pos=(sizes.width_border_left, sizes.height_left_category_desc - sizes.border_small),
-                               size=(sizes.width_left_elements, sizes.border_small),
-                               source='images/scenery/filet_souligne_144x6px.png'))
-
-        f.add_widget(ImageWrap(size=(sizes.width_left_elements, sizes.width_left_elements),
-                               pos=(sizes.width_border_left, sizes.height_left_first),
-                               source='images/scenery/fond_menu_gauche_144x144px.png'))
-        f.add_widget(ImageWrap(size=(sizes.width_left_elements, sizes.width_left_elements),
-                               pos=(sizes.width_border_left, sizes.height_left_second),
-                               source='images/scenery/fond_menu_gauche_144x144px.png'))
-
-        f.add_widget(LabelWrap(size=(sizes.width_right_margin, sizes.height_button_small),
-                               pos=(sizes.width_right_game, sizes.height_left_score),
-                               text=txt.txt_scenery_score,
-                               font_size=sizes.font_size_subtitle, bold=True))
 
         if (watermarked):
             watermark = LabelWrap(
@@ -651,6 +638,41 @@ class FloatGameScreen(BackKeyScreen):
                 sizes.event_c2 = (sizes.event_c2[0], sizes.event_c2[1] + sizes.height_button_small)
 
             watermark.label.background_color = 1, 1, 1, 0.5
+
+    # static in category left layout elements that need to disappear at the end of game
+    def init_pseudo_static_UI(self):
+        f = self.frame
+        # nice ui elements for categories
+        f1 = ImageWrap(pos=(sizes.width_border_left, sizes.height_left_category_title_filet - sizes.border_small),
+                       size=(sizes.width_left_elements, sizes.border_small),
+                       source='images/scenery/filet_souligne_144x6px.png')
+        f2 = ImageWrap(pos=(sizes.width_border_left, sizes.height_left_category_desc - sizes.border_small),
+                       size=(sizes.width_left_elements, sizes.border_small),
+                       source='images/scenery/filet_souligne_144x6px.png')
+
+        m1 = ImageWrap(size=(sizes.width_left_elements, sizes.width_left_elements),
+                       pos=(sizes.width_border_left, sizes.height_left_first),
+                       source='images/scenery/fond_menu_gauche_144x144px.png')
+        m2 = ImageWrap(size=(sizes.width_left_elements, sizes.width_left_elements),
+                       pos=(sizes.width_border_left, sizes.height_left_second),
+                       source='images/scenery/fond_menu_gauche_144x144px.png')
+        f.add_widget(f1)
+        f.add_widget(f2)
+        f.add_widget(m1)
+        f.add_widget(m2)
+
+        f.category_layout_f1 = f1
+        f.category_layout_f2 = f2
+        f.category_layout_m1 = m1
+        f.category_layout_m2 = m2
+
+    # remove left elements at the end
+    def delete_pseudo_static_UI(self):
+        f = self.frame
+        # f.remove_widget(f.category_layout_f1)
+        f.remove_widget(f.category_layout_f2)
+        f.remove_widget(f.category_layout_m1)
+        f.remove_widget(f.category_layout_m2)
 
     # create and add all dynamic UI elements (some movable, some resizabée, some text or image changeable, no background, some scenery)
     def init_dynamic_UI(self):
@@ -721,6 +743,45 @@ class FloatGameScreen(BackKeyScreen):
         f.add_widget(self.shadow)
         self.button_enabled = True
         self.button_cat_enabled = True
+
+    def init_end_of_game_UI(self):
+        f = self.frame
+
+        end_height_element = sizes.end_height_element
+        size = (end_height_element, end_height_element)
+
+        start = sizes.end_start
+        margin = sizes.end_margin
+
+        def fct(**any):
+            self.current_elem = None
+        fct()
+
+        i = 0
+        for category in self.categories:
+            i += 1
+
+            self.end_window_frame = ObjectProperty(None)
+
+            def pressed(button):
+                if (self.current_elem != None):
+                    f.remove_widget(self.end_window_frame)
+
+                if (self.current_elem == button.element):
+                    fct()
+                else:
+                    self.current_elem = button.element
+                    self.end_window_frame = self.more_infos(button.element, fct=fct, negative=True, alternate=True)
+
+            b = ButtonImage(on_press=pressed, source=category.element1.source, size=size, size_img=size,
+                            pos=(margin, start - end_height_element * i))
+            b.element = category.element1
+            f.add_widget(b)
+
+            b2 = ButtonImage(on_press=pressed, source=category.element2.source, size=size, size_img=size,
+                             pos=(2 * margin + end_height_element, start - end_height_element * i))
+            b2.element = category.element2
+            f.add_widget(b2)
 
     # disable background (visually and programmatically)
     def background_enable(self):
@@ -830,6 +891,9 @@ class FloatGameScreen(BackKeyScreen):
 
             self.frame.add_widget(watermark)
             watermark.label.background_color = 1, 1, 1, 0.25
+
+            self.delete_pseudo_static_UI()
+            self.init_end_of_game_UI()
 
     # does nothing, used for no action after animation
     def none(self, *any):
@@ -958,6 +1022,7 @@ class FloatGameScreen(BackKeyScreen):
         if (not negative):
             self.background_disable()
         self.frame.add_widget(window_frame)
+        return window_frame
 
     def stop_game(self, *any):
         if (self.button_enabled):

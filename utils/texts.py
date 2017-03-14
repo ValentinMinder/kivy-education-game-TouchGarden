@@ -495,14 +495,14 @@ txt_info_hedge_good = Text(
        "[anchor=dot103][b]Ces haies offrent des abris et de la nourriture à beaucoup d’animaux.[/b]\n" \
        "[anchor=dot104][b]Ces haies demandent peu d’entretien.[/b]\n" \
        "[anchor=dot105][b]Ces haies amènent de la couleur[/b] dans le jardin et permettent de confectionner de [b]délicieux sirops ou confitures.[/b]\n" \
-       "[anchor=dot106]Plus d’infos dans la [b]Charte des jardins[/b] ou dans la [b]brochure de Pro Natura Genève «Planter des haies indigènes[anchor=end]»[/b]",
+       "[anchor=dot106]Plus d’infos dans la [b]Charte des jardins[/b] ou dans la [b]brochure de Pro Natura Genève «Planter des haies indigènes[anchor=end]»[/b] - [i]Crédits photo: Pro Natura Champ-[anchor=end]Pittet[/i]",
     de="[anchor=dot100][b]Beispiele für einheimische Straucharten[/b]: Pfaffenhütchen, Heckenkirsche, Hasel, Hartriegel\n" \
        "[anchor=dot101][b]Einheimische Hecken sind wichtige Elemente von Vernetzungsachsen.[/b]\n" \
        "[anchor=dot102][b]Viele Tiere bewegen sich entlang von Hecken.[/b]\n" \
        "[anchor=dot103][b]Einheimische Hecken bieten einer grossen Zahl von Tieren Unterschlupf und Nahrung.[/b]\n" \
        "[anchor=dot104][b]Sie benötigen nicht viel Pflege.[/b]\n" \
        "[anchor=dot105][b]Sie bringen Farbe[/b] in den Garten und liefern köstliche Zutaten zur Herstellung von [b]Sirups und Konfitüren.[/b]\n" \
-       "[anchor=dot106]Weitere Infos in der [b]Garten-Charta[b] oder im Pro Natura Faltblatt [b]„Invasive Neophyten im Garten[anchor=end]“[/b]",
+       "[anchor=dot106]Weitere Infos in der [b]Garten-Charta[/b] oder im Pro Natura Faltblatt [b]„Invasive Neophyten im Garten[anchor=end]“[/b] - [i]Bild: Pro Natura Champ-[anchor=end]Pittet[/i]",
     en="Hedge of various native species")
 
 txt_info_hedge_bad = Text(
@@ -533,7 +533,7 @@ txt_info_fence_nospace = Text(
        + txt_info_solutions_fr +
        "[anchor=dot100]Faire un trou dans le bas du grillage d’au moins 15 centimètres de hauteur et de largeur.\n" \
        "[anchor=dot101]Surélever la barrière d’au moins 15 centimètres. Plus d’infos dans la [b]Charte des jardins[/b].\n" \
-       "[anchor=dot102][i]Images:[/i] A favoriser - exemple de clotûres permettant le libre passage de la petite faune. Ces méthodes d'espace ou de trous au pied peuvent également être appliquées aux murs et palissades.  [i]Crédits: Ecotec/Etat de [anchor=end]Genève[/i]",
+       "[anchor=dot102][i]Images:[/i] A favoriser - exemple de clotûres permettant le libre passage de la petite faune. Ces méthodes d'espace ou de trous au pied peuvent également être appliquées aux murs et palissades.  [i]Crédits photo: Ecotec/Etat de [anchor=end]Genève[/i]",
     de=txt_info_problem_de + "Zäune oder Gitter, die bis auf den Boden reichen, [b]sind Barrieren für Landtiere wie Igel oder Füchse.[/b]\n\n" \
        + txt_info_solutions_de +
        "[anchor=dot100][b]Heben Sie den Zaun an[/b], mindestens um 15 Zentimeter.\n" \
@@ -614,7 +614,7 @@ txt_info_animal_goat = Text(
        "[anchor=dot101][b]Les moutons sont utilisés pour les plus grands espaces.[/b] La Ville de Lausanne et la Commune d’Yverdon-les-Bains les utilisent depuis plusieurs années pour la tonte de certains parcs publics.  \n" \
        "[anchor=dot102][b]Les petits animaux qui vivent dans la pelouse ne sont plus pris par surprise dans les lames acérées de la tondeuse à gazon.[/b]\n" \
        "[anchor=dot103]Il est possible de [b]louer des chèvres et des moutons[/b] juste pour quelques jours.\n" \
-       "[anchor=dot104]Plus d’infos : contacter [b]La Mergerie du Bonheur[/b] www.la-mergerie.ch [i](Images)[/i]\n" \
+       "[anchor=dot104]Plus d’infos : contacter [b]La Mergerie du Bonheur[/b] www.la-mergerie.ch [i](Photos)[/i]\n" \
        "[anchor=dot105]" + txt_info_warning_fr + "[b]Les chèvres doivent toujours être au moins deux[anchor=end].[/b]",
     de="[anchor=dot100][b]Zwergziegen sind regelrechte Ökomäher[/b], die Ihnen im Garten die Arbeit abnehmen können.\n" \
        "[anchor=dot101][b]Schafe eignen sich für den Unterhalt grösserer Flächen.[/b] Die Gemeinde Yverdon-les-Bains und die Stadt Lausanne setzen seit mehreren Jahren Schafe für das «Mähen» einzelner Grünanlagen ein.\n" \
@@ -631,7 +631,7 @@ txt_info_animal_cat = Text(
     de=txt_info_problems_de +
        "[anchor=dot100][b]Katzen sind geschickte Jäger.[/b] Manchen Studien zufolge sind sie sogar [b]die häufigste Todesursache für kleine Wildtiere[/b] (Vögel, kleine Säugetiere, Amphibien und Insekten).\n" \
        "[anchor=dot101][b]Ein Halsband mit Glöckchen hindert die Katze nicht[/b] daran, kleine Wildtiere zu erbeuten. Sie entwickelt dann einfach Strategien, um noch lautloser und vorsichtiger zu jagen[anchor=end].",
-    en="cat")
+    en="cat[anchor=end].")
 
 txt_info_animal_cat_sol = Text(
     fr=txt_info_solutions_fr +
@@ -642,7 +642,7 @@ txt_info_animal_cat_sol = Text(
        "[anchor=dot100][b]Ziehen Sie der Katze ein buntes Halsband an.[/b] Das macht sie sichtbarer und hilft den Beutetieren, rechtzeitig zu flüchten.  [i]Bildern: Birdsbesafe® LLC[/i]\n"\
        "[anchor=dot101][b]Bringen Sie am Stamm Ihrer Bäume einen Kragen an[/b], der Katzen am Hochklettern hindert.\n"\
        "[anchor=dot102][b]Behalten Sie die Katze nachts im Haus[/b], denn dann verlassen viele Kleintiere ihre Verstecke und wandern umher[anchor=end].",
-    en="cat")
+    en="cat[anchor=end].")
 
 txt_info_balcony_herbs = Text(
     fr="[anchor=dot100][b]Votre balcon peut être un relais important dans un corridor biologique.[/b]\n" \
