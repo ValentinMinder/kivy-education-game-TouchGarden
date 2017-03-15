@@ -55,9 +55,14 @@ gsettings set org.gnome.desktop.background picture-uri file:///home/touchgarden/
 # everyday at 17:45 shutdown and programm restart at 9:45 the next day (16h later)
 # min hour day-of-month month day-of-week(0-6) command
 # every day from march-october, schedule restart on tomorrow at 9:45 (16 * 3600)
-## 45 17 * 3-10 * sudo killall elousbd & sudo rtcwake -m off -s 57600
-# every 1st of November, schedule a restart 4 month later (4 * 31 * 3600)
-## 45 17 1 11 * sudo killall elousbd & sudo rtcwake -m off -s 10713600
+# computer in save-to-disk state (option 'disk') known as 'veille prolongée'
+# computer will restart ONLY if shut down automatically with rtcwake
+## 45 17 * 3-10 * sudo killall elousbd & sudo rtcwake -m disk -s 57600
+
+# everyday from november-february, schedule a complet stop at midnight
+# computer won't restart until manually power on
+## 59 23 * 11-2 * sudo shutdown
+
 
 # TODO: in file manager (nautilus), Edit > Preferences > Behavior > Single click to activate items + run executable files
 
