@@ -5,11 +5,15 @@
 # Warning: english is not supported everywhere
 # change current to change future texts callings
 class lang:
+    no = -1
     fr = 0
     de = 1
     en = 2
     default = fr
     current = default
+
+    def current_fct(self):
+        return self.current
 
 
 # text color handling
@@ -40,13 +44,15 @@ class Text:
         self.english = en
         self.color = color
 
-    def get(self):
+    def get(self, l=lang.no):
+        if (lang.no == l):
+            l = lang.current
         switch = {
             lang.fr: self.french,
             lang.de: self.german,
             lang.en: self.english
         }
-        return self.color + switch.get(lang.current)  # + color.end
+        return self.color + switch.get(l)  # + color.end
 
 txt_main_title_short = "TouchGarden"
 
@@ -56,16 +62,37 @@ txt_main_title = Text(
     en="My garden could be a wildlife corridor!")
 
 txt_main_title_fr = Text(
-    fr="Mon jardin peut être un corridor biologique!",
-    de="Mon jardin peut être un corridor biologique!")
+    fr=txt_main_title.get(lang.fr),
+    de="")
 
 txt_main_title_de = Text(
-    fr="Mein Garten kann ein Wildtierkorridor sein!",
-    de="Mein Garten kann ein Wildtierkorridor sein!")
+    fr=txt_main_title.get(lang.de),
+    de="")
 
 txt_main_title_en = Text(
-    fr="My garden could be a wildlife corridor!",
-    de="My garden could be a wildlife corridor!")
+    fr=txt_main_title.get(lang.en),
+    de="")
+
+txt_lang_choice = Text(
+    color=color.white,
+    fr="[b] Français[/b]",
+    de="[b] Deutsch[/b]",
+    en="[b] English[/b]")
+
+txt_lang_choice_fr = Text(
+    fr = txt_lang_choice.get(lang.fr),
+    de = ""
+)
+
+txt_lang_choice_de = Text(
+    fr = txt_lang_choice.get(lang.de),
+    de = ""
+)
+
+txt_lang_choice_en = Text(
+    fr = txt_lang_choice.get(lang.en),
+    de = ""
+)
 
 txt_watermark_heig = Text(
     fr="Projet de service civil réalisé en partenariat entre Pro Natura et l'HEIG-VD (IICT). Retrouvez ce jeu dans l'exposition du Centre Pro Natura de Champ-Pittet du 18 mars au 1er novembre 2017.",
@@ -194,7 +221,7 @@ txt_impressum_full = \
     "[b]Illustrations[/b]: Ariane Nicollier / Fabrica Collective, Lucas Oettli\n" \
     "[b]Conception graphique[/b]: Marc-Olivier Schatz\n" \
     "[b]Contenus et textes[/b]: Briséïs Castella, Layne Meinich\n" \
-    "[b]Traductions [i]deutsch[/i][/b]: Alena Wehrli, Florence Kupferschmid, Mira Maeder\n" \
+    "[b]Traductions allemand[/b]: Alena Wehrli, Florence Kupferschmid, Mira Maeder\n" \
     "[b]Relectures[/b]: Marie Bovay, Andrea Strässle, Lucas Oettli, Alan Regley\n" \
     "[b]Développement informatique et programmation[/b]: Valentin Minder\n" \
     "[b]Partenaire[/b]: Institute for Information and Communication Technologies ([b]IICT[/b])\n" \
@@ -284,52 +311,58 @@ txt_tutorial_play = Text(
     en="Start")
 
 # INTERACTIONS
-
-txt_interact_problems = Text(
-    color=color.white,
-    fr="Problèmes",
-    de="Probleme",
-    en="Problems")
-
-txt_interact_solutions = Text(
-    color=color.white,
-    fr="Solutions",
-    de="Lösungen",
-    en="Solutions")
+txt_interact_timeout = Text(
+    color=color.magenta,
+    fr="Aucune action réalisée durant une longue période... \n\n[b]Redémarrage automatique du jeu dans 15 secondes.[/b]",
+    de="Keine Handlungen vorgenommen... \n\n[b]Das Spiel wird automatisch in 15 Sekunden neugestartet.[/b]",
+    en="No action during a long time... \n\n[b]The game is going to restart automatically in 15 seconds.")
 
 txt_interact_confirm = Text(
-    fr="Confirmation: veux-tu vraiment arrêter le jeu ?",
-    de="Bestätigung: Willst du das Spiel wirklich beenden?",
-    en="Confirmation: stop playing this game ?")
+    color=color.magenta,
+    fr="Confirmation: voulez-vous vraiment arrêter et redémarrer le jeu ?\n\n[b]Redémarrage automatique du jeu dans 15 secondes.[/b]",
+    de="Bestätigung: Wollen Sie das Spiel wirklich beenden and neustarten?\n\n[b]Das Spiel wird automatisch in 15 Sekunden neugestartet.[/b]",
+    en="Confirmation: stop playing this game and start a new one ?")
 
-txt_interact_confirm_lang = "Tu pourras changer la langue en redémarrant le jeu. Du kannst die Sprache wechseln, indem du das Spiel neustartest. You can change the language by stopping the game."
+txt_interact_confirm_lang = "[i]Vous pouvez changer la langue en redémarrant le jeu. \n" + \
+                            "Sie können die Sprache wechseln, indem Sie das Spiel neustartest. \n" + \
+                            "You can change the language by stopping the game.[/i]"
+
+txt_interact_confirm_lang_multi = Text(
+    color=color.grey,
+    fr=txt_interact_confirm_lang,
+    de=txt_interact_confirm_lang,
+    en=txt_interact_confirm_lang)
 
 txt_interact_continue = Text(
-    fr="Non, continuer à jouer ce jeu",
+    color = color.green,
+    fr="Non, continuer à jouer à ce jeu",
     de="Nein, ich will weiterspielen",
     en="No, continue playing this game")
 
 txt_interact_stop = Text(
+    color = color.magenta,
     fr="Oui, arrêter et redémarrer le jeu",
     de="Ja, Spiel abbrechen und neustarten",
     en="Yes, Abort game and start over")
 
-txt_interact_infos = Text(
-    fr="Tu peux accéder à plus d'informations ou passer à la suite du jeu.",
-    de="Du kannst noch mehr Informationen abrufen oder weiterspielen",
-    en="TOEN")
+txt_interact_stop_title = Text(
+    color = color.magenta,
+    fr="Arrêter le jeu?",
+    de="Spiel abbrechen?",
+    en="Quit game?")
+
+txt_interact_stop_short = Text(
+    color = color.white,
+    fr="Arrêter",
+    de="Ab- brechen",
+    en="Quit")
 
 txt_interact_forward = Text(
     color=color.white,
     fr="Continuer",
     de="Weiter- spielen",
-    en="TOEN")
+    en="Continue")
 
-txt_interact_timeout = Text(
-    color=color.magenta,
-    fr="Aucune action réalisée, redémarrage du jeu dans 10 secondes.",
-    de="Keine Handlungen vorgenommen, das Spiel wird in 10 Sekunden neugestartet",
-    en="TOEN")
 
 txt_end_level1 = Text(
     color=color.green,
@@ -348,11 +381,6 @@ txt_end_level3 = Text(
     fr="[b]C'est pas terrible… [/b]\n\n[b]Vous n’avez obtenu que des points négatifs, votre jardin n'est pas du tout un corridor biologique![/b]\n La plupart des animaux auront beaucoup de difficultés pour vivre, se déplacer, se reproduire et se nourrir chez vous.",
     de="[b]Nicht gerade umwerfend… [/b]\n\n[b] Sie haben nur Negativpunkte erhalten, Ihr Garten ist überhaupt kein biologischer Korridor![/b]\n Die meisten Tierarten werde grosse Schwierigkeiten haben, sich bei Ihnen frei  zu bewegen,  fortzupflanzen und zu ernähren.",
     en="TOEN")
-
-txt_end_play = Text(
-    fr="Redémarrer et jouer à nouveau",
-    de="Spiel neustarten und nochmals spielen",
-    en="Abort game and start over again")
 
 txt_end_score = Text(
     color=color.magenta,
@@ -442,6 +470,12 @@ txt_quiz_tombola_win = Text(
 txt_quiz_tombola_win = Text(
     fr="Désolé, c'est perdu... à la prochaine!'",
     de="Leider kein Glück gehabt… bis zum nächsten Mal!")
+
+txt_interact_solutions = Text(
+    color=color.white,
+    fr="Solutions",
+    de="Lösungen",
+    en="Solutions")
 
 txt_info_problems_fr = "" + color.magenta + "[b]Problèmes:[/b] \n" + color.end
 txt_info_problems_de = "" + color.magenta + "[b]Problemen:[/b] \n" + color.end
@@ -651,7 +685,7 @@ txt_info_balcony_herbs = Text(
     de="[anchor=dot100][b]Ihr Balkon kann ein wichtiger Trittstein in einer Vernetzungsachse werden.[/b]\n" \
        "[anchor=dot101][b]Mit ein paar Gewürzpflanzen machen Sie aus Ihrem Balkon eine Bar für Schmetterlinge.[/b] Diese saugen bei den Blüten von Origano, Melisse, Thymian oder Rosmarin gerne Nektar.\n" \
        "[anchor=dot102][b]Die Kräuter verströmen angenehme Düfte und liefern Ihnen die nötigen Zutaten für köstliche Tees und würzige Speisen[anchor=end].[/b]",
-    en="en")
+    en="Aromatic herbs at the balcony")
 
 txt_info_balcony_geranium = Text(
     fr=txt_info_problems_fr +

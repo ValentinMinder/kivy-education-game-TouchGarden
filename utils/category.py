@@ -1,12 +1,14 @@
 # coding=utf-8
 from kivy.animation import Animation
-from kivy.uix.label import Label
+from kivy.core.audio import SoundLoader
 from kivy.uix.scatter import Scatter
 import random
 
 from utils import texts as txt
 from utils import sizes
 from utils.gui import ImageWrap
+
+sound_cat = SoundLoader.load("audio/chat.wav")
 
 
 class Category(object):
@@ -705,6 +707,8 @@ def init_category_struct(frame):
         anim = Animation(duration=f * d)
         anim.bind(on_complete=forward)
         anim.start(animal.image)
+
+        sound_cat.play()
 
         wait = Animation(duration=(f + 4) * d + 1.5)
         return wait

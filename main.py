@@ -7,6 +7,11 @@ watermarked = True
 quiz_enabled = False
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
 english_enabled = True
+# general reset timeout in seconds
+timeout = 60
+#timeout of warning window (timeout/stop game)
+timeout_window_conf = 15
+max_darkness_idle = 0.70 # 0 -> 1.0 scale, 1.0 the darker
 
 from kivy.config import Config
 
@@ -29,6 +34,7 @@ Config.set('graphics', 'resizable', 0)
 
 import random
 import settings
+import time
 
 from kivy.animation import Animation
 
@@ -59,7 +65,13 @@ Builder.load_file('screens.kv')
 Builder.load_file('widgets.kv')
 
 # pre-load game music
+# started when game is started and stopped when game is stopped or idled back to start screen
+# no music for quiz
 music = SoundLoader.load("audio/garden_base.wav")
+music_alt = SoundLoader.load("audio/garden_alt.wav")
+# load and start playing game audio
+music.loop = music_alt.loop = True
+music.volume = music_alt.volume = 0.8 # 0 -> 1 scale, 1=100%, default to 1 for others sounds
 
 
 # Creating a backgroundable label (by default a blank background)
@@ -200,6 +212,10 @@ def win_generate(text_title, size=(sizes.win_width + 26, sizes.win_height + 23))
 class StartScreen(KeyScreen):
     def __init__(self, **kwargs):
         super(StartScreen, self).__init__(**kwargs)
+        self.frequency_idle_light = 0.01
+        self.step_idle_light = 0.01
+        self.dark_continue = True
+        self.button_click = True
 
         impressum_txt = txt.txt_impressum
 
@@ -215,12 +231,27 @@ class StartScreen(KeyScreen):
             if self.visible:
                 close(any)
             else:
-                self.add_widget(window_frame)
                 self.visible = True
 
+                def remove_impressum_win(*any):
+                    if self.visible:
+                        self.visible = False
+                        self.remove_widget(window_frame)
+
+                def add_impressum_win(*any):
+                    self.add_widget(window_frame)
+                    Clock.schedule_once(remove_impressum_win, timeout*2)
+
+                if self.dim_element.background_color[3] > 0:
+                    Clock.schedule_once(add_impressum_win, (
+                    self.dim_element.background_color[3] / self.step_idle_light - 10) * self.frequency_idle_light)
+                else:
+                    add_impressum_win()
+
         def close(*any):
-            self.remove_widget(window_frame)
             self.visible = False
+            self.remove_widget(window_frame)
+            self.resume()
 
         # add the close button of window
         window_frame.add_widget(ButtonImageText(
@@ -267,7 +298,7 @@ class StartScreen(KeyScreen):
             src_back='images/scenery/fenetre_infos_200x97px_green.png',
             size_img=(23, 30),
             src='images/scenery/fleche_seule_23x44px_white.png',
-            text=Text(color=color.white, fr="[b] Français[/b]", de=""),
+            text=txt_lang_choice_fr,
             left=170,
             font_size=sizes.font_size_title))
         index += 1
@@ -276,10 +307,10 @@ class StartScreen(KeyScreen):
             on_press=self.german,
             pos=(pos_x_lang(), poxy_lang_elem),
             size=(w_lang_elem, 97),
-            src_back='images/scenery/fenetre_infos_200x97px_white.png',
+            src_back='images/scenery/fenetre_infos_200x97px_green.png',
             size_img=(23, 30),
-            src='images/scenery/fleche_seule_23x44px.png',
-            text=Text(color=color.green, fr="[b] Deutsch[/b]", de=""),
+            src='images/scenery/fleche_seule_23x44px_white.png',
+            text=txt_lang_choice_de,
             left=170,
             font_size=sizes.font_size_title))
         index += 1
@@ -292,7 +323,7 @@ class StartScreen(KeyScreen):
                 src_back='images/scenery/fenetre_infos_200x97px_green.png',
                 size_img=(23, 30),
                 src='images/scenery/fleche_seule_23x44px_white.png',
-                text=Text(color=color.white, fr="[b] English[/b]", de=""),
+                text=txt_lang_choice_en,
                 left=170,
                 font_size=sizes.font_size_title))
 
@@ -324,6 +355,33 @@ class StartScreen(KeyScreen):
 
         sizes.win_dy -= dy
 
+        self.dim_element = LabelB()
+        self.dim_element.background_color = 0,0,0,0
+        self.add_widget(self.dim_element)
+        self.on_touch_up()
+
+    def on_touch_up(self, *any):
+        self.dark_continue = False
+        self.resume()
+        self.last_click = time.time()
+        Clock.schedule_once(self.check_idle, timeout + 1)
+
+    def check_idle(self, *any):
+        current = time.time()
+        if (current - self.last_click) > timeout:
+            self.dark_continue = True
+            self.idle()
+
+    def idle (self, *any):
+        self.dim_element.background_color = 0, 0, 0, self.dim_element.background_color[3] + self.step_idle_light
+        if self.dim_element.background_color[3] < max_darkness_idle and self.dark_continue:
+            Clock.schedule_once(self.idle, self.frequency_idle_light * 10)
+
+    def resume (self, *any):
+        self.dim_element.background_color = 0, 0, 0, self.dim_element.background_color[3] - self.step_idle_light
+        if self.dim_element.background_color[3] > 0:
+            Clock.schedule_once(self.resume, self.frequency_idle_light)
+
     def french(self, *any):
         lang.current = lang.fr
         self.forward()
@@ -337,11 +395,28 @@ class StartScreen(KeyScreen):
         self.forward()
 
     def forward(self):
-        self.manager.switch_to(FloatGameScreen(name=txt_main_title_short, previous=self), direction='left')
+        if self.button_click:
+            self.button_click = False
+            self.dark_continue = False
+            self.on_touch_up()
+
+            def forward(*any):
+                self.manager.switch_to(FloatGameScreen(name=txt_main_title_short, previous=self), direction='left')
+
+            if self.dim_element.background_color[3] > 0:
+                Clock.schedule_once(forward, (self.dim_element.background_color[3] / self.step_idle_light - 10) * self.frequency_idle_light)
+            else:
+                forward()
+
+    #should be called by next screen when they come back to restore the timeout
+    def return_to_screen(self):
+        self.button_click = True
+        self.dark_continue = True
+        self.on_touch_up()
 
 
 # screen for picking training mode difficulty
-class StatsScreen(BackKeyScreen):
+class StatsScreen(KeyScreen):
     # layout containing the screen's buttons, used for cursor function
     layout = ObjectProperty()
     max = 5
@@ -542,7 +617,10 @@ class FloatGameScreen(BackKeyScreen):
 
     def __init__(self, **kwargs):
         super(FloatGameScreen, self).__init__(**kwargs)
+        music.play()
         self.quiz = Quiz()
+        self.game_running = True
+        self.timeout_warning_off = True
 
         # handles category numbers (start at 0)
         self.nb_current_category = 0
@@ -559,6 +637,10 @@ class FloatGameScreen(BackKeyScreen):
         # init categories and game
         self.init_welcome_tuto()
         self.start_game_tuto()
+
+        #trigger timeout at start already
+        self.timeout_touch()
+
 
     # create and add all static UI elements (non-movable, non-changeable, only background and scenery)
     def init_static_UI(self):
@@ -604,7 +686,7 @@ class FloatGameScreen(BackKeyScreen):
                                  size=(sizes.width_left_margin, sizes.height_button_small),
                                  size_img=(75, 44),
                                  source="images/scenery/fleche_suite_75x44px.png"))
-        f.add_widget(ButtonImage(on_press=self.stop_game,
+        f.add_widget(ButtonImage(on_press=self.stop_game_ask,
                                  pos=(sizes.width_right_game, sizes.border_small),
                                  size=(sizes.width_right_margin, sizes.height_button_small),
                                  size_img=(57, 57),
@@ -826,6 +908,8 @@ class FloatGameScreen(BackKeyScreen):
 
     def init_category_struct(self):
         self.categories = init_category_struct(self.frame)
+        #re-schuffle
+        self.categories = random.sample(self.categories, self.categories.__len__())
         self.gameturn_setup(self.categories[self.nb_current_category])
 
     def category_forward(self, *any):
@@ -894,6 +978,9 @@ class FloatGameScreen(BackKeyScreen):
 
             self.delete_pseudo_static_UI()
             self.init_end_of_game_UI()
+
+            music_alt.play()
+            music.stop()
 
     # does nothing, used for no action after animation
     def none(self, *any):
@@ -1024,11 +1111,24 @@ class FloatGameScreen(BackKeyScreen):
         self.frame.add_widget(window_frame)
         return window_frame
 
+    def stop_game_ask(self, *any):
+        if (self.button_enabled & self.button_cat_enabled):
+            # open window to ask confirmation to reset/stop game', except if game is finished => stop immediately
+            if (self.nb_current_category == self.categories.__len__()):
+                self.stop_game()
+            else:
+                self.stop_game_warning(timeout=False)
+
     def stop_game(self, *any):
-        if (self.button_enabled):
-            # 'TODO: ask confirmation to reset/stop game'
+        if self.game_running:
+            self.game_running = False
             if self.frame.cat_reverse:
                 self.frame.cat.flip()
+
+            # stop the music
+            music.stop()
+            music_alt.stop()
+            self.previous.return_to_screen()
             self.back()
 
     # update the cursor placement and gauge filling/color depending on points
@@ -1088,9 +1188,13 @@ class FloatGameScreen(BackKeyScreen):
         anim.start(self.static.image)
 
     def anim_animal(self, element, points, alt=False):
+        #trigger no timeout during animation
+        self.timeout_touch()
         def after(*any):
             # remove the animal or make sure it disappear
             self.frame.remove_widget(animal)
+            #trigger timeout from END of animation
+            self.timeout_touch()
 
             # self.hipster(0)
             if (points > 0):
@@ -1104,20 +1208,125 @@ class FloatGameScreen(BackKeyScreen):
         animal.static = self.static
 
         def after_start(*any):
+            # trigger no timeout during animation
+            self.timeout_touch()
             if (alt):
                 anim_end = element.anim_end_alt(animal)
             else:
                 anim_end = element.anim_end(animal)
             anim_end.bind(on_complete=after)
             anim_end.start(animal.image)
+
             self.anim_points(points, element.event_pos[1], element.event_pos[1], fct_next=self.none)
 
         anim_start = element.anim_start()
         anim_start.bind(on_complete=after_start)
         anim_start.start(animal.image)
 
-    # triggered for EVERY touch on any element of this screen
+    # should be called anywhere a touch is made, to update last_lcik and schedule the timeout check
+    def timeout_touch(self):
+        self.last_click = time.time()
+        Clock.schedule_once(self.timeout_check, timeout + 1)
+
+    #check if timeout has expired and launch the warning
+    def timeout_check(self, dt):
+        current = time.time()
+        if (current - self.last_click) > timeout:
+            # goes to warning ONLY if no other timeout warning is running
+            if self.timeout_warning_off:
+                self.stop_game_warning(timeout=True)
+
+    #warns the user about timeout, and end game after timeout_window_conf if no action taken
+    def stop_game_warning(self, timeout=False):
+        self.timeout_warning_off = False
+        window_frame = win_generate(text_title=txt_interact_stop_title)
+
+        should_stop = True
+        def stop_game(*any):
+            if should_stop:
+                self.timeout_warning_off = True
+                self.stop_game(any)
+
+        event = Clock.schedule_once(stop_game, timeout_window_conf)
+
+        def forward(*any):
+            should_stop = False
+            event.cancel()
+            self.frame.remove_widget(window_frame)
+            self.timeout_touch()
+            self.background_enable()
+            self.timeout_warning_off = True
+
+        if timeout:
+            window_frame.label.label.text = txt_interact_timeout.get()
+        else:
+            window_frame.label.label.text = txt_interact_confirm.get()
+
+        window_frame.add_widget(ButtonImageText(
+            on_press=forward,
+            pos=(win_dx(sizes.win_width - sizes.win_width_infos), win_dy(sizes.win_height - sizes.win_header)),
+            size=(sizes.win_width_infos, sizes.win_header),
+            src_back='images/scenery/back_80x183px_green.png',
+            size_img=(33, sizes.win_header),
+            src='images/scenery/fleche_seule_23x44px_white.png',
+            text=txt_interact_forward,
+            left=sizes.win_width_infos - 33))
+
+
+        # add a stop and continue buttons in timeout window
+        left = win_dx((sizes.win_width - 2 * sizes.win_width_infos) / 3)
+        right = win_dx((sizes.win_width - 2 * sizes.win_width_infos) / 3 * 2) + sizes.win_width_infos
+        up = win_dy((sizes.win_height - 2 * sizes.win_header) / 2) + sizes.win_header
+        down = up - sizes.win_header
+
+        window_frame.add_widget(LabelWrap(
+            pos=(left,up),
+            size=(sizes.win_width_infos, sizes.win_header),
+            text=txt_interact_continue))
+
+        window_frame.add_widget(ButtonImageText(
+            on_press=forward,
+            pos=(left, down),
+            size=(sizes.win_width_infos, sizes.win_header),
+            src_back='images/scenery/back_80x183px_green.png',
+            size_img=(35, sizes.win_header),
+            src='images/scenery/fleche_seule_23x44px_white.png',
+            text=txt_interact_forward,
+            left=sizes.win_width_infos - 35))
+
+        window_frame.add_widget(LabelWrap(
+            pos=(right, up),
+            size=(sizes.win_width_infos, sizes.win_header),
+            text=txt_interact_stop))
+
+        window_frame.add_widget(ButtonImageText(
+            on_press=stop_game,
+            pos=(right, down),
+            size=(sizes.win_width_infos, sizes.win_header),
+            src_back='images/scenery/back_80x183px_red.png',
+            size_img=(sizes.win_header,sizes.win_header),
+            src='images/scenery/picto_croix_150x150px.png',
+            text=txt_interact_stop_short,
+            left=sizes.win_width_infos - sizes.win_header))
+
+        # add 3-language information
+        window_frame.add_widget(LabelWrap(
+            pos=(left, down - 3 * sizes.win_header),
+            size=(sizes.win_width - 2 * sizes.win_width_infos, sizes.win_width_infos),
+            text=txt_interact_confirm_lang_multi))
+
+
+        self.background_disable()
+        self.frame.add_widget(window_frame)
+
+    # triggered for EVERY touch MOVE on any element of this screen
+    def on_touch_move(self, touch):
+        self.timeout_touch()
+        return False
+
+    # triggered for EVERY touch UP on any element of this screen
     def on_touch_up(self, touch):
+        self.timeout_touch()
         element = self.currentObj
         # react only to element scatter moves ended to right target area
         if (self.button_enabled & isinstance(element, ElementScatter)):
@@ -1352,11 +1561,6 @@ class TouchGardenApp(App):
         self.manager = ScreenManager()
 
     def build(self):
-        # load and start playing game audio
-        if music:
-            music.loop = True
-            music.play()
-
         # set starting screen, quiz or game
         if quiz_enabled:
             self.manager.switch_to(StatsScreen(name="QuizStartScreen"))
