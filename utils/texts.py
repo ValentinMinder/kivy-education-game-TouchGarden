@@ -38,7 +38,7 @@ class color:
 
 
 class Text:
-    def __init__(self, fr, de, en="en", color=color.default):
+    def __init__(self, fr, de, en="", color=color.default):
         self.french = fr
         self.german = de
         self.english = en
@@ -284,25 +284,37 @@ txt_tutorial_welcome_p0 = Text(
     fr="Bienvenue dans mon jardin !",
     de="Herzlich Willkommen in meinem Garten!",
     en="Welcome in my garden!")
-txt_dot = Text(fr="  •  ", de="  •  ")
+
+txt_dot = Text(
+    fr="  •  ",
+    de="  •  ",
+    en="  •  ")
+
 txt_tutorial_welcome_p1 = Text(
     fr="\n\n[b]BUT DU JEU[/b]\n" \
        "Aménager des corridors biologiques dans son jardin.\n\n\n" \
        "[b]DEROULEMENT DU JEU[/b]\n" \
-       "[anchor=dot000x]Dans la colonne de gauche, une série d’objets pour aménager le jardin apparaissent.\n" \
-       "[anchor=dot000y]Choisir un objet, le glisser et le déposer dans le jardin.\n" \
+       "[anchor=dot000x]Dans la colonne de gauche, deux objets pour aménager le jardin apparaissent.\n" \
+       "[anchor=dot000y]Choisir un des deux objets, le glisser et le déposer dans le jardin sur la zone clignotante.\n" \
        "[anchor=dot000z]Chaque bon choix rapporte des points. Chaque mauvais choix enlève des points. Plus le score sera élevé, plus le jardin sera accueillant pour la faune qui le traverse.\n\n\n" \
        "[b]CHOIX STRATEGIQUE[/b]\n" \
        "On apprend en faisant des erreurs ! Il est possible de corriger les mauvaix choix et d’améliorer son score.\n",
     de="\n\n[b]ZIEL DES SPIELS[/b]\n" \
        "Gestalten eines biologischen Korridors im eigenen Garten\n\n" \
        "[b]ABLAUF DES SPIELS[/b]\n" \
-       "[anchor=dot000x]In der linken Kolonne erscheint eine Auswahl von Objekten, mit denen der Garten eingerichtet werden kann.\n" \
+       "[anchor=dot000x]In der linken Kolonne erscheint eine Auswahl von zwei Objekten, mit denen der Garten eingerichtet werden kann.\n" \
        "[anchor=dot000y]Ein Objekt aussuchen, in den Garten ziehen und positionieren.\n" \
        "[anchor=dot000z]Jede gute Wahl bringt Punkte ein. Bei jeder schlechten Wahl werdent Punkte abgezogen. Je höher die Punktzahl, desto einladender ist der Garten für die Wildtiere, die ihn durchqueren.\n\n" \
        "[b]STRATEGIE[/b]\n" \
        "Aus Fehlern lernt man ! Eine schlechte Wahl kann korrigiert und die Punktzahl verbessert werden.",
-    en="The goal of the game is to help me set up my backyard layout.")
+    en="\n\n[b]GOAL[/b]\n" \
+       "Build and set up wildlife corridors in your backyard garden.\n\n\n" \
+       "[b]GAME FLOW[/b]\n" \
+       "[anchor=dot000x]In the left column, two objects are available to set up the garden layout.\n" \
+       "[anchor=dot000y]Choose one of the two object, drag it to the garden and drop it in the blinking area.\n" \
+       "[anchor=dot000z]Every good choice gives a point. Every bad choice takes a point. When the final score is the highest, the garden is the best welcoming for wildlife that goes through it.\n\n\n" \
+       "[b]STRATEGY[/b]\n" \
+       "Everyone learns by making mistakes! It is possible to correct or replace bad choices and improve the score!\n")
 
 txt_tutorial_play = Text(
     color=color.white,
@@ -368,19 +380,19 @@ txt_end_level1 = Text(
     color=color.green,
     fr="[b]Bravo et félicitations ![/b]\n\n[b]Vous avez obtenu plus de 3 points, votre jardin est un véritable corridor biologique![/b] Les animaux s’y sentent bien pour vivre, se déplacer, se reproduire, se nourrir, etc…",
     de="[b]Herzlichen Glückwunsch ![/b]\n\n[b]Sie haben mehr als 3 Punkte erreicht, Ihr Garten ist ein echter biologischer Korridor![/b] Die Tiere fühlen sich wohl bei Ihnen und können sich frei bewegen,  fortpflanzen, ernähren etc…",
-    en="TOEN")
+    en="[b]Good game and congratulations ![/b]\n\n[b]You have obtained more than 3 points, your garden is a real wildlife corridor![/b] Many animals will feel good in your garden for living, going around, eating, mating, etc…")
 
 txt_end_level2 = Text(
     color=color.orange,
     fr="[b]Bravo mais vous pouvez encore apporter quelques améliorations![/b]\n\n[b]Vous avez obtenu entre 0 et 3 points, votre jardin est peut-être un corridor biologique pour quelques animaux[/b], mais pour d’autres, il y aura des pièges!",
     de="[b]Nicht schlecht, aber Sie können noch einige Verbesserungen anbringen! [/b]\n\n[b] Sie haben zwischen 0 und 3 Punkten erreicht, Ihr Garten kann einigen Tieren als biologischer  Korridor dienen[/b]. Für  andere jedoch birgt er Fallen!",
-    en="TOEN")
+    en="[b]Good game but this could be better![/b]\n\n[b]You have obtained between 0 and 3 points, your garden is maybe a wildlife corridor for some animals[/b], but for others there some trap falls!")
 
 txt_end_level3 = Text(
     color=color.magenta,
     fr="[b]C'est pas terrible… [/b]\n\n[b]Vous n’avez obtenu que des points négatifs, votre jardin n'est pas du tout un corridor biologique![/b]\n La plupart des animaux auront beaucoup de difficultés pour vivre, se déplacer, se reproduire et se nourrir chez vous.",
-    de="[b]Nicht gerade umwerfend… [/b]\n\n[b] Sie haben nur Negativpunkte erhalten, Ihr Garten ist überhaupt kein biologischer Korridor![/b]\n Die meisten Tierarten werde grosse Schwierigkeiten haben, sich bei Ihnen frei  zu bewegen,  fortzupflanzen und zu ernähren.",
-    en="TOEN")
+    de="[b]Nicht gerade umwerfend… [/b]\n\n[b] Sie haben nur Negativpunkte erhalten, Ihr Garten ist überhaupt kein biologischer Korridor![/b]\n Die meisten Tierarten werde grosse Schwierigkeiten haben, sich bei Ihnen frei zu bewegen, fortzupflanzen und zu ernähren.",
+    en="[b]This doesn't sound good… [/b]\n\n[b]You have obtained only negative points, you garden is not a wildlife corridor at all![/b]\n Most of animals will have a lot of difficulties living, going around, eating, mating, etc…")
 
 txt_end_score = Text(
     color=color.magenta,
@@ -501,7 +513,7 @@ txt_info_pond = Text(
        "[anchor=dot103][b]Setzen Sie keine Fische oder Schildkröten in den Weiher[/b], denn sie fressen die Kaulquappen und Libellenlarven.\n" \
        "[anchor=dot104][b]Bauen Sie keinen Weiher, wenn Ihr Garten von Strassen umgeben ist.[/b]\n" \
        "[anchor=dot105]Weitere Infos im Pro Natura Faltblatt [b]„Amphibien rund ums Haus[anchor=end]“[/b]",
-    en="Pond")
+    en="Pond[anchor=end].")
 
 txt_info_pool = Text(
     fr=txt_info_problems_fr +
@@ -520,7 +532,7 @@ txt_info_pool = Text(
        "[anchor=dot103][b]Schalten Sie die Poolbeleuchtung über Nacht aus[/b], damit die Insekten nicht haufenweise ertrinken.\n" \
        "[anchor=dot104][b]Desinfizieren Sie Ihr Schwimmbad möglichst nicht mit Chlor.[/b] Als weniger schädliche Alternativen bieten sich die Elektrolyse und die Wasseraufbereitung mit Magnesium an.\n" \
        "[anchor=dot105]Weitere Infos in der [b]Garten-Charta[/b] und im Pro Natura Faltblatt [b]„Amphibien rund ums Haus[anchor=end]“[/b]",
-    en="Swimming pool")
+    en="Swimming pool[anchor=end].")
 
 txt_info_hedge_good = Text(
     fr="[anchor=dot100][b]Exemple d’espèces d’arbustes indigènes[/b] : fusain d’Europe, chèvrefeuille, noisetier, cornouiller sanguin\n" \
@@ -537,7 +549,7 @@ txt_info_hedge_good = Text(
        "[anchor=dot104][b]Sie benötigen nicht viel Pflege.[/b]\n" \
        "[anchor=dot105][b]Sie bringen Farbe[/b] in den Garten und liefern köstliche Zutaten zur Herstellung von [b]Sirups und Konfitüren.[/b]\n" \
        "[anchor=dot106]Weitere Infos in der [b]Garten-Charta[/b] oder im Pro Natura Faltblatt [b]„Invasive Neophyten im Garten[anchor=end]“[/b] - [i]Bild: Pro Natura Champ-[anchor=end]Pittet[/i]",
-    en="Hedge of various native species")
+    en="Hedge of various native species[anchor=end].")
 
 txt_info_hedge_bad = Text(
     fr=txt_info_problems_fr +
@@ -560,7 +572,7 @@ txt_info_hedge_bad = Text(
        "[anchor=dot105][b]Ersetzen Sie Ihre Thuja- oder Kirschlorbeerhecke durch eine einheimische Hecke[/b] aus Wildsträuchern aus der Region. Eine solche Hecke bietet den Tieren Nahrung und Unterschlupf und liefert [b]Beeren oder Blüten, aus denen sich feine Sirups und Konfitüren herstellen lassen.[/b]\n" \
        "[anchor=dot106][b]Öffnen Sie am Fuss Ihrer Hecke ein paar Durchgänge[/b], damit Igel und andere Tiere mühelos von einem in den anderen Garten gelangen können.\n" \
        "[anchor=dot107]Weitere Infos in der [b]Garten-Charta[/b] oder im Pro Natura Faltblatt [b]„Invasive Neophyten im Garten[anchor=end]“[/b]",
-    en="Hedge of thuja and laurel")
+    en="Hedge of thuja and laurel[anchor=end].")
 
 txt_info_fence_nospace = Text(
     fr=txt_info_problem_fr + "Une barrière ou un grillage touchant le sol [b]ne laisse pas passer les animaux terrestres[/b] tels que les hérissons ou les renards.\n\n" \
@@ -573,7 +585,7 @@ txt_info_fence_nospace = Text(
        "[anchor=dot100][b]Heben Sie den Zaun an[/b], mindestens um 15 Zentimeter.\n" \
        "[anchor=dot101][b]Schneiden Sie am Boden ein Loch in das Gitter[/b], mindestens 15 Zentimeter hoch und breit. Weitere Infos in der [b]Garten-Charta[/b].\n" \
        "[anchor=dot102][i]Bildern:[/i] Vorzuziehen - Beispiele von Zäunen, welche kleinen Tieren einen freien Durchgang ermöglichen. Diese Methode -Abstand oder Löcher am unteren Ende- kann auch bei Mauern und Palisaden angewandt werden.  [i]Ecotec/Kanton [anchor=end]Genf[/i]",
-    en="Garden fence close to the ground ")
+    en="Garden fence[anchor=end].")
 
 # two fences have the same texts (chang it if not logical)
 txt_info_fence_space = txt_info_fence_nospace
@@ -589,7 +601,7 @@ txt_info_fence_wall = Text(
        "[anchor=dot100][b]Lassen Sie Kletterpflanzen an Ihrer Mauer hochwachsen.[/b] Efeu zum Beispiel wird von vielen Tieren als Versteck und Vorratskammer genutzt und dient Eichhörnchen als Klettergerüst, wenn ihnen die Mauer den Weg in den Nachbargarten versperrt.\n" \
        "[anchor=dot101][b]Öffnen Sie am Fuss der Mauer kleine Durchgänge[/b] von mindestens 15 Zentimeter Höhe und Breite, damit kleinere Tiere wie Igel oder Frösche auf die andere Seite der Mauer gelangen können.\n" \
        "[anchor=dot102]Weitere Infos in der [b]Garten-Charta[/b].  [i]Bild: Reverdy Carrasco/[anchor=end]flickr[/i]",
-    en="Concrete wall")
+    en="Concrete wall[anchor=end].")
 
 txt_info_floor_grass = Text(
     fr="[anchor=dot100][b]Le gravier, les galets ou les pavés herbeux sont beaucoup moins chauffés par le soleil et restent frais[/b], même sous un soleil plombant.\n" \
@@ -600,7 +612,7 @@ txt_info_floor_grass = Text(
        "[anchor=dot101][b]Kleine Landtiere verbrennen sich nicht[/b], wenn sie die Fläche überqueren.\n" \
        "[anchor=dot102][b]Kies, Schotter oder Rasengittersteine benötigen nur wenig Unterhalt.[/b]\n" \
        "[anchor=dot103][b]Das Wasser versickert auf natürliche Weise im Untergrund[/b], ohne dass der Boden verschlammt.  [i]Bild: Patrick Standish/[anchor=end]flickr[/i]",
-    en="Patio with grassy floor")
+    en="Patio with grassy floor[anchor=end].")
 
 txt_info_floor_stone = Text(
     fr=txt_info_problems_fr +
@@ -615,7 +627,7 @@ txt_info_floor_stone = Text(
        "[anchor=dot102][b]Das Regenwasser kann nicht im Untergrund versickern[/b], sodass der Boden rund um die Terrasse verschlammt.\n\n"
        + txt_info_solutions_de +
        "[anchor=dot103][b]Kies, Schotter oder Rasengittersteine heizen sich in der Sonne viel weniger stark auf.[/b] Eine Terrasse mit Rasengittersteinen bleibt frisch, auch wenn die Sonne brennt.\n[i]Bild: Patrick Standish/[anchor=end]flickr[/i]",
-    en="Patio with black sandstone floor")
+    en="Patio with black sandstone floor[anchor=end].")
 
 txt_info_shelter_wood = Text(
     fr=txt_info_problem_fr + "Beaucoup de personnes se débarrassent des branches et des feuilles mortes[/b] pour avoir un jardin « propre ». Or, beaucoup d’animaux ont besoin des feuilles et du bois morts pour se nourrir, se cacher ou pondre.\n\n" \
@@ -628,7 +640,7 @@ txt_info_shelter_wood = Text(
        "[anchor=dot100][b]Schichten Sie Laub und Totholz zu kleinen Haufen auf.[/b] So entstehen wertvolle Schlupfwinkel für Igel, Insekten und andere Tiere.\n" \
        "[anchor=dot101][b]Zünden Sie Laub- oder Asthaufen niemals an.[/b] Die vielen Tiere, die darin hausen, würden bei lebendigem Leib verbrennen.\n" \
        "[anchor=dot102]Weitere Infos in der [b]Garten-Charta.[/b]  [i]Bild: Pro Natura Champ-[anchor=end]Pittet[/i]",
-    en="Pile of old wood and dead leafs")
+    en="Pile of old wood and dead leafs[anchor=end].")
 
 txt_info_shelter_flower = Text(
     fr="[anchor=dot100][b]Les prairies fleuries sont des éléments importants des corridors biologiques.[/b]\n" \
@@ -641,7 +653,7 @@ txt_info_shelter_flower = Text(
        "[anchor=dot102][b]Eine Blumenwiese braucht viel weniger Pflege als ein Rasen.[/b] Es genügt, sie ein- oder zweimal pro Jahr zu mähen. Weitere Infos im Pro Natura Faltblatt [i]„Schmetterlinge im Garten“[/i] und Broschüre [i]„Blumenwiesen anlegen und pflegen“[/i] (zu kaufen an der Rezeption)\n" \
        "[anchor=dot103]" + txt_info_warning_de + " Wer eine schöne Blumenwiese wünscht, darf [b]weder Dünger noch Unkrautvertilger einsetzen.[/b] " \
                                        "[b]Verwenden Sie keine Pestizide. Sie sind für die meisten Tiere der Blumenwiesen giftig.[/b]  [i]Bild: CSD Ingénieurs [anchor=end]SA[/i]",
-    en="Portion of meadow covered in flowers")
+    en="Portion of meadow covered in flowers[anchor=end].")
 
 txt_info_animal_goat = Text(
     fr="[anchor=dot100][b]Les chèvres naines sont de véritables tondeuses écologiques[/b] qui vous « mâcheront » le travail dans votre jardin.\n" \
@@ -656,7 +668,7 @@ txt_info_animal_goat = Text(
        "[anchor=dot103]Es ist auch möglich, [b]Ziegen und Schafe nur für ein paar Tage zu mieten.[/b]\n" \
        "[anchor=dot104]Weitere Auskünfte erteilt die [b]Mergerie du Bonheur[/b] www.la-mergerie.ch [i](Bildern)[/i]\n" \
        "[anchor=dot105]" + txt_info_warning_de + "[b]Ziegen müssen immer mindestens zu zweit sein[anchor=end].[/b]",
-    en="Pygmy dwarf goats")
+    en="Pygmy dwarf goats[anchor=end].")
 
 txt_info_animal_cat = Text(
     fr=txt_info_problems_fr +
@@ -665,7 +677,7 @@ txt_info_animal_cat = Text(
     de=txt_info_problems_de +
        "[anchor=dot100][b]Katzen sind geschickte Jäger.[/b] Manchen Studien zufolge sind sie sogar [b]die häufigste Todesursache für kleine Wildtiere[/b] (Vögel, kleine Säugetiere, Amphibien und Insekten).\n" \
        "[anchor=dot101][b]Ein Halsband mit Glöckchen hindert die Katze nicht[/b] daran, kleine Wildtiere zu erbeuten. Sie entwickelt dann einfach Strategien, um noch lautloser und vorsichtiger zu jagen[anchor=end].",
-    en="cat[anchor=end].")
+    en="Cat[anchor=end].")
 
 txt_info_animal_cat_sol = Text(
     fr=txt_info_solutions_fr +
@@ -676,7 +688,7 @@ txt_info_animal_cat_sol = Text(
        "[anchor=dot100][b]Ziehen Sie der Katze ein buntes Halsband an.[/b] Das macht sie sichtbarer und hilft den Beutetieren, rechtzeitig zu flüchten.  [i]Bildern: Birdsbesafe® LLC[/i]\n"\
        "[anchor=dot101][b]Bringen Sie am Stamm Ihrer Bäume einen Kragen an[/b], der Katzen am Hochklettern hindert.\n"\
        "[anchor=dot102][b]Behalten Sie die Katze nachts im Haus[/b], denn dann verlassen viele Kleintiere ihre Verstecke und wandern umher[anchor=end].",
-    en="cat[anchor=end].")
+    en="Cat[anchor=end].")
 
 txt_info_balcony_herbs = Text(
     fr="[anchor=dot100][b]Votre balcon peut être un relais important dans un corridor biologique.[/b]\n" \
@@ -685,7 +697,7 @@ txt_info_balcony_herbs = Text(
     de="[anchor=dot100][b]Ihr Balkon kann ein wichtiger Trittstein in einer Vernetzungsachse werden.[/b]\n" \
        "[anchor=dot101][b]Mit ein paar Gewürzpflanzen machen Sie aus Ihrem Balkon eine Bar für Schmetterlinge.[/b] Diese saugen bei den Blüten von Origano, Melisse, Thymian oder Rosmarin gerne Nektar.\n" \
        "[anchor=dot102][b]Die Kräuter verströmen angenehme Düfte und liefern Ihnen die nötigen Zutaten für köstliche Tees und würzige Speisen[anchor=end].[/b]",
-    en="Aromatic herbs at the balcony")
+    en="Aromatic herbs at the balcony[anchor=end].")
 
 txt_info_balcony_geranium = Text(
     fr=txt_info_problems_fr +
@@ -696,4 +708,4 @@ txt_info_balcony_geranium = Text(
        "[anchor=dot100][b]Bei den Geranien, die im Handel angeboten werden, handelt es sich in der Regel um afrikanische Arten[/b], die für die Insekten der Schweiz kaum von Nutzen sind.\n\n" \
        + txt_info_solutions_de +
        "[anchor=dot101][b]Ziehen Sie auf Ihrem Balkon Gewürzkräuter[/b] wie Melisse oder Rosmarin. [b]Sie sind für die einheimischen Insekten nützlich, liefern feine Tees und aromatisieren Ihre Speisen[anchor=end].[/b]",
-    en="Geraniums")
+    en="Geraniums[anchor=end].")

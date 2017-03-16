@@ -27,7 +27,9 @@ git clone https://github.com/ValentinMinder/TouchGarden garden
 
 # copy start file on desktop for easy access
 cp garden/start.sh start.sh
+cp garden/start.sh calibrate.sh
 chmod u+x start.sh
+chmod u+x calibrate.sh
 chmod u+x garden/update.sh
 
 # copy auto-start script in place (home folder, name '.gnomerc' and executable)

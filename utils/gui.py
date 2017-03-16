@@ -63,14 +63,14 @@ class ButtonImage(Button):
 
 # transparent button with centered unstreched image wrapper
 class ButtonImageText(Button):
-    def __init__(self, on_press, pos, size, src_back, size_img, src, text, left, vAlignTop = False, font_size = sizes.font_size_large):
+    def __init__(self, on_press, pos, size, source_back, size_img, source, text, left, vAlignTop = False, font_size = sizes.font_size_large):
         super(ButtonImageText, self).__init__(on_press=on_press, pos=pos, size=size, size_hint=(None, None),
                                           background_normal='images/scenery/transparency.png')
 
         self.add_widget(
             ImageWrap(pos=pos,
                       size=size,
-                      source=src_back))
+                      source=source_back))
 
         label = LabelWrap(pos=(pos[0], pos[1]),
                           size=(left, size[1]),
@@ -84,7 +84,7 @@ class ButtonImageText(Button):
         self.add_widget(
             ImageWrap(pos=(pos[0] + left, pos[1] + (size[1] - size_img[1]) / 2.0),
                       size=size_img,
-                      source=src))
+                      source=source))
 
 class ButtonImageChoices(ButtonImage):
     def __init__(self, on_press, pos, text):

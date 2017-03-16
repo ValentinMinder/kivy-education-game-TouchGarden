@@ -35,6 +35,7 @@ Config.set('graphics', 'resizable', 0)
 import random
 import settings
 import time
+from subprocess import call
 
 from kivy.animation import Animation
 
@@ -258,20 +259,62 @@ class StartScreen(KeyScreen):
             on_press=close,
             pos=(win_dx(sizes.win_width - sizes.win_header), win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_header, sizes.win_header),
-            src_back='images/scenery/back_80x183px_red.png',
+            source_back='images/scenery/back_80x183px_red.png',
             size_img=(sizes.win_header, sizes.win_header),
-            src='images/scenery/picto_croix_150x150px.png',
+            source='images/scenery/picto_croix_150x150px.png',
             text=txt_scenery_notxt,
             left=0))
+
+        self.last = None
+        def terminate(btn):
+            if (self.last != None and btn != self.last):
+                App.get_running_app().stop()
+            self.last = btn
+
+            def reset_last(*any):
+                self.last = None
+            Clock.schedule_once(reset_last, 1)
+
+        window_frame.add_widget(ButtonImage(
+            on_press=terminate,
+            pos=(win_dx(sizes.win_width - sizes.win_header - 10), win_dy(70)),
+            size=(79, 164),
+            size_img=(79, 164),
+            source='images/credits/HEIG-VD_Logo 14x29_RVB ROUGE.png'))
+
+        # reverse invisible button
+        window_frame.add_widget(ButtonImage(
+            on_press=terminate,
+            pos=(sizes.width - 79 - win_dx(sizes.win_width -  sizes.win_header - 10), sizes.height - 164 - win_dy(70)),
+            size=(79, 164),
+            size_img=(79, 164),
+            source='images/scenery/transparency.png'))
+
+        h = 100.0
+        l = h / 305.0 * 771.0
+        window_frame.add_widget(ButtonImage(
+            on_press=terminate,
+            pos=(win_dx(sizes.win_width - l - 10), win_dy(sizes.win_height - sizes.win_header - h - 10)),
+            size=(l, h),
+            size_img=(l, h),
+            source='images/credits/pronatura.jpg'))
+
+        #reverse invisible button
+        window_frame.add_widget(ButtonImage(
+            on_press=terminate,
+            pos=(sizes.width - l - win_dx(sizes.win_width - l - 10), sizes.height - h - win_dy(sizes.win_height - sizes.win_header - h - 10)),
+            size=(l, h),
+            size_img=(l, h),
+            source='images/scenery/transparency.png'))
 
         # add logos with impressum buttum
         self.add_widget(ButtonImageText(
             on_press=impressum,
             pos=(2 * sizes.width_left_margin, 0),
             size=(624, 100),
-            src_back='images/scenery/impressum.png',
+            source_back='images/scenery/impressum.png',
             size_img=(1, 1),
-            src='images/scenery/transparency.png',
+            source='images/scenery/transparency.png',
             text=impressum_txt,
             left=624,
             vAlignTop=True))
@@ -295,9 +338,9 @@ class StartScreen(KeyScreen):
             on_press=self.french,
             pos=(pos_x_lang(), poxy_lang_elem),
             size=(w_lang_elem, 97),
-            src_back='images/scenery/fenetre_infos_200x97px_green.png',
+            source_back='images/scenery/fenetre_infos_200x97px_green.png',
             size_img=(23, 30),
-            src='images/scenery/fleche_seule_23x44px_white.png',
+            source='images/scenery/fleche_seule_23x44px_white.png',
             text=txt_lang_choice_fr,
             left=170,
             font_size=sizes.font_size_title))
@@ -307,9 +350,9 @@ class StartScreen(KeyScreen):
             on_press=self.german,
             pos=(pos_x_lang(), poxy_lang_elem),
             size=(w_lang_elem, 97),
-            src_back='images/scenery/fenetre_infos_200x97px_green.png',
+            source_back='images/scenery/fenetre_infos_200x97px_green.png',
             size_img=(23, 30),
-            src='images/scenery/fleche_seule_23x44px_white.png',
+            source='images/scenery/fleche_seule_23x44px_white.png',
             text=txt_lang_choice_de,
             left=170,
             font_size=sizes.font_size_title))
@@ -320,9 +363,9 @@ class StartScreen(KeyScreen):
                 on_press=self.english,
                 pos=(pos_x_lang(), poxy_lang_elem),
                 size=(w_lang_elem, 97),
-                src_back='images/scenery/fenetre_infos_200x97px_green.png',
+                source_back='images/scenery/fenetre_infos_200x97px_green.png',
                 size_img=(23, 30),
-                src='images/scenery/fleche_seule_23x44px_white.png',
+                source='images/scenery/fleche_seule_23x44px_white.png',
                 text=txt_lang_choice_en,
                 left=170,
                 font_size=sizes.font_size_title))
@@ -359,6 +402,19 @@ class StartScreen(KeyScreen):
         self.dim_element.background_color = 0,0,0,0
         self.add_widget(self.dim_element)
         self.on_touch_up()
+
+        #reverse impressum -> calibrate the screen with 5 second timeout if pressed
+        # if the screen is inversed (not calibrated), then the calibration will launch when "it's like" impressum is pressed
+        def calibrate(*any):
+            if self.dim_element.background_color[3] < 0.05:
+                call(["/etc/opt/elo-usb/elova", "--nvram", "--caltargettimeout=5"])
+
+        self.add_widget(ButtonImage(
+            on_press=calibrate,
+            pos=(sizes.width - (2 * sizes.width_left_margin) - 624, sizes.height - 0 - 100),
+            size=(624, 100),
+            size_img=(624, 100),
+            source='images/scenery/transparency.png'))
 
     def on_touch_up(self, *any):
         self.dark_continue = False
@@ -1031,9 +1087,9 @@ class FloatGameScreen(BackKeyScreen):
             on_press=on_press,
             pos=(win_dx(sizes.win_width - sizes.win_width_infos), win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_width_infos, sizes.win_header),
-            src_back='images/scenery/back_80x183px_green.png',
+            source_back='images/scenery/back_80x183px_green.png',
             size_img=(sizes.win_header / 2, sizes.win_header),
-            src='images/scenery/fleche_seule_23x44px_white.png',
+            source='images/scenery/fleche_seule_23x44px_white.png',
             text=txt_tutorial_play,
             left=sizes.win_width_infos - sizes.win_header / 2))
 
@@ -1061,9 +1117,9 @@ class FloatGameScreen(BackKeyScreen):
                 on_press=close,
                 pos=(win_dx(sizes.win_width - sizes.win_header), win_dy(sizes.win_height - sizes.win_header)),
                 size=(sizes.win_header, sizes.win_header),
-                src_back='images/scenery/back_80x183px_red.png',
+                source_back='images/scenery/back_80x183px_red.png',
                 size_img=(sizes.win_header, sizes.win_header),
-                src='images/scenery/picto_croix_150x150px.png',
+                source='images/scenery/picto_croix_150x150px.png',
                 text=txt_scenery_notxt,
                 left=0))
         else:
@@ -1072,9 +1128,9 @@ class FloatGameScreen(BackKeyScreen):
                 pos=(
                     win_dx(sizes.win_width - sizes.win_width_infos), win_dy(sizes.win_height - sizes.win_header)),
                 size=(sizes.win_width_infos, sizes.win_header),
-                src_back='images/scenery/back_80x183px_green.png',
+                source_back='images/scenery/back_80x183px_green.png',
                 size_img=(sizes.win_header / 2, sizes.win_header),
-                src='images/scenery/fleche_seule_23x44px_white.png',
+                source='images/scenery/fleche_seule_23x44px_white.png',
                 text=txt_interact_forward,
                 left=sizes.win_width_infos - sizes.win_header / 2))
 
@@ -1098,9 +1154,9 @@ class FloatGameScreen(BackKeyScreen):
                 on_press=next_solutions,
                 pos=(win_dx((sizes.win_width - 200) / 2), win_dy(sizes.win_header * 1.5)),
                 size=(200, 97),
-                src_back='images/scenery/fenetre_infos_200x97px_green.png',
+                source_back='images/scenery/fenetre_infos_200x97px_green.png',
                 size_img=(23, 44),
-                src='images/scenery/fleche_seule_23x44px_white.png',
+                source='images/scenery/fleche_seule_23x44px_white.png',
                 text=txt_interact_solutions,
                 font_size=sizes.font_size_subtitle,
                 left=160)
@@ -1266,9 +1322,9 @@ class FloatGameScreen(BackKeyScreen):
             on_press=forward,
             pos=(win_dx(sizes.win_width - sizes.win_width_infos), win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_width_infos, sizes.win_header),
-            src_back='images/scenery/back_80x183px_green.png',
+            source_back='images/scenery/back_80x183px_green.png',
             size_img=(33, sizes.win_header),
-            src='images/scenery/fleche_seule_23x44px_white.png',
+            source='images/scenery/fleche_seule_23x44px_white.png',
             text=txt_interact_forward,
             left=sizes.win_width_infos - 33))
 
@@ -1288,9 +1344,9 @@ class FloatGameScreen(BackKeyScreen):
             on_press=forward,
             pos=(left, down),
             size=(sizes.win_width_infos, sizes.win_header),
-            src_back='images/scenery/back_80x183px_green.png',
+            source_back='images/scenery/back_80x183px_green.png',
             size_img=(35, sizes.win_header),
-            src='images/scenery/fleche_seule_23x44px_white.png',
+            source='images/scenery/fleche_seule_23x44px_white.png',
             text=txt_interact_forward,
             left=sizes.win_width_infos - 35))
 
@@ -1303,9 +1359,9 @@ class FloatGameScreen(BackKeyScreen):
             on_press=stop_game,
             pos=(right, down),
             size=(sizes.win_width_infos, sizes.win_header),
-            src_back='images/scenery/back_80x183px_red.png',
+            source_back='images/scenery/back_80x183px_red.png',
             size_img=(sizes.win_header,sizes.win_header),
-            src='images/scenery/picto_croix_150x150px.png',
+            source='images/scenery/picto_croix_150x150px.png',
             text=txt_interact_stop_short,
             left=sizes.win_width_infos - sizes.win_header))
 
@@ -1388,9 +1444,9 @@ class FloatGameScreen(BackKeyScreen):
             on_press=more_infos,
             pos=(win_dx(sizes.win_width - sizes.win_width_infos), win_dy(sizes.win_height - sizes.win_header)),
             size=(sizes.win_width_infos, sizes.win_header),
-            src_back='images/scenery/back_80x183px_green.png',
+            source_back='images/scenery/back_80x183px_green.png',
             size_img=(sizes.win_header, sizes.win_header),
-            src='images/scenery/picto_info_63x63px.png',
+            source='images/scenery/picto_info_63x63px.png',
             text=txt_recover_infos,
             left=sizes.win_width_infos - sizes.win_header))
 
