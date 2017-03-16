@@ -548,7 +548,7 @@ class StatsScreen(KeyScreen):
         reset_star(self.star_de)
 
     def forward(self, *any):
-        self.manager.switch_to(ContestIntroScreen(name="Game", previous=self), direction='up')
+        self.manager.switch_to(ContestIntroScreen(name="Game", previous=self,quiz = Quiz()), direction='up')
         self.should_forward = True
         Clock.schedule_once(self.reset_stars, 1)
 
@@ -610,19 +610,37 @@ class QuestionWidget(BoxLayout):
 
 # screen for picking training mode difficulty
 class ContestIntroScreen(BackKeyScreen):
-    def __init__(self, **kwargs):
+    def __init__(self, quiz, **kwargs):
         super(ContestIntroScreen, self).__init__(**kwargs)
-
-        quiz = Quiz()
-        q = quiz.question_public_img
-        im = QuestionWidget(q, image=True)
-        self.l.add_widget(im)
+        self.current_question = 0
+        self.quiz = quiz
+        self.all_correct = True
+        self.fwd(rm = False)
 
     def check(self):
-        self.forward()
+        self.next()
+
+    def fwd(self, rm = True, *any):
+        if rm:
+            self.l.remove_widget(self.im)
+        if (self.current_question < self.quiz.questions.__len__()):
+            q = self.quiz.questions[self.current_question]
+
+            # TODO: add images!
+            # TODO: add questions counter
+            self.im = QuestionWidget(q, image=False)
+            self.l.add_widget(self.im)
+            self.current_question += 1
+        else:
+            self.forward()
+
+    def next(self):
+        self.im.block()
+        self.all_correct &= self.im.correct()
+        Clock.schedule_once(self.fwd, 0.5)
 
     def forward(self):
-        self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous), direction='left')
+        self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous, all_correct = self.all_correct), direction='left')
 
 
 # screen for picking training mode difficulty
@@ -630,15 +648,20 @@ class ContestScreen(BackKeyScreen):
     # layout containing the screen's buttons, used for cursor function
     layout = ObjectProperty()
 
-    def __init__(self, **kwargs):
+    def __init__(self, all_correct, **kwargs):
         super(ContestScreen, self).__init__(**kwargs)
 
         layout = BoxLayout(orientation='vertical', size_hint=(1, 1), padding=10, spacing=10)
         self.add_widget(layout)
 
+        if all_correct:
+            text = "All correct!"
+        else:
+            text = "some mistakes"
+
         layout.add_widget(
             Label(
-                text='Tu peux maintenant participer au concours en répondant correctement à quelques sur l\'exposition',
+                text=text,
                 size_hint=(1, 0.2)))
 
         self.qlayout = qlayout = BoxLayout(orientation='vertical', size_hint=(1, 1), spacing=10)
