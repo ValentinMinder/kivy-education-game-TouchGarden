@@ -4,7 +4,7 @@
 # TODO: disable the watermark (False) for actual production at client's premise (Pro Natura). Leave it enabled (True) for distribution and ANY other use.
 watermarked = True
 # TODO: enable the quiz (True) on the computer whre the quizz is wanted (otherwise, False, it will launch the garden game)
-quiz_enabled = False
+quiz_enabled = True
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
 english_enabled = True
 # general reset timeout in seconds
@@ -99,7 +99,7 @@ for font in settings.KIVY_FONTS:
 class ButtonStar(ToggleButton):
     # on press, toogle all previous stars and untoggle following
     def on_press(self):
-        self.parent.parent.parent.check(self)
+        self.parent.parent.parent.parent.check(self)
 
 
 # specialized version of screen that handles keyboard presses and has a cursor system,
@@ -476,45 +476,51 @@ class StatsScreen(KeyScreen):
     # layout containing the screen's buttons, used for cursor function
     layout = ObjectProperty()
     max = 5
+    should_forward = True
 
     def __init__(self, **kwargs):
         super(StatsScreen, self).__init__(**kwargs)
 
-        def add_star(widget):
+        def add_star(widget, lang):
             widget.add_widget(Label())
             for i in range(1, self.max + 1):
                 bs = ButtonStar()
+                bs.lang = lang
                 bs.text = bs.id = str(i)
                 widget.add_widget(bs)
                 widget.add_widget(Label())
 
-        add_star(self.star_fr)
-        add_star(self.star_de)
+        add_star(self.star_fr, lang = lang.fr)
+        add_star(self.star_de, lang = lang.de)
+
+        self.until_run = 0
+        self.until_run_up = True
+        Clock.schedule_interval(self.check_run, 0.5)
+
+    def check_run(self, *any):
+        if (self.should_forward):
+            self.check_stars(self.star_fr, self.until_run)
+            self.check_stars(self.star_de, self.until_run)
+        self.until_run +=1 if self.until_run_up else -1
+
+        if (self.until_run == self.max + 1):
+            self.until_run_up = False
+        if (self.until_run < -self.max):
+            self.until_run_up = True
+
 
     def check(self, btn):
         nb = int(btn.id)
         self.rate = nb
 
-        def check_star(widget):
-            for i in widget.children:
-                if (i.id):
-                    if int(i.id) <= nb:
-                        i.state = 'down'
-                    else:
-                        i.state = 'normal'
-                        anim = Animation(x=2000, duration=1)
-                        anim.start(i)
+        #change language
+        lang.current = btn.lang
 
-                    # todo: choos if anim should forward
-                    if (int(i.id) == self.max):
-                        anim = Animation(duration=3)
-                        anim.bind(on_complete=self.forward_)
-                        anim.start(i)
-
-        check_star(self.star_fr)
-        check_star(self.star_de)
-        self.vde.disabled = False
-        self.vfr.disabled = False
+        self.check_stars(self.star_fr, nb)
+        self.check_stars(self.star_de, nb)
+        if (self.should_forward):
+            self.should_forward = False
+            Clock.schedule_once(self.forward, 0.5)
 
     def validate_fr(self):
         lang.current = lang.fr
@@ -524,11 +530,27 @@ class StatsScreen(KeyScreen):
         lang.current = lang.de
         self.forward()
 
-    def forward_(self, *any):
-        self.forward()
+    def check_stars(self, widget, until):
+        for i in widget.children:
+            if (i.id):
+                if int(i.id) <= until:
+                    i.state = 'down'
+                else:
+                    i.state = 'normal'
 
-    def forward(self):
-        self.manager.switch_to(ContestIntroScreen(name="Game", previous=self), direction='left')
+    def reset_stars(self, *any):
+        def reset_star(widget):
+            for i in widget.children:
+                if (i.id):
+                    i.state = 'normal'
+
+        reset_star(self.star_fr)
+        reset_star(self.star_de)
+
+    def forward(self, *any):
+        self.manager.switch_to(ContestIntroScreen(name="Game", previous=self), direction='up')
+        self.should_forward = True
+        Clock.schedule_once(self.reset_stars, 1)
 
 
 class QuestionWidget(BoxLayout):

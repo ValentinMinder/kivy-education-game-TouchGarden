@@ -35,6 +35,8 @@ class color:
     back_magenta = (0.89, 0.13, 0.37, 1)
     back_green = (0, 0.66, 0.195, 1)
     back_selected = (1, 0.5, 0, 1)
+    back_blue_dark = (0, 0, 102.0/256.0, 1)
+    back_no_color = (0,0,0,0)
 
 
 class Text:
@@ -456,8 +458,8 @@ txt_game_move_pass = Text(
 
 txt_quiz_intro_fr = "Merci d'évaluer l'exposition pour participer au concours"
 txt_quiz_intro_de = "Bitte geben Sie uns eine Bewertung um am Wettbewerb teilzunehmen"
-txt_quiz_intro_conf_fr = "Réponse enregsitrée, merci!"
-txt_quiz_intro_conf_de = "Antwort gespeichert, danke!"
+#txt_quiz_intro_conf_fr = "Réponse enregsitrée, merci!"
+#txt_quiz_intro_conf_de = "Antwort gespeichert, danke!"
 
 txt_quiz_conf = Text(
     fr="Merci pour votre évaluation. Vous pouvez maintenant participer au concours en répondant correctement à quelques questions.",

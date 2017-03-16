@@ -24,54 +24,51 @@
 <StatsScreen>:
     star_fr: star_fr
     star_de: star_de
-    vde: vde
-    vfr: vfr
-    BoxLayout:
-
-        orientation: 'vertical'
-        padding: 10
-        spacing: 30
-        size_hint: 1, 1
-
+    FloatLayout:
         LabelB:
-            text: txt.txt_quiz_intro_fr
-            background_color: color.back_grey
-            size_hint: 1, 0.4
+            background_color: color.back_blue_dark
 
         BoxLayout:
-            orientation: 'horizontal'
+            orientation: 'vertical'
+            padding: 10
+            spacing: 30
             size_hint: 1, 1
-            id: star_fr
 
-        Button:
-            id: vfr
-            size_hint: 1, 0.4
-            text: txt.txt_quiz_intro_conf_fr
-            disabled: True
-            on_press: root.validate_fr()
 
-        LabelB:
-            background_color: color.back_grey_dark
-            font_size: '12dp'
-            size_hint: 1, 0.05
+            LabelB:
+                text: txt.txt_quiz_intro_fr
+                background_color: color.back_grey
+                size_hint: 1, 0.4
 
-        LabelB:
-            text: txt.txt_quiz_intro_de
-            background_color: color.back_grey
-            size_hint: 1, 0.4
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 1
+                id: star_fr
 
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, 1
-            id: star_de
+            LabelB:
+                text: txt.txt_scenery_notxt.get()
+                background_color: color.back_no_color
+                size_hint: 1, 0.2
 
-        Button:
-            id: vde
-            size_hint: 1, 0.4
-            text: txt.txt_quiz_intro_conf_de
-            disabled: True
-            on_press: root.validate_de()
+            LabelB:
+                background_color: color.back_grey_dark
+                font_size: '12dp'
+                size_hint: 1, 0.1
 
+            LabelB:
+                text: txt.txt_quiz_intro_de
+                background_color: color.back_grey
+                size_hint: 1, 0.4
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 1
+                id: star_de
+
+            LabelB:
+                text: txt.txt_scenery_notxt.get()
+                background_color: color.back_no_color
+                size_hint: 1, 0.2
 
 <QuestionWidget>
     q: q
