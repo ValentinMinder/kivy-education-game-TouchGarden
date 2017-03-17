@@ -785,6 +785,10 @@ class FloatGameScreen(BackKeyScreen):
         self.nb_current_category__used = 0
         self.points = 0
 
+        #auto-detect and help people that have problems with placement
+        self.fail_interact_trial = 0
+        self.easy_interact_mode = False
+
         self.frame = FloatLayout(size_hint=(1, 1))
         self.init_static_UI()
         self.init_pseudo_static_UI()
@@ -1288,6 +1292,9 @@ class FloatGameScreen(BackKeyScreen):
             if self.frame.cat_reverse:
                 self.frame.cat.flip()
 
+            self.fail_interact_trial = 0
+            self.easy_interact_mode = False
+
             # stop the music
             music.stop()
             music_alt.stop()
@@ -1495,9 +1502,9 @@ class FloatGameScreen(BackKeyScreen):
         if (self.button_enabled & isinstance(element, ElementScatter)):
             target = self.current_category.target
             # automatize placement for detection, static image & animation
-            # check collision, object placed
+            # check collision, object placed OR EAZY mode and no placement needed
             self.currentObj = ObjectProperty(None)
-            if (target.image.collide_widget(element)):
+            if (target.image.collide_widget(element) or self.easy_interact_mode):
                 # don't forward category during animation!
                 self.button_cat_enabled = False
                 # put the real object in place of target (suppose both elements have same size!)
@@ -1529,13 +1536,20 @@ class FloatGameScreen(BackKeyScreen):
                 # disable all other widget in category selection
                 self.category_clean()
                 self.nb_current_category__used += 1
+
+                if not self.easy_interact_mode:
+                    self.fail_interact_trial = 0
             else:
                 # object not placed, return to place and text changed
                 anim = Animation(x=element.x_orig, y=element.y_orig)
                 anim.start(element)
                 self.speach.label.text = txt_game_move_unreached.get()
 
-                # TODO: after 2 or 3 failed trials, activate the "easy_selection" mode
+                #after 3 failed trials IN A ROW, activate the "easy_selection" mode, and the 3rd, 4st and all subsequent trials will be "EAZY"
+                self.fail_interact_trial += 1
+                if (self.fail_interact_trial >= 2):
+                    self.easy_interact_mode = True
+                    self.on_touch_up(touch)
 
     # after negative scenario
     def after_positive(self, element):
@@ -1545,7 +1559,10 @@ class FloatGameScreen(BackKeyScreen):
     def after_negative(self, element):
         window_frame = win_generate(text_title=txt.txt_recover_header)
 
+        #if info window was optionnally opened during the choices, then no pop-up. Otherwise, forec the use to see it.
+        self.win_neg_open_more_infos = False
         def more_infos(screen):
+            self.win_neg_open_more_infos = True
             self.more_infos(element, fct=self.none)
 
         window_frame.add_widget(ButtonImageText(
@@ -1571,7 +1588,11 @@ class FloatGameScreen(BackKeyScreen):
                 self.hipster(pt)
                 after_all_choices()
 
-            self.more_infos(element, fct=fct, negative=True, alternate=True)
+
+            if self.win_neg_open_more_infos:
+                fct()
+            else:
+                self.more_infos(element, fct=fct, negative=True, alternate=True)
 
         # add a correction to negative elements
         def correct(screen):
@@ -1605,7 +1626,10 @@ class FloatGameScreen(BackKeyScreen):
                 # forward category allowed after positive animation!
                 self.button_cat_enabled = True
 
-            self.more_infos(element, fct=fct, negative=True, alternate=True)
+            if self.win_neg_open_more_infos:
+                fct()
+            else:
+                self.more_infos(element, fct=fct, negative=True, alternate=True)
 
         # keep the object
         def keep(screen):
@@ -1618,13 +1642,17 @@ class FloatGameScreen(BackKeyScreen):
                 # forward category allowed after positive animation!
                 self.button_cat_enabled = True
 
-            self.more_infos(element, fct=fct, negative=True, alternate=True)
+            if self.win_neg_open_more_infos:
+                fct()
+            else:
+                self.more_infos(element, fct=fct, negative=True, alternate=True)
 
         # remove the recover window and update cursor
         def after_all_choices():
             self.frame.remove_widget(window_frame)
             self.hipster_sways_after()
             self.background_enable()
+            self.win_neg_open_more_infos = False
 
         class ButtonImageChoicesKeep(ButtonImageChoices):
             def __init__(self, element, pos):
