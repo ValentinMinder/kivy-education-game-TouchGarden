@@ -1,0 +1,497 @@
+================================================================================    
+
+          Elo Multiple Touchscreen Linux Driver - Single Touch (ST) USB
+
+          Intel i686 (32 bit) or AMD64/Intel (64 bit) or ARMv7l (32 bit) 
+       
+                         List of New Features & Changes
+
+--------------------------------------------------------------------------------               
+
+                                  Version 4.3.1 
+                               September 15, 2016
+                               Elo Touch Solutions
+
+================================================================================    
+
+
+Summary of new features & changes in driver v4.3.1 :
+----------------------------------------------------
+
+  1. Added single touch support for Elo Intellitouch SAW Multi Touch(MT) 
+     HID and non-HID controllers with VID:PID(04e7:0022, 04e7:0027, 04e7:0124, 
+     04e7:0126)  
+ 
+  2. Added single touch support for Elo Intellitouch Pro PCAP controllers with
+     VID:PID(04e7:0063, 04e7:0064, 04e7:0067, 0eef:7200, 0eef:7402, 0eef:a800) 
+ 
+  3. Added support for Linux ARM distributions(requires Xwindows support) with 
+     ARMv7l 32 bit platform. The ARMv7l driver was built and tested using a 
+     PandaBoard ES running Ubuntu 12.04.5 LTS(ARMv7l).    
+
+  4. Added elo.service systemd startup script and instructions to enable elo
+     driver startup on Linux distributions with systemd init system.
+ 
+
+
+================================================================================    
+
+
+
+
+Previous Versions:
+------------------
+================================================================================   
+
+                                  Version 4.2.0 
+                                  July 21, 2016
+                               Elo Touch Solutions
+
+================================================================================    
+
+
+Summary of new features & changes in driver v4.2.0 :
+----------------------------------------------------
+
+  1. Added Right Click On Hold(RCOH) feature for all supported touchscreens. The
+     RCOH feature is disabled by default and can be enabled using the command 
+     line control panel utility(cplcmd) or eloconvertconfig utility.
+
+  2. Added RCOH parameters(RCOHFlag, RCOHToleranceArea and RCOHDelay) which can 
+     be used to configure the RCOH settings for each specific touchscreen. The 
+     command line control panel utility(cplcmd) or eloconvertconfig utility can
+     be used to view the current RCOH parameters and set them as needed.
+ 
+  3. Added single touch support for Elo Intellitouch Pro PCAP controllers with
+     VID:PID(03eb:8a6e, 04e7:00c0, 04e7:1d00, 04e7:1c00, 04e7:240b, 04e7:2410,   
+     2149:3ab8, 2149:42cf, 04e7:2003 & 04e7:2100)  
+ 
+  4. Elo Intellitouch Pro PCAP controllers with VID:PID(03eb:8a6e, 04e7:00c0, 
+     04e7:1d00, 04e7:2003, etc) that do not contain a valid serial number will 
+     only work in single touchscreen mode. Driver requires unique serial numbers 
+     to work with multiple touchscreens.  
+
+  5. Fixed a driver issue where the active touch controller with no serial 
+     number could be mistaken for a new touch device, resulting in some unwanted 
+     initialization errors - "Device 1: Could not claim interface 1"
+
+  6. Initialized the Serial Number string to "None", so touch controllers that 
+     have no serial number will now report "None" instead of unprintable 
+     characters in the driver log.
+
+  7. Added driver commandline option "--ignoreserialnumber" to ignore serial 
+     number matching for using the touch driver configuration data.
+
+  8. Added more protection in the code to avoid any race condition or any errors 
+     when the Elo driver is killed manually.  
+
+  9. Added a commandline option "--file" to the eloautocalib utility to read the
+     touchscreen calibration parameters from a specified file and apply it to
+     the driver.
+
+ 10. Renamed Intellitouch 2800XX series eSAW controllers to 3200XX series.
+
+
+
+================================================================================    
+
+ 
+================================================================================    
+
+                                  Version 4.1.0-b3 
+                                December 31, 2015
+                               Elo Touch Solutions
+
+================================================================================    
+
+
+Summary of new features & changes in driver v4.1.0 :
+----------------------------------------------------
+
+  1. Added single touch support for Elo Intellitouch Pro PCAP and Intellitouch
+     2800XX series SAW controllers.
+
+  2. Added support for touch controller serial numbers greater than 8 characters.
+
+  3. Added a new tool to display or modify current global and device specific
+     touchscreen parameters [eloconvertconfig]. Type the command
+     "/etc/opt/elo-usb/eloconvertconfig --help" for available command line
+     parameters and usage.
+
+  4. Converted beep parameters(BeepOnTouch, BeepTime and BeepFreq) to device 
+     specific parameters. Each touchscreen device can now be configured with
+     different beep settings.
+
+  5. Modified the default videoscreen to touchscreen association. Previously,
+     if a valid video2touch association is not found then the touchscreen would
+     be assigned to videoscreen 0. Now, the touchscreen is assigned to the same    
+     videoscreen (example: touch 0 => video 0, touch 1 => video 1, etc.). 
+     Running the calibration utility, elova will overwrite this default 
+     association.  
+
+  6. Modified the default initialization behaviour for PCAP touchscreens such 
+     that they would be aligned to the associated videoscreen out of the box and
+     would not require calibration. Running the calibration utility, elova will 
+     overwrite this default alignment. 
+
+
+
+================================================================================   
+
+ 
+================================================================================    
+
+                                 Version 4.0.1 
+                                November 11, 2014
+                               Elo Touch Solutions
+
+================================================================================    
+
+
+Summary of new features & changes in driver v4.0.1 :
+----------------------------------------------------
+
+  1. Fixed a device handle leak that caused the driver to quit or stop 
+     functioning after a few hours.
+
+  2. Fixed a file write error that resulted in loss of device specific 
+     information including calibration data in a multiple touchscreen setup. 
+
+  3. Fixed a stale data issue that resulted in loss of new calibration data 
+     after unplug and replug of a USB touchscreen.  
+
+  4. Fixed a minor issue that prevented the use of certain commandline 
+     parameters in the driver binary(--xwarppointer, --displaycoordinates, etc).
+
+  5. Fixed a X authentication issue in the driver that occured during system 
+     startup on SUSE Linux Enterprise Desktop (SLED) 11 SP3.   
+  
+  6. Verified support for multiple videoscreen setup based on multiple X 
+     videoscreens(Xinerama or separate X videoscreens). Use the "--xwarppointer" 
+     driver commandline parameter to use XWarpPointer call to send touch events 
+     to X window system. This option is essential if the target Linux
+     platform has multiple video screens configured in separate X video screen 
+     mode or Xinerama mode. The default call to send touch events, 
+     XTestFakeMotionEvent has a bug that prevents the switching of cursor across 
+     video screens in Xinerama mode or separate X video screen mode [Xorg v7.4 
+     or later].    
+
+  7. Enabled the --xwarppointer option in the driver by default in the driver 
+     startup script (/etc/opt/elo-usb/loadEloTouchUSB.sh).
+ 
+  8. Added X videoscreen information to the touch events that are displayed when 
+     the --displaycoordinates option is enabled in the driver.
+
+  9. Improved the robustness of the driver to be tolerant to errors during
+     dynamic memory allocation.
+
+ 10. Improved the robustness of the data read and writes to driver configuration
+     file.
+
+ 11. The USB driver log file(EloUsbErrorLog.txt) that was previously located in 
+     the driver folder (/etc/opt/elo-usb/) has been moved to /var/log/elo-usb/
+     folder.    
+
+
+
+================================================================================    
+
+
+================================================================================    
+
+                                  Version 4.0.0
+                                November 08, 2013 
+                               Elo Touch Solutions
+
+================================================================================    
+
+
+Summary of new features & changes in driver v4.0.0 :
+----------------------------------------------------
+
+  1. Supports multiple ST(Single Touch) touchscreens (maximum: 32) and multiple
+     videoscreens (maximum: 32) 
+
+  2. Supports Linux 3.x.x and 2.6.x kernels
+
+  3. Supports latest Xorg Xserver versions (v1.14.3 or newer)
+
+  4. Video monitor to touchscreen associations for multiple touchscreens 
+     enables touch routing to correct video monitor, based on unique touchscreen
+     serial number.[Video2Touch.txt]   
+
+
+
+Supported System Configurations:
+--------------------------------
+
+ The current version of the USB driver will support the following 
+ video and touchscreen configurations: 
+
+ 1. Single video and single touchscreen.
+ 2. Multiple video and single touchscreen. 
+ 3. Multiple video and multiple touchscreens. 
+
+ 
+
+================================================================================    
+
+
+================================================================================    
+
+                                  Version 3.5.4-beta1
+                                  April 30, 2013 
+                                Elo Touch Solutions
+
+================================================================================    
+
+
+Summary of new features & changes in driver v3.5.4-beta1 :
+----------------------------------------------------------
+
+  1. Precalibration support using touchscreen controller's NVRAM (Non 
+     Volatile Random Access Memory), if available.
+
+  2. Desktop position independent calibration using precalibration 
+     feature in a multiple monitor setup. Requires USB configuration file
+     (/etc/opt/elo-usb/USBConfigData) to be stored on the hard drive of target 
+     Linux system.  
+
+  3. Dynamic adjustment of touchscreen calibration to suit current video 
+     resolution using precalibration feature [eloautocalib].Type 
+     "/etc/opt/elo-usb/eloautocalib --help" for available command line 
+     parameters and usage.
+
+
+
+================================================================================    
+
+
+================================================================================    
+
+                                  Version 3.5.3
+                                 December 14, 2012 
+                                Elo Touch Solutions
+
+================================================================================    
+
+
+Summary of new features & changes in driver v3.5.3 :
+----------------------------------------------------
+
+  1. Added command line parameters for the 'elousbd' driver. All parameters use 
+     the long command line option with the "--" format. Use the "--help" option 
+     to see all the available commandline options.
+
+  2. Added help section for the 'elousbd' driver. The "--help" driver commandline 
+     parameter displays all the available commandline options and some driver
+     usage examples.
+
+  3. Added "--version" driver commandline parameter to display the USB touchscreen 
+     driver version information.
+
+  4. Added "--displaycoordinates" driver commandline parameter to display the 
+     touch data, corresponding to each touch, on a terminal. This option is used 
+     for testing the touchscreen, hence touch data is only displayed and not sent 
+     to Xserver to move the mouse pointer.
+
+  5. Added "--xwarppointer" driver commandline parameter to use XWarpPointer call
+     to send touch events to X window system. Use this option if the target Linux
+     platform has multiple video screens configured in separate X video screen mode
+     (not twinview mode). The default call to send touch events, XTestFakeMotionEvent 
+     has a bug that prevents the switching of cursor across video screens in separate
+     X video screen mode [Xorg v7.4 or later].     
+
+  6. Added "--activetoucharea" driver commandline parameter to enable the mouse 
+     pointer to respond to touch input within the specified area only. This option
+     needs the following parameters to specify the touch area: OriginX, OriginY, 
+     Width and Height. 
+
+
+================================================================================    
+
+
+================================================================================             
+
+                                  Version 3.5.2-1 
+                                   June 07, 2012
+                                Elo Touch Solutions
+
+================================================================================    
+
+
+Summary of new features & changes in driver v3.5.2-1 :
+------------------------------------------------------
+
+  1. Fixed an issue where the driver consumed 100% cpu resources  
+     when launched at system boot on some Linux distributions.
+
+  2. Fixed an issue where the driver could corrupt the USB touchscreen
+     configuration file during system reboot.
+
+  3. Fixed an issue where the driver would exit after several hundred 
+     trials while recycling power to the touch controller.
+
+  4. Added delays to the USB device arrival and exit routines to allow 
+     more time for the touch controller to stabilize during an USB unplug 
+     and replug event. 
+
+
+================================================================================    
+
+
+================================================================================    
+
+                                  Version 3.5.2 
+                                February 15, 2011
+                                Elo TouchSystems
+
+================================================================================    
+
+
+Summary of new features & changes in driver v3.5.2 :
+----------------------------------------------------
+
+  1. Fixed an issue where touch is lost when an user restarts an 
+     Xwindows session using Ctrl+Alt+Backspace key combination.
+
+  2. Fixed an issue where the driver would not work with a Xwindows
+     system that does not require authentication (xauth).
+
+  3. Fixed an issue in the drag delay logic in the driver for mousemode.
+
+  4. Updated the range for Drag Delay parameter to be consistent with
+     other drivers. New Drag Delay Range is from 50 ms to 2500 ms.  
+
+  5. Removed the requirement for controller serial number matching
+     to retrieve data from configuration file.
+
+
+================================================================================    
+
+
+================================================================================    
+
+                                 Version 3.5.1 
+                                August 11, 2010
+                                Elo TouchSystems
+
+================================================================================    
+
+
+Summary of new features & changes in driver v3.5.1 :
+----------------------------------------------------
+
+  1. Fixed an issue where the touchscreen driver (elousbd) gets terminated
+     when an user logs out of a Xwindows session and touches the screen
+
+  2. Support for Motif verions 3.0 [libXm.so.3] and 4.0 [libXm.so.4]
+
+
+================================================================================    
+
+
+================================================================================    
+
+                                 Version 3.5.0 
+                                 July 14, 2009
+                                Elo TouchSystems
+
+================================================================================    
+
+Summary of new features & changes in driver v3.5.0 :
+----------------------------------------------------
+
+  1. Support for 64 bit AMD/Intel x86_64 platform added. Visit the   
+     Linux downloads section at www.elotouch.com to download the 
+     64 bit AMD/Intel x86_64 platform driver package or the standard 
+     32 bit Intel i686 (x86) platform driver package.  
+
+  2. This userspace driver adds support for recent Linux kernel versions
+     2.6.25 and newer.  
+
+  3. The Elo Touchscreen driver components now require new libusb-1.0 library
+     support (older libusb-0.1 library will not work). Most newer Linux 
+     distributions have started shipping this library(update to the popular 
+     libusb-0.1 library) as a part of their standard release. Customers can 
+     also download and compile the libusb-1.0 library from source (requires 
+     gcc v4.0.0 or later) available at libusb website. This driver will 
+     NOT work with the older libusb-0.1 library.   
+
+  4. Eliminates the Elo Touchscreen driver requirement for USB Human
+     Interface Device (USBHID) component to be a loadable kernel module.
+     Hence, for Linux distributions that have USBHID component built
+     into the kernel by default (example: Redhat, Fedora, etc),
+     recompiling the kernel is not required to install the Elo Touchscreen 
+     driver.
+
+  5. Adds support for Xorg Xserver versions 1.5RC and newer. Older versions
+     of Xorg Xserver are also supported.
+
+  6. Adds support for multiple video screens and single USB touchscreen 
+     configuration. Nvidia Twinview, Xorg Xinerama and Xorg non-Xinerama 
+     based multiple video screens are supported.
+
+  7. The calibration utility provides a default timeout of 30 seconds for 
+     each calibration target. The timeout can be disabled or changed using
+     commandline option --caltargettimeout. It also provides a list of 
+     available video and touch devices for calibration and options to select 
+     specific devices for calibration. The previous calibration command line 
+     parameters -u and -s are now obsolete. All long command line options in 
+     the elova calibration utility have been modified to use the "--" format
+     instead of the "-" format. Formatted the elova output and help information 
+     width to 80 columns for low resolution displays and text consoles. Type 
+     "/etc/opt/elo-usb/elova --help" for available command line parameters 
+     and usage.
+
+  8. Adds a new single touch alignment feature in the elova calibration 
+     utility to support the APR Smartset 7010 controller. This mode displays 
+     only 1 target instead of 3 targets to determine the video screen 
+     associated with the APR Smartset touchscreen.   
+ 
+  9. Adds Beep-on-Touch feature. Beep can be enabled or disabled and other
+     beep parameters can be modified using the GUI control panel (cpl - 
+     sound tab) or using the command line control panel (cplcmd).
+ 
+ 10. The installation procedure for the Userscape USB driver is simplified 
+     compared to previous kernel USB drivers. Customers do have to build 
+     any driver components on the target system and hence do not need to
+     have development environment installed. 
+ 
+ 11. Adds support for recent touchscreen controllers including Surface 
+     Capacitive 5020, APR Smartset 7010 and Accutouch COACh IV controllers.
+
+ 12. Improved plug and play support for USB touchscreen controllers. Changed 
+     the Elo USB touchscreen device permissions to allow normal users to work 
+     with the plugged in touchscreen.
+
+ 13. Adds support for Emacs text editor in the graphic control panel
+     to view the Readme.txt file. 
+
+ 14. This driver release is a major change from the previous version. 
+     Hence some features, options and components from the previous driver
+     versions are now obsolete. 
+
+
+
+Known Issues in driver v3.5.0 :
+-------------------------------
+
+  1. In some Xserver versions the touchscreen driver (elousbd) gets terminated
+     when a user logs out. See troubleshooting section in the readme.txt file
+     for more details and options.
+
+  2. When the driver is started manually from a non-root user account within 
+     Xwindows, the beep-on-touch feature does not work. The driver has to be 
+     loaded from a system startup environment or root user account to get the 
+     beep-on-touch feature functioning properly.      
+
+
+
+================================================================================    
+
+                       Copyright (c) 2016 Elo Touch Solutions
+
+                              All rights reserved.
+
+================================================================================   
