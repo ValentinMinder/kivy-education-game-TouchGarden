@@ -4,7 +4,7 @@
 # TODO: disable the watermark (False) for actual production at client's premise (Pro Natura). Leave it enabled (True) for distribution and ANY other use.
 watermarked = True
 # TODO: enable the quiz (True) on the computer whre the quizz is wanted (otherwise, False, it will launch the garden game)
-quiz_enabled = True
+quiz_enabled = False
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
 english_enabled = True
 # general reset timeout in seconds
@@ -32,6 +32,7 @@ Config.set('graphics', 'show_cursor', 0)
 Config.set('graphics', 'borderless', 1)
 Config.set('graphics', 'resizable', 0)
 
+import os
 import random
 import settings
 import time
@@ -457,6 +458,7 @@ class StartScreen(KeyScreen):
             self.on_touch_up()
 
             def forward(*any):
+                save_entry(file="~/Desktop/garden.csv", opt = "start")
                 self.manager.switch_to(FloatGameScreen(name=txt_main_title_short, previous=self), direction='left')
 
             if self.dim_element.background_color[3] > 0:
@@ -470,6 +472,11 @@ class StartScreen(KeyScreen):
         self.dark_continue = True
         self.on_touch_up()
 
+
+def save_entry(file, opt = ""):
+    time_sec = time.time()
+    time_utf = time.ctime(time_sec)
+    os.system("echo " + str(time_sec) + ", " + time_utf + ", " + lang_str() + ", " + opt + " >> " + file)
 
 # screen for picking training mode difficulty
 class StatsScreen(KeyScreen):
@@ -513,8 +520,10 @@ class StatsScreen(KeyScreen):
         nb = int(btn.id)
         self.rate = nb
 
-        #change language
+        # change language
         lang.current = btn.lang
+
+        save_entry(file = "~/Desktop/rates.csv", opt = str(nb))
 
         self.check_stars(self.star_fr, nb)
         self.check_stars(self.star_de, nb)
@@ -615,33 +624,84 @@ class ContestIntroScreen(BackKeyScreen):
         self.current_question = 0
         self.quiz = quiz
         self.all_correct = True
-        self.fwd(rm = False)
+
+        self.correct = ['replies']
+        self.correct_nb = 0
+        self.public = "U"
+        self.nbimg = quiz.question_images.__len__()
+        self.max = quiz.questions.__len__() + self.nbimg
+
+        self.fwd(rm=False)
+        self.timeout_running = True
+        self.timeout_touch()
 
     def check(self):
         self.next()
 
+
     def fwd(self, rm = True, *any):
         if rm:
             self.l.remove_widget(self.im)
-        if (self.current_question < self.quiz.questions.__len__()):
-            q = self.quiz.questions[self.current_question]
+        if (self.current_question < self.max):
 
-            # TODO: add images!
-            # TODO: add questions counter
-            self.im = QuestionWidget(q, image=False)
+            if (self.current_question < self.nbimg):
+                # add images questions
+                q = self.quiz.question_images[self.current_question]
+                self.im = QuestionWidget(q, image=True)
+            else:
+                # add non-images text questions
+                q = self.quiz.questions[self.current_question - self.nbimg]
+                self.im = QuestionWidget(q, image=False)
+
             self.l.add_widget(self.im)
             self.current_question += 1
+            # questions counter
+            self.timer.text = txt_quiz_question.get() + str(self.current_question) + "/" + str(self.max)
         else:
             self.forward()
 
     def next(self):
         self.im.block()
-        self.all_correct &= self.im.correct()
+        is_correct = self.im.correct()
+        if (self.current_question < self.max):
+            self.correct_nb += 1 if is_correct else 0
+            self.all_correct &= is_correct
+        else:
+            self.public = 'A' if is_correct else 'E'
+        self.correct.append(is_correct)
         Clock.schedule_once(self.fwd, 0.5)
 
+    def end_stats(self):
+        # all_correct, #nb_correct, total_question, #public A/E/U, #details of questions
+        save_entry(file="~/Desktop/stats.csv", opt=str(self.all_correct) + "," + str(self.correct_nb) + "," + str(self.current_question) + ", " + self.public + ", " + str(self.correct))
+
     def forward(self):
+        self.timeout_running = False
+        self.end_stats()
         self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous, all_correct = self.all_correct), direction='left')
 
+    # triggered for EVERY touch MOVE on any element of this screen
+    def on_touch_move(self, touch):
+        self.timeout_touch()
+        return False
+
+    # triggered for EVERY touch UP on any element of this screen
+    def on_touch_up(self, touch):
+        self.timeout_touch()
+
+    # should be called anywhere a touch is made, to update last_lcik and schedule the timeout check
+    def timeout_touch(self):
+        self.last_click = time.time()
+        Clock.schedule_once(self.timeout_check, timeout + 1)
+
+    # check if timeout has expired and expire
+    def timeout_check(self, dt):
+        current = time.time()
+        if (current - self.last_click) > timeout:
+            if self.timeout_running:
+                self.timeout_running = False
+                self.end_stats()
+                self.back()
 
 # screen for picking training mode difficulty
 class ContestScreen(BackKeyScreen):
@@ -654,62 +714,59 @@ class ContestScreen(BackKeyScreen):
         layout = BoxLayout(orientation='vertical', size_hint=(1, 1), padding=10, spacing=10)
         self.add_widget(layout)
 
-        if all_correct:
-            text = "All correct!"
-        else:
-            text = "some mistakes"
+        text = txt_quiz_end_positive if all_correct else txt_quiz_end_negative
 
         layout.add_widget(
             Label(
-                text=text,
+                text=text.get(),
                 size_hint=(1, 0.2)))
 
-        self.qlayout = qlayout = BoxLayout(orientation='vertical', size_hint=(1, 1), spacing=10)
+        if all_correct:
+            summary = Label(
+                text=txt_quiz_tombola_start.get(),
+                size_hint=(1, 0.2))
+            layout.add_widget(summary)
+            summary.font_size = sizes.font_size_title
 
-        self.quiz = Quiz()
-        qlayout.add_widget(QuestionWidget(self.quiz.question_public))
-        for qi in self.quiz.question_images:
-            im = QuestionWidget(qi, image=True)
-            qlayout.add_widget(im)
-        for qq in self.quiz.questions:
-            qw = QuestionWidget(qq)
-            qlayout.add_widget(qw)
+            counter = Label(
+                text="-",
+                size_hint=(1, 1))
+            layout.add_widget(counter)
+            counter.font_size = 100
 
-        layout.add_widget(qlayout)
+            self.i = 5 + 1
+            def retract(*any):
+                self.i -= 1
+                counter.text = str(self.i)
+                if (self.i > 0):
+                    Clock.schedule_once(retract, 1)
+                else:
 
-        self.btn_submit = btn = Button(text="répondre d'abord à toutes les questions", size_hint=(1, 0.1),
-                                       background_normal='', background_down='')
-        btn.disabled = True
-        btn.background_color = color.back_grey
+                    win = False
+                    winners = {1654, 2478, 3745, 4536, 5937}
+                    my_win = random.randint(1, 9999)
 
-        def erase():
-            self.back()
+                    reset_txt.text = txt_quiz_tombola_reset.get()
+                    if my_win in winners:
+                        win = True
 
-        def submit():
-            all_correct = True
-            for qq in self.qlayout.children:
-                all_correct &= qq.correct()
-                qq.block()
-            if all_correct:
-                btn.background_color = color.back_green
-                btn.text = "Bravo, vous avez répondu correctement, vous allez participer au tirage au sort."
-            else:
-                btn.background_color = color.back_magenta
-                btn.text = "Quelques erreurs, malheureusement... à bientôt"
-                # todo: after timeout, move to start screen
+                    def reset(*any):
+                        self.back()
 
-            btn.on_press = erase
+                    if win:
+                        summary.text = txt_quiz_tombola_win.get()
+                        counter.text = str(my_win)
+                        Clock.schedule_once(reset, 3 * timeout)
+                    else:
+                        summary.text = txt_quiz_tombola_loose.get()
+                        Clock.schedule_once(reset, timeout)
+            retract()
 
-        btn.on_press = submit
-        layout.add_widget(btn)
-
-    def check(self):
-        done = True
-        for q in self.qlayout.children:
-            done &= q.done()
-        if done:
-            self.btn_submit.disabled = False
-            self.btn_submit.text = "Appuyer pour vérifier, lorsque tu es prêt."
+        reset_txt = Label(
+            size_hint=(1, 0.1))
+        layout.add_widget(reset_txt)
+        if not all_correct:
+            reset_txt.text = txt_quiz_tombola_reset.get()
 
 
 # float layout for draggable elements management
@@ -725,6 +782,7 @@ class FloatGameScreen(BackKeyScreen):
 
         # handles category numbers (start at 0)
         self.nb_current_category = 0
+        self.nb_current_category__used = 0
         self.points = 0
 
         self.frame = FloatLayout(size_hint=(1, 1))
@@ -1220,8 +1278,12 @@ class FloatGameScreen(BackKeyScreen):
             else:
                 self.stop_game_warning(timeout=False)
 
-    def stop_game(self, *any):
+    def stop_game(self, timeout=False, *any):
         if self.game_running:
+            t = 'timeout' if timeout else 'quit'
+            # end, end_reason, points, category_seen, category_used
+            save_entry(file="~/Desktop/garden.csv", opt="end, " + t +", " + str(self.points) + "," + str(self.nb_current_category) + "," + str(self.nb_current_category__used))
+
             self.game_running = False
             if self.frame.cat_reverse:
                 self.frame.cat.flip()
@@ -1346,7 +1408,7 @@ class FloatGameScreen(BackKeyScreen):
         def stop_game(*any):
             if should_stop:
                 self.timeout_warning_off = True
-                self.stop_game(any)
+                self.stop_game(timeout)
 
         event = Clock.schedule_once(stop_game, timeout_window_conf)
 
@@ -1466,6 +1528,7 @@ class FloatGameScreen(BackKeyScreen):
 
                 # disable all other widget in category selection
                 self.category_clean()
+                self.nb_current_category__used += 1
             else:
                 # object not placed, return to place and text changed
                 anim = Animation(x=element.x_orig, y=element.y_orig)

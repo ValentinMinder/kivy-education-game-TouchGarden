@@ -51,9 +51,14 @@ class Quiz:
                       replies={Reply(Text(fr="construire des murs en pierres sèches", de="Trockenmauern bauen"), is_correct=False),
                                Reply(Text(fr="laisser des tas de bois morts", de="Totholzhaufen liegen lassen"), is_correct=True),
                                Reply(Text(fr="planter des noisetiers", de="Haselsträucher pflanzen"), is_correct=False)})
-        questions = {q1, q2, q3, q4, q5, q6}
-        selection = questions.__len__()
-        self.questions = random.sample(questions, selection)
+
+        question_public = Question(question=Text(fr="Quel âge avez-vous ?", de="Wie alt sind Sie ?"),
+                                        replies={Reply(Text(fr="Enfant (jusqu'à 16 ans)", de="Kinder (bis 16 Jahre)"),
+                                                       is_correct=False),
+                                                 Reply(Text(fr="Adulte (à partir de 17 ans)",
+                                                            de="Erwaschene (ab 17 Jahre)"), is_correct=True)})
+
+        self.questions = [q1, q2, q3, q4, q5, q6, question_public]
 
         qi1 = Question(question=Text(fr="Sélectionnez le jardin qui est le meilleur corridor biologique. [i][Dessins: Mira Maeder][/i]", de="Wählen Sie denjenigen Garten aus, welcher den besten biologischen Korridor darstellt. [i][Zeichnen: Mira Maeder][/i]"),
                       replies={Reply(text='images/quiz/garden_draw1.jpg', is_correct=True),
@@ -63,11 +68,6 @@ class Quiz:
                       replies={Reply(text='images/quiz/passage_faune.jpg', is_correct=False),
                                Reply(text='images/quiz/tunnel_faune.jpg', is_correct=False),
                                Reply(text='images/quiz/crapauduc.jpg', is_correct=True)})
-        questions = {qi1, qi2}
-        self.question_images = random.sample(questions, 2)
+        self.question_images = [qi1, qi2]
 
-        self.question_public_img = qi2
 
-        self.question_public = Question(question=Text(fr="Quel âge avez-vous ?", de="Wie alt sind Sie ?"),
-                      replies={Reply(Text(fr="Enfant (jusqu'à 16 ans)", de="Kinder (bis 16 Jahre)"), is_correct=True),
-                               Reply(Text(fr="Adulte (à partir de 17 ans)", de="Erwaschene (ab 17 Jahre)"), is_correct=True)})

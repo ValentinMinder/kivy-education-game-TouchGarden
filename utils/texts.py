@@ -15,6 +15,14 @@ class lang:
     def current_fct(self):
         return self.current
 
+def lang_str():
+    switch = {
+        lang.fr: "fr",
+        lang.de: "de",
+        lang.en: "en"
+    }
+    return switch.get(lang.current)
+
 
 # text color handling
 class color:
@@ -458,32 +466,44 @@ txt_game_move_pass = Text(
 
 txt_quiz_intro_fr = "Merci d'évaluer l'exposition pour participer au concours"
 txt_quiz_intro_de = "Bitte geben Sie uns eine Bewertung um am Wettbewerb teilzunehmen"
-#txt_quiz_intro_conf_fr = "Réponse enregsitrée, merci!"
-#txt_quiz_intro_conf_de = "Antwort gespeichert, danke!"
 
 txt_quiz_conf = Text(
-    fr="Merci pour votre évaluation. Vous pouvez maintenant participer au concours en répondant correctement à quelques questions.",
-    de="Vielen Dank für Ihre Bewertung. Sie können jetzt am Wettbewerb teilnehmen, indem Sie einige Fragen richtig beantworten.")
+    fr="[b]Merci pour votre évaluation.[/b]\nVous pouvez participer au concours en répondant correctement à quelques questions.",
+    de="[b]Vielen Dank für Ihre Bewertung.[/b]\nSie können jetzt am Wettbewerb teilnehmen, indem Sie einige Fragen richtig beantworten.")
+
+txt_quiz_question = Text(
+    fr = "Question ",
+    de = "Frage ")
 
 txt_quiz_end_positive = Text(
-    fr="Bravo, vous avez répondu correctement à toutes les questions, vous allez participer au tirage au sort.",
-    de="Bravo, Sie haben alle Fragen richtig beantwortet! Sie werden an der Auslosung teilnehmen.")
+    color=color.green,
+    fr="[b]Bravo, vous avez répondu correctement à toutes les questions,\n vous allez participer au tirage au sort.[/b]",
+    de="[b]Bravo, Sie haben alle Fragen richtig beantwortet!\nSie werden an der Auslosung teilnehmen.[/b]")
 
 txt_quiz_end_negative = Text(
+    color=color.orange,
     fr="Vous avez fait quelques erreurs, malheureusement… à bientôt!",
     de="Sie haben leider einige Fehler gemacht… Auf Wiedersehen und bis bald!")
 
 txt_quiz_tombola_start = Text(
-    fr="Attention, tirage au sort en cours!",
-    de="Achtung, die Auslosung findet statt!")
+    color = color.magenta,
+    fr="[b]Attention, tirage au sort en cours![/b]",
+    de="[b]Achtung, die Auslosung findet statt![/b]")
 
 txt_quiz_tombola_win = Text(
-    fr="Bravo, vous avez gagné! Veuillez vous présenter à la réception avec le code suivant:",
-    de="Bravo, Sie haben gewonnen! Bitte melden Sie sich mit folgendem Code an der Rezeption:")
+    color = color.green,
+    fr="[b]Bravo, vous avez gagné! Veuillez vous présenter à la réception avec le code suivant:[/b]",
+    de="[b]Bravo, Sie haben gewonnen! Bitte melden Sie sich mit folgendem Code an der Rezeption:[/b]")
 
-txt_quiz_tombola_win = Text(
-    fr="Désolé, c'est perdu... à la prochaine!'",
-    de="Leider kein Glück gehabt… bis zum nächsten Mal!")
+txt_quiz_tombola_loose = Text(
+    color = color.orange,
+    fr="[b]Désolé, c'est perdu... à la prochaine![/b]",
+    de="[b]Leider kein Glück gehabt… bis zum nächsten Mal![/b]")
+
+txt_quiz_tombola_reset = Text(
+    color = color.orange,
+    fr="[i]Reset automatique dans une minute.[/i]",
+    de="[i]Automatisch Reset in 1 Minute[/i]")
 
 txt_interact_solutions = Text(
     color=color.white,
