@@ -4,7 +4,7 @@
 # TODO: disable the watermark (False) for actual production at client's premise (Pro Natura). Leave it enabled (True) for distribution and ANY other use.
 watermarked = True
 # TODO: enable the quiz (True) on the computer whre the quizz is wanted (otherwise, False, it will launch the garden game)
-quiz_enabled = False
+quiz_enabled = True
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
 english_enabled = True
 # general reset timeout in seconds
@@ -18,7 +18,7 @@ from kivy.config import Config
 from utils import sizes
 
 if watermarked:
-    Config.set('graphics', 'fullscreen', 'fake')  # Keep the width * width size for distribution
+    Config.set('graphics', 'fullscreen', 'auto')  # Keep the width * width size for distribution
 else:
     Config.set('graphics', 'fullscreen', 'auto')  # take full screen for production
 Config.set('graphics', 'width', sizes.width)  # 1366
@@ -751,15 +751,19 @@ class ContestScreen(BackKeyScreen):
                         win = True
 
                     def reset(*any):
-                        self.back()
+			if self.timeout_running:
+			    self.timeout_running = False
+                	    self.back()
 
                     if win:
                         summary.text = txt_quiz_tombola_win.get()
                         counter.text = str(my_win)
-                        Clock.schedule_once(reset, 3 * timeout)
+                        Clock.schedule_once(reset, timeout + 10)
                     else:
                         summary.text = txt_quiz_tombola_loose.get()
                         Clock.schedule_once(reset, timeout)
+		    self.timeout_touch()
+
             retract()
 
         reset_txt = Label(
@@ -767,6 +771,32 @@ class ContestScreen(BackKeyScreen):
         layout.add_widget(reset_txt)
         if not all_correct:
             reset_txt.text = txt_quiz_tombola_reset.get()
+
+	self.timeout_running = True
+	self.timeout_touch()
+
+    # triggered for EVERY touch MOVE on any element of this screen
+    def on_touch_move(self, touch):
+        self.timeout_touch()
+        return False
+
+    # triggered for EVERY touch UP on any element of this screen
+    def on_touch_up(self, touch):
+        self.timeout_touch()
+
+    # should be called anywhere a touch is made, to update last_lcik and schedule the timeout check
+    def timeout_touch(self):
+        self.last_click = time.time()
+        Clock.schedule_once(self.timeout_check, timeout + 1)
+
+    # check if timeout has expired and expire
+    def timeout_check(self, dt):
+        current = time.time()
+        if (current - self.last_click) > timeout:
+            if self.timeout_running:
+                self.timeout_running = False
+                self.back()
+
 
 
 # float layout for draggable elements management
