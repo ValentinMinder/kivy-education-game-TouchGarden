@@ -43,7 +43,7 @@ class color:
     back_magenta = (0.89, 0.13, 0.37, 1)
     back_green = (0, 0.66, 0.195, 1)
     back_selected = (1, 0.5, 0, 1)
-    back_blue_dark = (0, 0, 102.0/256.0, 1)
+    back_blue_dark = (34/256.0, 45/256.0, 90/256.0, 1)
     back_no_color = (0,0,0,0)
 
 
@@ -463,9 +463,20 @@ txt_game_move_pass = Text(
     en="Skipped category, no point recieved")
 
 # quiz
+txt_quiz_title = Text(
+    color = color.white,
+    fr = "CONCOURS    -    WETTBEWERB",
+    de = "")
 
-txt_quiz_intro_fr = "Merci d'évaluer l'exposition pour participer au concours"
-txt_quiz_intro_de = "Bitte geben Sie uns eine Bewertung um am Wettbewerb teilzunehmen"
+txt_quiz_intro_fr = Text(
+    color = color.white,
+    fr = "Merci d'évaluer l'exposition pour participer au concours",
+    de = "")
+
+txt_quiz_intro_de = Text(
+    color = color.white,
+    fr = "Bitte geben Sie uns eine Bewertung um am Wettbewerb teilzunehmen",
+    de = "")
 
 txt_quiz_conf = Text(
     fr="[b]Merci pour votre évaluation.[/b]\nVous pouvez participer au concours en répondant correctement à quelques questions.",

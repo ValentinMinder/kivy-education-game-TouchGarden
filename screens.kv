@@ -34,11 +34,16 @@
             spacing: 30
             size_hint: 1, 1
 
+            LabelB:
+                text: txt.txt_quiz_title.get()
+                background_color: color.back_no_color
+                font_size: '60dp'
+                size_hint: 1, 0.5
 
             LabelB:
-                text: txt.txt_quiz_intro_fr
-                background_color: color.back_grey
-                size_hint: 1, 0.4
+                text: txt.txt_quiz_intro_fr.get()
+                background_color: color.back_no_color
+                size_hint: 1, 0.3
 
             BoxLayout:
                 orientation: 'horizontal'
@@ -48,7 +53,7 @@
             LabelB:
                 text: txt.txt_scenery_notxt.get()
                 background_color: color.back_no_color
-                size_hint: 1, 0.2
+                size_hint: 1, 0.05
 
             LabelB:
                 background_color: color.back_grey_dark
@@ -56,19 +61,28 @@
                 size_hint: 1, 0.1
 
             LabelB:
-                text: txt.txt_quiz_intro_de
-                background_color: color.back_grey
-                size_hint: 1, 0.4
+                text: txt.txt_quiz_intro_de.get()
+                background_color: color.back_no_color
+                size_hint: 1, 0.3
 
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, 1
                 id: star_de
 
-            LabelB:
-                text: txt.txt_scenery_notxt.get()
-                background_color: color.back_no_color
-                size_hint: 1, 0.2
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 0.8
+
+                LabelB:
+                    text: txt.txt_scenery_notxt.get()
+                    background_color: color.back_no_color
+                    size_hint: 0.5, 1
+
+                #TODO: smaller logo + button for calibration / test / stop
+                Image:
+                    size_hint: 0.5, 1
+                    source: "images/scenery/impressum.png"
 
 <QuestionWidget>
     q: q
