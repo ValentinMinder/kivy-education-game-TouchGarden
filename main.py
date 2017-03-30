@@ -4,7 +4,7 @@
 # TODO: disable the watermark (False) for actual production at client's premise (Pro Natura). Leave it enabled (True) for distribution and ANY other use.
 watermarked = True
 # TODO: enable the quiz (True) on the computer whre the quizz is wanted (otherwise, False, it will launch the garden game)
-quiz_enabled = True
+quiz_enabled = False
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
 english_enabled = True
 # general reset timeout in seconds
@@ -493,7 +493,7 @@ class StartScreen(KeyScreen):
 def save_entry(file, opt = ""):
     time_sec = time.time()
     time_utf = time.ctime(time_sec)
-    os.system("echo " + str(time_sec) + ", " + time_utf + ", " + lang_str() + ", " + opt + " >> " + file)
+    os.system("echo " + str(time_sec) + "," + time_utf + "," + lang_str() + "," + opt + " >> " + file)
 
 # screen for picking training mode difficulty
 class StatsScreen(KeyScreen):
@@ -581,11 +581,10 @@ class StatsScreen(KeyScreen):
 
 
     def switch_color(self, *any):
-        print 'hello'
-        if self.logo.source == 'images/credits/pronatura.png':
-            self.logo.source = 'images/credits/pronatura_nb.png'
+        if self.logo.text == '-':
+            self.logo.text = '/'
         else:
-            self.logo.source = 'images/credits/pronatura.png'
+            self.logo.text = '\\'
 
     cal_ct = 0
     def calibrate(self):
@@ -737,7 +736,7 @@ class ContestIntroScreen(BackKeyScreen):
 
     def end_stats(self):
         # all_correct T/F, corridors T/F, #nb_correct (max 3), total_question(max 5), #public A/E/U, no details of questions
-        save_entry(file="~/Desktop/stats.csv", opt=str(self.all_correct) + ", " + str(self.quest_corr) + ", " + str(self.correct_nb) + "," + str(self.current_question) + ", " + self.public)
+        save_entry(file="~/Desktop/stats.csv", opt=str(self.all_correct) + "," + str(self.quest_corr) + "," + str(self.correct_nb) + "," + str(self.current_question) + "," + self.public)
 
     def forward(self):
         self.timeout_running = False
@@ -798,7 +797,7 @@ class ContestScreen(BackKeyScreen):
             layout.add_widget(counter)
             counter.font_size = 100
 
-            self.i = 5 + 1
+            self.i = 10 + 1
             def retract(*any):
                 self.i -= 1
                 counter.text = str(self.i)
@@ -813,6 +812,7 @@ class ContestScreen(BackKeyScreen):
                     reset_txt.text = txt_quiz_tombola_reset.get()
                     if my_win in winners:
                         win = True
+                    win = False # EVERYONE LOOSES, WHATEVER
 
                     def reset(*any):
 			if self.timeout_running:

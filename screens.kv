@@ -99,13 +99,12 @@
                     size_hint: 0.65, 1
 
                 #TODO: smaller logo + button for calibration / test / stop
-                Image:
+                LabelB:
                     id: logo
-                    size_hint: 0.2, 1
-                    source: "images/credits/pronatura.png"
-                Image:
-                    size_hint: 0.05, 1
-                    source: "images/credits/HEIG-VD_Logo 14x29_RVB ROUGE.png"
+                    background_color: color.back_no_color
+                    text: '-'
+                    size_hint: 0.05, 0.25
+                    font_size: '12dp'
                 Button:
                     size_hint: 0.05, 1
                     on_press: root.switch_color()
