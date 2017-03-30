@@ -503,6 +503,8 @@ class StatsScreen(KeyScreen):
         self.until_run = 0
         self.until_run_up = True
         Clock.schedule_interval(self.check_run, 0.5)
+        self.last_click = time.time()
+
 
     def check_run(self, *any):
         if (self.should_forward):
@@ -557,10 +559,26 @@ class StatsScreen(KeyScreen):
         reset_star(self.star_de)
 
     def forward(self, *any):
-        self.manager.switch_to(ContestIntroScreen(name="Game", previous=self,quiz = Quiz()), direction='up')
+        self.manager.switch_to(ContestIntroScreen(name="Quiz", previous=self,quiz = Quiz()), direction='up')
         self.should_forward = True
         Clock.schedule_once(self.reset_stars, 1)
 
+
+    def switch_color(self, *any):
+        print 'hello'
+        if self.logo.source == 'images/credits/pronatura.png':
+            self.logo.source = 'images/credits/pronatura_nb.png'
+        else:
+            self.logo.source = 'images/credits/pronatura.png'
+
+    def calibrate(*any):
+        call(["/etc/opt/elo-usb/elova", "--nvram", "--caltargettimeout=5"])
+
+    def check_stop(self):
+        current = time.time()
+        if (current - self.last_click) < 1:
+            App.get_running_app().stop()
+        self.last_click = time.time()
 
 class QuestionWidget(BoxLayout):
     def __init__(self, q, image=False):

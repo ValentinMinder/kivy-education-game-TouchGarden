@@ -24,6 +24,7 @@
 <StatsScreen>:
     star_fr: star_fr
     star_de: star_de
+    logo: logo
     FloatLayout:
         LabelB:
             background_color: color.back_blue_dark
@@ -34,11 +35,25 @@
             spacing: 30
             size_hint: 1, 1
 
-            LabelB:
-                text: txt.txt_quiz_title.get()
-                background_color: color.back_no_color
-                font_size: '60dp'
+            BoxLayout:
+                orientation: 'horizontal'
                 size_hint: 1, 0.5
+
+                Button:
+                    size_hint: 0.05, 1
+                    on_press: root.calibrate()
+                    background_normal: 'images/scenery/transparency.png'
+
+                LabelB:
+                    text: txt.txt_quiz_title.get()
+                    background_color: color.back_no_color
+                    font_size: '60dp'
+                    size_hint: 0.90, 1
+
+                Button:
+                    size_hint: 0.05, 1
+                    on_press: root.check_stop()
+                    background_normal: 'images/scenery/transparency.png'
 
             LabelB:
                 text: txt.txt_quiz_intro_fr.get()
@@ -74,15 +89,27 @@
                 orientation: 'horizontal'
                 size_hint: 1, 0.8
 
+                Button:
+                    size_hint: 0.05, 1
+                    background_normal: 'images/scenery/transparency.png'
+
                 LabelB:
-                    text: txt.txt_scenery_notxt.get()
+                    text: txt.txt_quiz_intro_bye.get()
                     background_color: color.back_no_color
-                    size_hint: 0.5, 1
+                    size_hint: 0.65, 1
 
                 #TODO: smaller logo + button for calibration / test / stop
                 Image:
-                    size_hint: 0.5, 1
-                    source: "images/scenery/impressum.png"
+                    id: logo
+                    size_hint: 0.2, 1
+                    source: "images/credits/pronatura.png"
+                Image:
+                    size_hint: 0.05, 1
+                    source: "images/credits/HEIG-VD_Logo 14x29_RVB ROUGE.png"
+                Button:
+                    size_hint: 0.05, 1
+                    on_press: root.switch_color()
+                    background_normal: 'images/scenery/transparency.png'
 
 <QuestionWidget>
     q: q

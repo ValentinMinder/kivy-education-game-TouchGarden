@@ -478,6 +478,11 @@ txt_quiz_intro_de = Text(
     fr = "Bitte geben Sie uns eine Bewertung um am Wettbewerb teilzunehmen",
     de = "")
 
+txt_quiz_intro_bye = Text(
+    color = color.white,
+    fr = "Merci pour votre visite, au revoir et à bientôt! \nDanke für Ihre Besuch, auf Wiedersehen und bis bald!",
+    de = "")
+
 txt_quiz_conf = Text(
     fr="[b]Merci pour votre évaluation.[/b]\nVous pouvez participer au concours en répondant correctement à quelques questions.",
     de="[b]Vielen Dank für Ihre Bewertung.[/b]\nSie können jetzt am Wettbewerb teilnehmen, indem Sie einige Fragen richtig beantworten.")
@@ -493,8 +498,8 @@ txt_quiz_end_positive = Text(
 
 txt_quiz_end_negative = Text(
     color=color.orange,
-    fr="Vous avez fait quelques erreurs, malheureusement… à bientôt!",
-    de="Sie haben leider einige Fehler gemacht… Auf Wiedersehen und bis bald!")
+    fr="[b]Vous avez fait quelques erreurs, malheureusement… \nAu revoir et à bientôt![/b]",
+    de="[b]Sie haben leider einige Fehler gemacht… \nAuf Wiedersehen und bis bald![/b]")
 
 txt_quiz_tombola_start = Text(
     color = color.magenta,
