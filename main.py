@@ -266,15 +266,19 @@ class StartScreen(KeyScreen):
             text=txt_scenery_notxt,
             left=0))
 
-        self.last = None
+        self.cal_ct = 0
         def terminate(btn):
-            if (self.last != None and btn != self.last):
-                App.get_running_app().stop()
-            self.last = btn
+            self.cal_ct += 1
+            if self.cal_ct == 1:
+                def reset_cal_ct(*any):
+                    self.cal_ct = 0
+                Clock.schedule_once(reset_cal_ct, 2)
+            if self.cal_ct == 5:
+                def calib(*any):
+                    App.get_running_app().stop()
+                Clock.schedule_once(calib, 0.5)
+                self.cal_ct = 0
 
-            def reset_last(*any):
-                self.last = None
-            Clock.schedule_once(reset_last, 1)
 
         window_frame.add_widget(ButtonImage(
             on_press=terminate,
@@ -298,7 +302,7 @@ class StartScreen(KeyScreen):
             pos=(win_dx(sizes.win_width - l - 10), win_dy(sizes.win_height - sizes.win_header - h - 10)),
             size=(l, h),
             size_img=(l, h),
-            source='images/credits/pronatura.jpg'))
+            source='images/credits/pronatura.png'))
 
         #reverse invisible button
         window_frame.add_widget(ButtonImage(
@@ -406,9 +410,22 @@ class StartScreen(KeyScreen):
 
         #reverse impressum -> calibrate the screen with 5 second timeout if pressed
         # if the screen is inversed (not calibrated), then the calibration will launch when "it's like" impressum is pressed
-        def calibrate(*any):
+        self.cal_ct = 0
+        def calibrate(btn):
             if self.dim_element.background_color[3] < 0.05:
-                call(["/etc/opt/elo-usb/elova", "--nvram", "--caltargettimeout=5"])
+                self.cal_ct += 1
+
+            if self.cal_ct == 1:
+                def reset_cal_ct(*any):
+                    self.cal_ct = 0
+                Clock.schedule_once(reset_cal_ct, 2)
+
+            if self.cal_ct == 5:
+                def calib(*any):
+                    call(["/etc/opt/elo-usb/elova", "--nvram", "--caltargettimeout=5"])
+                Clock.schedule_once(calib, 0.5)
+                self.cal_ct = 0
+
 
         self.add_widget(ButtonImage(
             on_press=calibrate,
@@ -503,7 +520,6 @@ class StatsScreen(KeyScreen):
         self.until_run = 0
         self.until_run_up = True
         Clock.schedule_interval(self.check_run, 0.5)
-        self.last_click = time.time()
 
 
     def check_run(self, *any):
@@ -571,14 +587,32 @@ class StatsScreen(KeyScreen):
         else:
             self.logo.source = 'images/credits/pronatura.png'
 
-    def calibrate(*any):
-        call(["/etc/opt/elo-usb/elova", "--nvram", "--caltargettimeout=5"])
-
+    cal_ct = 0
+    def calibrate(self):
+        self.cal_ct += 1
+        if self.cal_ct == 1:
+            def reset_cal_ct(*any):
+                self.cal_ct = 0
+            Clock.schedule_once(reset_cal_ct, 2)
+        if self.cal_ct == 5:
+            def calib(*any):
+                call(["/etc/opt/elo-usb/elova", "--nvram", "--caltargettimeout=5"])
+            Clock.schedule_once(calib, 0.5)
+            self.cal_ct = 0
+    stop_ct = 0
     def check_stop(self):
-        current = time.time()
-        if (current - self.last_click) < 1:
-            App.get_running_app().stop()
-        self.last_click = time.time()
+        self.stop_ct += 1
+        if self.stop_ct == 1:
+            def reset_stop_ct(*any):
+                self.stop_ct = 0
+            Clock.schedule_once(reset_stop_ct, 2)
+        if self.stop_ct == 5:
+            def stop(*any):
+                App.get_running_app().stop()
+                App.get_running_app().stop()
+            call(["/etc/opt/elo-usb/elova", "--nvram", "--caltargettimeout=5"])
+            Clock.schedule_once(stop, 0.5)
+            self.stop_ct = 0
 
 class QuestionWidget(BoxLayout):
     def __init__(self, q, image=False):
@@ -646,8 +680,10 @@ class ContestIntroScreen(BackKeyScreen):
         self.correct = ['replies']
         self.correct_nb = 0
         self.public = "U"
+        self.quest_corr = ""
         self.nbimg = quiz.question_images.__len__()
-        self.max = quiz.questions.__len__() + self.nbimg
+        self.nbtxt = quiz.questions.__len__()
+        self.max = 2 + self.nbimg + self.nbtxt
 
         self.fwd(rm=False)
         self.timeout_running = True
@@ -661,14 +697,20 @@ class ContestIntroScreen(BackKeyScreen):
         if rm:
             self.l.remove_widget(self.im)
         if (self.current_question < self.max):
-
-            if (self.current_question < self.nbimg):
-                # add images questions
-                q = self.quiz.question_images[self.current_question]
+            #quest 1->nbimg are images questions
+            if (self.current_question != 0 and self.current_question < self.nbimg + 1):
+                q = self.quiz.question_images[self.current_question - 1]
                 self.im = QuestionWidget(q, image=True)
             else:
-                # add non-images text questions
-                q = self.quiz.questions[self.current_question - self.nbimg]
+                #first (0) question is corridors biologiques
+                if (self.current_question == 0):
+                    q = self.quiz.question_corridors
+                #last question is public distinction
+                elif (self.current_question == self.max - 1):
+                    q = self.quiz.question_public
+                #x-> before last are text questions
+                else:
+                    q = self.quiz.questions[self.current_question - self.nbimg - 1]
                 self.im = QuestionWidget(q, image=False)
 
             self.l.add_widget(self.im)
@@ -682,16 +724,20 @@ class ContestIntroScreen(BackKeyScreen):
         self.im.block()
         is_correct = self.im.correct()
         if (self.current_question < self.max):
-            self.correct_nb += 1 if is_correct else 0
             self.all_correct &= is_correct
+            if (self.current_question == 1):
+                self.quest_corr = is_correct
+            else: #the last question is public distinction, not counted for all_correct
+                self.correct_nb += 1 if is_correct else 0
         else:
-            self.public = 'A' if is_correct else 'E'
+            # children (E=Enfant) is True, Adult is False
+            self.public = 'E' if is_correct else 'A'
         self.correct.append(is_correct)
         Clock.schedule_once(self.fwd, 0.5)
 
     def end_stats(self):
-        # all_correct, #nb_correct, total_question, #public A/E/U, #details of questions
-        save_entry(file="~/Desktop/stats.csv", opt=str(self.all_correct) + "," + str(self.correct_nb) + "," + str(self.current_question) + ", " + self.public + ", " + str(self.correct))
+        # all_correct T/F, corridors T/F, #nb_correct (max 3), total_question(max 5), #public A/E/U, no details of questions
+        save_entry(file="~/Desktop/stats.csv", opt=str(self.all_correct) + ", " + str(self.quest_corr) + ", " + str(self.correct_nb) + "," + str(self.current_question) + ", " + self.public)
 
     def forward(self):
         self.timeout_running = False

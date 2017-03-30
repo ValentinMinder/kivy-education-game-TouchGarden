@@ -21,6 +21,7 @@ class Quiz:
         self.current = -1
         self.shuffle_questions()
 
+
     def next_question(self):
         self.current += 1
         if (self.current < self.questions.__len__()):
@@ -43,22 +44,27 @@ class Quiz:
                       replies={Reply(Text(fr="…elles diminuent la quantité d’oxygène dans l’eau, ce qui les empêche de respirer", de="…sie den Sauerstoffgehalt im Wasser reduzieren und dadurch die Fische am atmen hindern"), is_correct=True),
                                Reply(Text(fr="…elles réchauffent l’eau", de="…sie das Wasser erwärmen"), is_correct=False),
                                Reply(Text(fr="…elles forment un tapis sur lequel ils ne peuvent plus pondre leurs œufs", de="…die Fische auf den sich bildenden Algenteppichen nicht laichen können"), is_correct=False)})
-        q5 = Question(question=Text(fr="Un corridor biologique, c’est…", de="Ein biologischer Korridor ist…"),
+        question_corridors = Question(question=Text(fr="Un corridor biologique, c’est…", de="Ein biologischer Korridor ist…"),
                       replies={Reply(Text(fr="… un ensemble d’espaces naturels assez proches les uns des autres, pour permettre aux animaux de se déplacer en sécurité", de="…ein System aus natürlichen Lebensräumen, die genügend nahe beieinander liegen, damit die Tiere sich sicher zwischen ihnen hin und her bewegen können"), is_correct=True),
                                Reply(Text(fr="… un champ utilisé pour faire des études biologiques sur les plantes", de="…ein Feld, auf dem Pflanzenforschung betrieben wird"), is_correct=False),
                                Reply(Text(fr="… un rayon de supermarché qui vend des produits bio", de="…eine Bio-Abteilung im Supermarkt"), is_correct=False)})
-        q6 = Question(question=Text(fr="Que peut-on faire dans nos jardins pour faciliter la reproduction des lucanes ?", de="Was können wir in unserem Garten tun, um dem Hirschkäfer die Fortpflanzung zu erleichtern ?"),
+        q5 = Question(question=Text(fr="Que peut-on faire dans nos jardins pour faciliter la reproduction des lucanes ?", de="Was können wir in unserem Garten tun, um dem Hirschkäfer die Fortpflanzung zu erleichtern ?"),
                       replies={Reply(Text(fr="construire des murs en pierres sèches", de="Trockenmauern bauen"), is_correct=False),
                                Reply(Text(fr="laisser des tas de bois morts", de="Totholzhaufen liegen lassen"), is_correct=True),
                                Reply(Text(fr="planter des noisetiers", de="Haselsträucher pflanzen"), is_correct=False)})
 
         question_public = Question(question=Text(fr="Quel âge avez-vous ?", de="Wie alt sind Sie ?"),
                                         replies={Reply(Text(fr="Enfant (jusqu'à 16 ans)", de="Kinder (bis 16 Jahre)"),
-                                                       is_correct=False),
+                                                       is_correct=True),
                                                  Reply(Text(fr="Adulte (à partir de 17 ans)",
-                                                            de="Erwaschene (ab 17 Jahre)"), is_correct=True)})
+                                                            de="Erwaschene (ab 17 Jahre)"), is_correct=False)})
 
-        self.questions = [q1, q2, q3, q4, q5, q6, question_public]
+        self.questions = [q1, q2, q3, q4, q5]
+        #two (2) random text questions out of 5
+        self.questions = random.sample(self.questions, 2)
+
+        self.question_public = question_public
+        self.question_corridors = question_corridors
 
         qi1 = Question(question=Text(fr="Sélectionnez le jardin qui est le meilleur corridor biologique. [i][Dessins: Mira Maeder][/i]", de="Wählen Sie denjenigen Garten aus, welcher den besten biologischen Korridor darstellt. [i][Zeichnen: Mira Maeder][/i]"),
                       replies={Reply(text='images/quiz/garden_draw1.jpg', is_correct=True),
@@ -69,5 +75,8 @@ class Quiz:
                                Reply(text='images/quiz/tunnel_faune.jpg', is_correct=False),
                                Reply(text='images/quiz/crapauduc.jpg', is_correct=True)})
         self.question_images = [qi1, qi2]
+        # 1 random image question out of 2
+        self.question_images = random.sample(self.question_images, 1)
+
 
 
