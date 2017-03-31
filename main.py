@@ -4,7 +4,7 @@
 # TODO: disable the watermark (False) for actual production at client's premise (Pro Natura). Leave it enabled (True) for distribution and ANY other use.
 watermarked = True
 # TODO: enable the quiz (True) on the computer whre the quizz is wanted (otherwise, False, it will launch the garden game)
-quiz_enabled = True
+quiz_enabled = False
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
 english_enabled = True
 # general reset timeout in seconds
@@ -937,10 +937,17 @@ class FloatGameScreen(BackKeyScreen):
 
         # buttons
         f.add_widget(ButtonImage(on_press=self.category_forward,
-                                 pos=(sizes.width_ref, sizes.border_small),
-                                 size=(sizes.width_left_margin, sizes.height_button_small),
+                                 pos=(sizes.width_ref + sizes.height_button_small - 2 + sizes.border_small, sizes.border_small),
+                                 size=(sizes.width_left_margin - (sizes.height_button_small - 4) - 2 * sizes.border_small, sizes.height_button_small),
                                  size_img=(75, 44),
                                  source="images/scenery/fleche_suite_75x44px.png"))
+
+        f.add_widget(ButtonImage(on_press=self.infos_rules,
+                                 pos=(sizes.width_ref + sizes.border_small, sizes.border_small + 3),
+                                 size=(sizes.height_button_small - 4, sizes.height_button_small - 4),
+                                 size_img=(sizes.height_button_small - 4, sizes.height_button_small - 4),
+                                 source="images/scenery/bouton_plus_d_infos_80x80px.png"))
+
         f.add_widget(ButtonImage(on_press=self.stop_game_ask,
                                  pos=(sizes.width_right_game, sizes.border_small),
                                  size=(sizes.width_right_margin, sizes.height_button_small),
@@ -1131,6 +1138,11 @@ class FloatGameScreen(BackKeyScreen):
         self.frame.remove_widget(self.shadow)
         self.frame.add_widget(self.shadow)
 
+    # access to rules at any point of game
+    def infos_rules(self, *any):
+        if (self.button_enabled & self.button_cat_enabled):
+            self.start_game_tuto(start_shuffle=False)
+
     # welcome tutorial: happy guy speaking
     def init_welcome_tuto(self):
         # at the very start, animate add the point gauge
@@ -1167,6 +1179,8 @@ class FloatGameScreen(BackKeyScreen):
         self.categories = random.sample(self.categories, self.categories.__len__())
         self.gameturn_setup(self.categories[self.nb_current_category])
 
+    # forward cause stop at the end
+    next_cat_end = False
     def category_forward(self, *any):
         if (self.button_enabled & self.button_cat_enabled):
             if (self.nb_current_category < sizes.category_number):
@@ -1174,6 +1188,10 @@ class FloatGameScreen(BackKeyScreen):
                 self.anim_points(0, 0, 0, self.none)
                 self.category_clean()
                 self.category_next(any)
+            elif self.next_cat_end:
+                self.stop_game_ask()
+            else:
+                self.next_cat_end = True
 
     def category_clean(self):
         self.frame.remove_widget(self.current_category.target)
@@ -1274,12 +1292,13 @@ class FloatGameScreen(BackKeyScreen):
         anim_points.bind(on_complete=remove)
         anim_points.start(points_image.image)
 
-    def start_game_tuto(self):
+    def start_game_tuto(self, start_shuffle=True):
         window_frame = win_generate(text_title=txt.txt_tutorial_welcome_p0)
 
         def on_press(*any):
             self.frame.remove_widget(window_frame)
-            self.init_category_struct()
+            if start_shuffle:
+                self.init_category_struct()
             self.background_enable()
 
         window_frame.add_widget(ButtonImageText(
