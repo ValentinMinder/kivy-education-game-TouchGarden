@@ -4,7 +4,7 @@
 # TODO: disable the watermark (False) for actual production at client's premise (Pro Natura). Leave it enabled (True) for distribution and ANY other use.
 watermarked = True
 # TODO: enable the quiz (True) on the computer whre the quizz is wanted (otherwise, False, it will launch the garden game)
-quiz_enabled = False
+quiz_enabled = True
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
 english_enabled = True
 # general reset timeout in seconds
@@ -581,10 +581,10 @@ class StatsScreen(KeyScreen):
 
 
     def switch_color(self, *any):
-        if self.logo.text == '-':
-            self.logo.text = '/'
-        else:
+        if self.logo.text == '/':
             self.logo.text = '\\'
+        else:
+            self.logo.text = '/'
 
     cal_ct = 0
     def calibrate(self):
@@ -608,8 +608,6 @@ class StatsScreen(KeyScreen):
         if self.stop_ct == 5:
             def stop(*any):
                 App.get_running_app().stop()
-                App.get_running_app().stop()
-            call(["/etc/opt/elo-usb/elova", "--nvram", "--caltargettimeout=5"])
             Clock.schedule_once(stop, 0.5)
             self.stop_ct = 0
 

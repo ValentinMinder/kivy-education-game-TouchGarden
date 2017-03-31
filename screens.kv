@@ -91,6 +91,7 @@
 
                 Button:
                     size_hint: 0.05, 1
+                    on_press: root.switch_color()
                     background_normal: 'images/scenery/transparency.png'
 
                 LabelB:
@@ -103,7 +104,7 @@
                     id: logo
                     background_color: color.back_no_color
                     text: '-'
-                    size_hint: 0.05, 0.25
+                    size_hint: 0.01, 0.25
                     font_size: '12dp'
                 Button:
                     size_hint: 0.05, 1
