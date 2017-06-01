@@ -5,6 +5,12 @@
 watermarked = True
 # TODO: enable the quiz (True) on the computer whre the quizz is wanted (otherwise, False, it will launch the garden game)
 quiz_enabled = False
+#enable/disable the quiz winning (hard-stop)
+quiz_winner = True
+#days when quiz can win [day, month] eg. June 5 is [5, 6]
+quiz_win_days = [[4,6], [5,6], [11,6], [18, 6], [25, 6], [5, 7], [14, 7], [25, 7], [1, 8], [10, 8]]
+quiz_win_code = 2478
+quiz_outcome = 5 #1 chance over X to win on winning days
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
 english_enabled = True
 # general reset timeout in seconds
@@ -739,7 +745,7 @@ class ContestIntroScreen(BackKeyScreen):
     def forward(self):
         self.timeout_running = False
         self.end_stats()
-        self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous, all_correct = self.all_correct), direction='left')
+        self.manager.switch_to(ContestScreen(name="Contest", previous=self.previous, all_correct = self.all_correct, public=self.public), direction='left')
 
     # triggered for EVERY touch MOVE on any element of this screen
     def on_touch_move(self, touch):
@@ -769,7 +775,7 @@ class ContestScreen(BackKeyScreen):
     # layout containing the screen's buttons, used for cursor function
     layout = ObjectProperty()
 
-    def __init__(self, all_correct, **kwargs):
+    def __init__(self, all_correct, public, **kwargs):
         super(ContestScreen, self).__init__(**kwargs)
 
         layout = BoxLayout(orientation='vertical', size_hint=(1, 1), padding=10, spacing=10)
@@ -781,7 +787,7 @@ class ContestScreen(BackKeyScreen):
             Label(
                 text=text.get(),
                 size_hint=(1, 0.2)))
-
+        import datetime
         if all_correct:
             summary = Label(
                 text=txt_quiz_tombola_start.get(),
@@ -804,13 +810,42 @@ class ContestScreen(BackKeyScreen):
                 else:
 
                     win = False
-                    winners = {1654, 2478, 3745, 4536, 5937}
-                    my_win = random.randint(1, 9999)
 
                     reset_txt.text = txt_quiz_tombola_reset.get()
-                    if my_win in winners:
-                        win = True
-                    win = False # EVERYONE LOOSES, WHATEVER
+                    win = False #loose by default
+
+                    #checks if today is a winning day
+                    now = datetime.datetime.now()
+                    win_day = False
+                    for days in quiz_win_days:
+                        if (days[0] == now.day) and (days[1] == now.month) :
+                            win_day = True
+                            print ("day: %s" %now.day)
+                            print ("month: %s" %now.month)
+
+                    #if winning days, random choice (1/X chance) to win,
+                    #until someone wins
+                    if win_day and quiz_winner:
+                        #checks if someone won already
+                        day_path = now.strftime("./won/%Y %m %d") 
+                        exist = os.path.isfile(day_path)
+                        if not exist:
+                            print "winning day, random choice to win"
+                            randi = random.randint(1, quiz_outcome) 
+                            print str(randi)
+                            if randi == 1:
+                                print "you won!"
+                                win = True
+                                f = open (day_path, "w")
+                                f.write(now.isoformat())
+                                f.write("\n")
+                                f.write(now.strftime("%c"))
+                                f.write("\n")
+                                f.write("winner " + public)
+                                f.write("\n")
+                                f.close()
+                        else:
+                            print "someone won already today, sorry"
 
                     def reset(*any):
 			if self.timeout_running:
@@ -819,7 +854,7 @@ class ContestScreen(BackKeyScreen):
 
                     if win:
                         summary.text = txt_quiz_tombola_win.get()
-                        counter.text = str(my_win)
+                        counter.text = str(quiz_win_code)
                         Clock.schedule_once(reset, timeout + 10)
                     else:
                         summary.text = txt_quiz_tombola_loose.get()
@@ -1875,3 +1910,4 @@ class TouchGardenApp(App):
 # launch the app
 if __name__ == '__main__':
     TouchGardenApp().run()
+
