@@ -330,9 +330,27 @@ class StartScreen(KeyScreen):
             left=624,
             vAlignTop=True))
 
+        # add warning/technical info in 2 languages
+        self.add_widget(LabelWrap(
+            pos=(sizes.width_left_margin, 100 + 46 + 4),
+            size=(sizes.width_game, 46),
+            text=txt_warning_title_fr,
+            font_size=sizes.font_size_default,
+            bold=False
+        ))
+
+        self.add_widget(LabelWrap(
+            pos=(sizes.width_left_margin, 100 + 2),
+            size=(sizes.width_game, 46),
+            text=txt_warning_title_de,
+            font_size=sizes.font_size_default,
+            bold=False
+        ))
+
+
         # add start buttons in 2 or 3 languages
         w_lang_elem = 200
-        poxy_lang_elem = 295
+        poxy_lang_elem = 295 - 60
         nb_elem = 2
         if english_enabled:
             nb_elem += 1
@@ -382,17 +400,21 @@ class StartScreen(KeyScreen):
                 font_size=sizes.font_size_title))
 
         # add titles in 2 or 3 languages
+        posy_title_base = 550
+        title_size = 40
+        titleu_size = 70
+        title_margin = 15
         self.add_widget(LabelWrap(
-            pos=(sizes.width_left_margin, 560),
-            size=(sizes.width_game, 40),
+            pos=(sizes.width_left_margin, posy_title_base),
+            size=(sizes.width_game, title_size),
             text=txt_main_title_fr,
             font_size=sizes.font_size_title,
             bold=True
         ))
 
         self.add_widget(LabelWrap(
-            pos=(sizes.width_left_margin, 560 - 1 * 40),
-            size=(sizes.width_game, 40),
+            pos=(sizes.width_left_margin, posy_title_base - titleu_size - title_size - title_margin),
+            size=(sizes.width_game, title_size),
             text=txt_main_title_de,
             font_size=sizes.font_size_title,
             bold=True
@@ -400,10 +422,36 @@ class StartScreen(KeyScreen):
 
         if english_enabled:
             self.add_widget(LabelWrap(
-                pos=(sizes.width_left_margin, 560 - 2 * 40),
-                size=(sizes.width_game, 40),
+                pos=(sizes.width_left_margin, posy_title_base + titleu_size + title_size + title_margin),
+                size=(sizes.width_game, title_size),
                 text=txt_main_title_en,
                 font_size=sizes.font_size_title,
+                bold=True
+            ))
+
+        # add subtitle (undertitle) in 2 languages
+        self.add_widget(LabelWrap(
+            pos=(sizes.width_left_margin, posy_title_base - titleu_size),
+            size=(sizes.width_game, titleu_size),
+            text=txt_under_title_fr,
+            font_size=sizes.font_size_subtitle,
+            bold=True
+        ))
+
+        self.add_widget(LabelWrap(
+            pos=(sizes.width_left_margin, posy_title_base - 2 * titleu_size - title_size - title_margin),
+            size=(sizes.width_game, titleu_size),
+            text=txt_under_title_de,
+            font_size=sizes.font_size_subtitle,
+            bold=True
+        ))
+
+        if english_enabled:
+            self.add_widget(LabelWrap(
+                pos=(sizes.width_left_margin, posy_title_base + title_size + title_margin),
+                size=(sizes.width_game, titleu_size),
+                text=txt_under_title_en,
+                font_size=sizes.font_size_subtitle,
                 bold=True
             ))
 
@@ -1268,21 +1316,31 @@ class FloatGameScreen(BackKeyScreen):
                 txt = txt_end_level2
                 txt_score.color = color.orange
                 txt_point.color = color.orange
-            if self.points >= 3:
+            if self.points >= 4:
                 txt = txt_end_level1
                 txt_score.color = color.green
                 txt_point.color = color.green
             watermark = LabelWrap(
-                pos=(sizes.width_left_margin, sizes.pos_c2[1]),
+                pos=(sizes.width_left_margin, sizes.pos_c2[1] + sizes.height_button_small),
                 size=(sizes.width_game, sizes.height_button_small * 2),
                 text=txt,
                 font_size=sizes.font_size_large
+            )
+
+            watermark_charta = LabelWrap(
+                pos=(sizes.width_left_margin, sizes.pos_c2[1]),
+                size=(sizes.width_game, sizes.height_button_small * 1),
+                text=txt_end_explanations,
+                font_size=sizes.font_size_large,
+                bold=True
             )
 
             self.speach.label.text = txt_score.get() + str(self.points) + txt_point.get()
 
             self.frame.add_widget(watermark)
             watermark.label.background_color = 1, 1, 1, 0.25
+            self.frame.add_widget(watermark_charta)
+            watermark_charta.label.background_color = 1, 1, 1, 0.25
 
             self.delete_pseudo_static_UI()
             self.init_end_of_game_UI()

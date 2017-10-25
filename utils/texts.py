@@ -83,6 +83,42 @@ txt_main_title_en = Text(
     fr=txt_main_title.get(lang.en),
     de="")
 
+txt_warning_title = Text(
+    fr="[i]Si l'écran tactile ne réagit pas, le même jeu est disponible sur l'autre écran,\nou adressez-vous au surveillant de l'exposition.[/i]",
+    de="[i]Falls der Touchscreen nicht reagiert, benutzen Sie bitte das zweite Spiel,\noder wenden Sie sich an die Aufsichtsperson.[/i]",
+    en="")
+
+txt_warning_title_fr = Text(
+    fr=txt_warning_title.get(lang.fr),
+    de="")
+
+txt_warning_title_de = Text(
+    fr=txt_warning_title.get(lang.de),
+    de="")
+
+txt_end_explanations = Text(
+    fr="Ce jeu est basé sur les principes de la Charte des Jardins, un engagement moral pour la biodiversité. \nLa Charte est disponible dans l'exposition et à la réception, vous pouvez vous en inspirer ou la signer.",
+    de="Dieses Spiel basiert auf den Prinzipien der Garten-Charta, einem moralischen Engagement für die Artenvielfalt. Sie können sich davon inspirieren lassen und bei Interesse die Charta unterschreiben.",
+    en="This game is based on the principles of the Garden's \n Treaty, a moral commitment for biodiversity.")
+#Die Charta ist an der Ausstellung oder am Empfang erhältlich.
+
+txt_under_title = Text(
+    fr="Ce jeu est basé sur les principes de la Charte des Jardins,\nun engagement moral pour la biodiversité.",
+    de="Dieses Spiel basiert auf den Prinzipien der Garten-Charta,\neinem moralischen Engagement für die Artenvielfalt.",
+    en="This game is based on the principles of the Garden's \n Treaty, a moral commitment for biodiversity. ")
+
+txt_under_title_fr = Text(
+    fr=txt_under_title.get(lang.fr),
+    de="")
+
+txt_under_title_de = Text(
+    fr=txt_under_title.get(lang.de),
+    de="")
+
+txt_under_title_en = Text(
+    fr=txt_under_title.get(lang.en),
+    de="")
+
 txt_lang_choice = Text(
     color=color.white,
     fr="[b] Français[/b]",
@@ -104,10 +140,26 @@ txt_lang_choice_en = Text(
     de = ""
 )
 
+txt_lang_choice_txt = Text(
+    color=color.white,
+    fr="[b] Veuillez choisir la langue[/b]",
+    de="[b] Bitte wählen Sie die Sprache[/b]",
+    en="")
+
+txt_lang_choice_txt_fr = Text(
+    fr = txt_lang_choice_txt.get(lang.fr),
+    de = ""
+)
+
+txt_lang_choice_txt_de = Text(
+    fr = txt_lang_choice_txt.get(lang.de),
+    de = ""
+)
+
 txt_watermark_heig = Text(
-    fr="Projet de service civil réalisé en partenariat entre Pro Natura et l'HEIG-VD (IICT). Retrouvez ce jeu dans l'exposition du Centre Pro Natura de Champ-Pittet du 18 mars au 1er novembre 2017.",
-    de="Ein Projekt des Zivildienstes, in Zusammenarbeit mit Pro Natura und der Fachhochschule HEIG-VD. Das Spiel ist im Ausstellung im Champ-Pittet vom 18. März bis am 1. November 2017 vorzufinden.",
-    en="Swiss civilian project in a partnership bewteen Pro Natura and HEIG-VD School of Engineering. Find this game in the exhibition of Champ-Pittet, Yverdon, from March 18th to November 1st 2017.")
+    fr="Projet de service civil réalisé en partenariat entre Pro Natura et l'HEIG-VD (HES-SO). Retrouvez ce jeu dans l'exposition du Centre Pro Natura de Champ-Pittet de mi-mars à fin octobre 2017 et 2018.",
+    de="Ein Projekt des Zivildienstes, in Zusammenarbeit mit Pro Natura und der Fachhochschule HEIG-VD. Das Spiel ist im Ausstellung im Champ-Pittet vom Mitte März bis Oktober 2017 und 2018 vorzufinden.",
+    en="Swiss civilian project in a partnership bewteen Pro Natura and HEIG-VD School of Engineering. Find this game in the exhibition of Champ-Pittet, Yverdon, from March to October 2017 and 2018.")
 
 # CATEGORIES and objects names
 
