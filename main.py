@@ -2,7 +2,7 @@
 # UTF-8 MUST be imported FIRST to prevent issues
 
 # TODO: disable the watermark (False) for actual production at client's premise (Pro Natura). Leave it enabled (True) for distribution and ANY other use.
-watermarked = True
+watermarked = False
 # TODO: enable the quiz (True) on the computer whre the quizz is wanted (otherwise, False, it will launch the garden game)
 quiz_enabled = False
 #enable/disable the quiz winning (hard-stop)
@@ -12,7 +12,7 @@ quiz_win_days = [[4,6], [5,6], [11,6], [18, 6], [25, 6], [5, 7], [14, 7], [25, 7
 quiz_win_code = 2478
 quiz_outcome = 5 #1 chance over X to win on winning days
 # TODO: True if it should enable the English langage (False for client, True for demo / distribution)
-english_enabled = True
+english_enabled = False
 # general reset timeout in seconds
 timeout = 60
 #timeout of warning window (timeout/stop game)
