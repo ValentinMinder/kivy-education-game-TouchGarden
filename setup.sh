@@ -51,29 +51,20 @@ gsettings set org.gnome.settings-daemon.plugins.power idle-dim false
 # change background image
 gsettings set org.gnome.desktop.background picture-uri file:///home/touchgarden/Desktop/garden/images/fond/wallpaper.png
 
-# TODO: setting up rtcwake and cron AS ROOT USER (for automated shutdown and restart), execute:
-## sudo -su
+# TODO: setting up automated shutdown, execute:
+# everyday, schedule a complet stop at midnight (computer are supposed to be shuted down manually anyway)
+## sudo su
+# then type password (touchgarden)
 ## crontab -e
-# choose nano and add the following line with ##
-
-# everyday at 17:45 shutdown and programm restart at 9:45 the next day (16h later)
-# min hour day-of-month month day-of-week(0-6) command
-# every day from march-october, schedule restart on tomorrow at 9:45 (16 * 3600)
-# computer in save-to-disk state (option 'disk') known as 'veille prolongée'
-# computer will restart ONLY if shut down automatically with rtcwake
-## 45 17 * 3-10 * sudo killall elousbd & sudo rtcwake -m disk -s 57600
-
-# everyday from november-february, schedule a complet stop at midnight
-# computer won't restart until manually power on
-## 59 23 * 11-2 * sudo shutdown
-
+# choose nano and add the following lines without ##
+## 00 23 * * * sudo shutdown
 
 # TODO: in file manager (nautilus), Edit > Preferences > Behavior > Single click to activate items + run executable files
 
 # TODO: install driver from archive SW602479_Elo_Linux_ST_USB_Driver_v4.3.1_x86_64.zip
 # follow guidelines at Elo-Linux-ST-USB-Driver-v4.3.1_Installation-Instructions.txt
 
-# to re-calibrate, execute the following
+# to re-calibrate, execute the following, or double-click on calibrate.sh on desktop
 # cd /etc/opt/elo-usb
 # sudo ./elova --nvram
 
