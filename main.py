@@ -330,6 +330,18 @@ class StartScreen(KeyScreen):
             left=624,
             vAlignTop=True))
 
+        # add garden charta FR
+        self.add_widget(ImageWrap(
+            pos=(0, 0),
+            size=(sizes.width_left_margin, sizes.width_left_margin),
+            source='images/charte_logo/LogoCharteJardinFR.jpg'))
+
+        # add garden charta DE
+        self.add_widget(ImageWrap(
+            pos=(sizes.width - sizes.width_left_margin, 0),
+            size=(sizes.width_left_margin, sizes.width_left_margin),
+            source='images/charte_logo/LogoCharteJardinDE.jpg'))
+
         # add warning/technical info in 2 languages
         self.add_widget(LabelWrap(
             pos=(sizes.width_left_margin, 100 + 46 + 4),
